@@ -1,0 +1,187 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useRef, useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+interface Client {
+  id: number;
+  name: string;
+  logo: string;
+}
+
+const clients: Client[] = [
+  { id: 1, name: "TechCorp", logo: "/clients/client1.png" },
+  { id: 2, name: "Devmark", logo: "/clients/client2.png" },
+  { id: 3, name: "Rapid Space", logo: "/clients/client3.png" },
+  { id: 4, name: "Webmaster", logo: "/clients/client4.png" },
+  { id: 5, name: "Plumbing", logo: "/clients/client5.png" },
+  { id: 6, name: "Connection", logo: "/clients/client6.png" },
+  { id: 7, name: "Patsy", logo: "/clients/client7.png" },
+  { id: 8, name: "Happy Partners", logo: "/clients/client8.png" },
+  { id: 9, name: "BuildCo", logo: "/clients/client9.png" },
+  { id: 10, name: "NextGen", logo: "/clients/client10.png" },
+];
+
+const VISIBLE = 8;
+const GAP = 16;
+
+export default function OurClients() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const checkScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 0);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+  };
+
+  const getCardWidth = () => {
+    const el = scrollRef.current;
+    if (!el) return 100;
+    return (el.clientWidth - GAP * (VISIBLE - 1)) / VISIBLE;
+  };
+
+  const scroll = (dir: "left" | "right") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardWidth = getCardWidth();
+    el.scrollBy({
+      left: dir === "left" ? -(cardWidth + GAP) * 2 : (cardWidth + GAP) * 2,
+      behavior: "smooth",
+    });
+    setTimeout(checkScroll, 350);
+  };
+
+  const autoScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1;
+    if (atEnd) {
+      el.scrollTo({ left: 0, behavior: "smooth" });
+    } else {
+      const cardWidth = getCardWidth();
+      el.scrollBy({ left: cardWidth + GAP, behavior: "smooth" });
+    }
+    setTimeout(checkScroll, 350);
+  };
+
+  const startAuto = () => {
+    if (autoRef.current) clearInterval(autoRef.current);
+    autoRef.current = setInterval(autoScroll, 2500);
+  };
+
+  const stopAuto = () => {
+    if (autoRef.current) clearInterval(autoRef.current);
+  };
+
+  useEffect(() => {
+    checkScroll();
+    startAuto();
+    return () => stopAuto();
+  }, []);
+
+  return (
+    <section className="py-12 px-6 max-w-6xl mx-auto">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-white dark:text-white">
+          Our <span className="text-blue-500">Clients</span>
+        </h2>
+        <div className="w-12 h-0.5 bg-blue-500 mx-auto mt-2" />
+      </div>
+
+      {/* Slider */}
+      <div className="relative">
+        {canScrollLeft && (
+          <button
+            onClick={() => { stopAuto(); scroll("left"); startAuto(); }}
+            className="
+              absolute -left-4 top-1/2 -translate-y-1/2 z-10
+              w-8 h-8 rounded-full bg-white dark:bg-slate-700
+              border border-gray-200 dark:border-gray-600
+              flex items-center justify-center shadow-md
+              text-gray-600 dark:text-white hover:shadow-lg transition-all duration-200
+            "
+          >
+            <ChevronLeft size={16} />
+          </button>
+        )}
+
+        <div
+          ref={scrollRef}
+          onScroll={checkScroll}
+          onMouseEnter={stopAuto}
+          onMouseLeave={startAuto}
+          className="flex gap-4 overflow-x-auto pb-2"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {clients.map((client) => (
+            <div
+              key={client.id}
+              className="shrink-0 flex flex-col items-center gap-2 group cursor-pointer"
+              style={{
+                width: `calc((100% - ${GAP * (VISIBLE - 1)}px) / ${VISIBLE})`,
+              }}
+            >
+              {/* Logo box */}
+              <div className="
+                w-full aspect-square rounded-xl
+                border border-gray-200 dark:border-gray-700
+                bg-white dark:bg-slate-800
+                flex items-center justify-center
+                transition-all duration-300
+                group-hover:border-blue-400 group-hover:shadow-md
+              ">
+                <img
+                  src={client.logo}
+                  alt={client.name}
+                  className="w-3/4 h-3/4 object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = "none";
+                    const parent = target.parentElement;
+                    if (parent) {
+                      parent.innerHTML = `<span class="text-xs font-semibold text-gray-400 dark:text-gray-500 text-center px-1">${client.name}</span>`;
+                    }
+                  }}
+                />
+              </div>
+              {/* Name */}
+              <p className="text-xs text-white dark:text-gray-400 text-center font-medium truncate w-full">
+                {client.name}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {canScrollRight && (
+          <button
+            onClick={() => { stopAuto(); scroll("right"); startAuto(); }}
+            className="
+              absolute -right-4 top-1/2 -translate-y-1/2 z-10
+              w-8 h-8 rounded-full bg-white dark:bg-slate-700
+              border border-gray-200 dark:border-gray-600
+              flex items-center justify-center shadow-md
+              text-gray-600 dark:text-white hover:shadow-lg transition-all duration-200
+            "
+          >
+            <ChevronRight size={16} />
+          </button>
+        )}
+      </div>
+
+      {/* Show More Button */}
+      <div className="flex justify-center mt-8">
+        <button className="
+          bg-blue-500 hover:bg-blue-600 text-white
+          text-sm font-semibold px-8 py-2.5 rounded-full
+          transition-colors duration-200
+        ">
+          Show More
+        </button>
+      </div>
+    </section>
+  );
+}
