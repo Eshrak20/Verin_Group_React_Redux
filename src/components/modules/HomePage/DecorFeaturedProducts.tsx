@@ -13,13 +13,13 @@ interface Product {
 }
 
 const decorProducts: Product[] = [
-  { id: 1, name: "Panda Leaf Luxury", image: "/products/decor1.jpg", price: 5499, oldPrice: 7000 },
-  { id: 2, name: "Xiaomi S3 Car", image: "/products/decor2.jpg", price: 11000, oldPrice: 13000 },
-  { id: 3, name: "Die-Cast Frame", image: "/products/decor3.jpg", price: 5490, oldPrice: 6500 },
-  { id: 4, name: "Die-Cast Frame", image: "/products/decor4.jpg", price: 5490, oldPrice: 6500 },
-  { id: 5, name: "Die-Cast Frame", image: "/products/decor5.jpg", price: 1190, oldPrice: 14000 },
-  { id: 6, name: "Wooden Frame", image: "/products/decor6.jpg", price: 5490, oldPrice: 6500 },
-  { id: 7, name: "Wall Decor", image: "/products/decor7.jpg", price: 1190, oldPrice: 14000 },
+  { id: 1, name: "Panda Leaf Luxury", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822555/decor_1_b8csaa.jpg", price: 5499, oldPrice: 7000 },
+  { id: 2, name: "Xiaomi S3 Car", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822790/decor_2_aqxj8w.jpg", price: 11000, oldPrice: 13000 },
+  { id: 3, name: "Die-Cast Frame", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822789/decor_3_m0sclb.jpg", price: 5490, oldPrice: 6500 },
+  { id: 4, name: "Die-Cast Frame", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822790/decor_4_hvjd08.jpg", price: 5490, oldPrice: 6500 },
+  { id: 5, name: "Die-Cast Frame", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822790/decor_5_utdsbf.jpg", price: 1190, oldPrice: 14000 },
+  { id: 6, name: "Wooden Frame", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822790/decor_6_c8mj8j.jpg", price: 5490, oldPrice: 6500 },
+  { id: 7, name: "Wall Decor", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822789/decor_7_yfpmas.jpg", price: 1190, oldPrice: 14000 },
 ];
 
 const VISIBLE = 5;

@@ -19,7 +19,7 @@ interface Blog {
 const blogs: Blog[] = [
   {
     id: 1,
-    image: "/blogs/blog1.jpg",
+    image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782847868/blog6_snmspo.jpg",
     categoryBn: "টিউটোরিয়াল",
     categoryEn: "Tutorial",
     titleBn: "CPU বনাম GPU আর্কিটেকচার: সিকোয়েন্শিয়াল বনাম প্যারালাল এক্সিকিউশন",
@@ -32,7 +32,7 @@ const blogs: Blog[] = [
   },
   {
     id: 2,
-    image: "/blogs/blog2.jpg",
+    image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782847869/blog1_z95qzk.jpg",
     categoryBn: "টিউটোরিয়াল",
     categoryEn: "Tutorial",
     titleBn: "কেন TypeScript ডেভেলপারদের জন্য একটি গেম-চেঞ্জার",
@@ -45,7 +45,7 @@ const blogs: Blog[] = [
   },
   {
     id: 3,
-    image: "/blogs/blog3.jpg",
+    image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782847869/blog4_bczxvg.jpg",
     categoryBn: "টিউটোরিয়াল",
     categoryEn: "Tutorial",
     titleBn: "কেন TypeScript ডেভেলপারদের জন্য একটি গেম-চেঞ্জার",
@@ -58,7 +58,7 @@ const blogs: Blog[] = [
   },
   {
     id: 4,
-    image: "/blogs/blog4.jpg",
+    image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782847869/blog2_pblwwx.jpg",
     categoryBn: "টিউটোরিয়াল",
     categoryEn: "Tutorial",
     titleBn: "কেন TypeScript ডেভেলপারদের জন্য একটি গেম-চেঞ্জার",
@@ -71,7 +71,7 @@ const blogs: Blog[] = [
   },
   {
     id: 5,
-    image: "/blogs/blog5.jpg",
+    image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782847869/blog3_rmvs5h.jpg",
     categoryBn: "টিউটোরিয়াল",
     categoryEn: "Tutorial",
     titleBn: "কেন TypeScript ডেভেলপারদের জন্য একটি গেম-চেঞ্জার",
@@ -84,7 +84,7 @@ const blogs: Blog[] = [
   },
   {
     id: 6,
-    image: "/blogs/blog6.jpg",
+    image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782847868/blog5_bkqlqm.jpg",
     categoryBn: "টিউটোরিয়াল",
     categoryEn: "Tutorial",
     titleBn: "কেন TypeScript ডেভেলপারদের জন্য একটি গেম-চেঞ্জার",
@@ -119,7 +119,7 @@ export default function OurBlogs() {
             className={`
               px-4 py-1.5 rounded-full text-xs hover:cursor-pointer font-semibold transition-all duration-300
               ${isBangla
-                ? "bg-blue-500 hover:cursor-pointer text-white shadow-sm"
+                ? "bg-[#00416A] hover:bg-[#003557] hover:cursor-pointer text-white shadow-sm"
                 : "text-gray-500 dark:text-gray-400 hover:cursor-pointer hover:text-gray-700 dark:hover:text-white"
               }
             `}
@@ -131,7 +131,7 @@ export default function OurBlogs() {
             className={`
               px-4 py-1.5 rounded-full text-xs hover:cursor-pointer font-semibold transition-all duration-300
               ${!isBangla
-                ? "bg-blue-500 hover:cursor-pointer text-white shadow-sm"
+                ? "bg-[#00416A] hover:bg-[#003557] hover:cursor-pointer text-white shadow-sm"
                 : "text-gray-500 dark:text-gray-400 hover:cursor-pointer hover:text-gray-700 dark:hover:text-white"
               }
             `}

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-// src/components/LaptopFeaturedProducts.tsx
+
 import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -12,20 +12,20 @@ interface Product {
   oldPrice: number;
 }
 
-const laptopProducts: Product[] = [
-  { id: 1, name: "MacBook Air M2", image: "/products/laptop1.jpg", price: 125000, oldPrice: 135000 },
-  { id: 2, name: "Dell XPS 13", image: "/products/laptop2.jpg", price: 98000, oldPrice: 110000 },
-  { id: 3, name: "HP Pavilion 15", image: "/products/laptop3.jpg", price: 65000, oldPrice: 72000 },
-  { id: 4, name: "Lenovo ThinkPad", image: "/products/laptop4.jpg", price: 85000, oldPrice: 95000 },
-  { id: 5, name: "Asus ROG Strix", image: "/products/laptop5.jpg", price: 145000, oldPrice: 160000 },
-  { id: 6, name: "Acer Aspire 5", image: "/products/laptop6.jpg", price: 55000, oldPrice: 62000 },
-  { id: 7, name: "MSI Modern 14", image: "/products/laptop7.jpg", price: 72000, oldPrice: 80000 },
+const electronicsProducts: Product[] = [
+  { id: 1, name: "MacBook Air M2", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822987/electronics1_qsb0fl.jpg", price: 120000, oldPrice: 150000 },
+  { id: 2, name: "Dell XPS 13", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822986/electronics2_lttaln.jpg", price: 95000, oldPrice: 110000 },
+  { id: 3, name: "HP Pavilion 15", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822987/electronics3_wil6or.jpg", price: 65000, oldPrice: 75000 },
+  { id: 4, name: "Lenovo ThinkPad", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822986/electronics4_rkswtm.jpg", price: 85000, oldPrice: 95000 },
+  { id: 5, name: "Asus ROG Strix", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822986/electronics7_j5zf50.jpg", price: 150000, oldPrice: 180000 },
+  { id: 6, name: "Acer Aspire 5", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822987/electronics5_pqf8it.jpg", price: 55000, oldPrice: 65000 },
+  { id: 7, name: "MSI Modern 14", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822986/electronics6_wv077a.jpg", price: 70000, oldPrice: 85000 },
 ];
 
 const VISIBLE = 5;
 const GAP = 12;
 
-export default function LaptopFeaturedProducts() {
+export default function ElectronicsFeaturedProducts() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -86,7 +86,7 @@ export default function LaptopFeaturedProducts() {
   return (
     <section className="px-6 py-8 max-w-6xl mx-auto">
       <h2 className="text-center text-4xl font-bold text-white dark:text-white mb-6">
-        Laptop Featured Products
+        Electronics Featured Products
       </h2>
 
       <div className="relative">
@@ -113,7 +113,7 @@ export default function LaptopFeaturedProducts() {
           className="flex gap-3 overflow-x-auto pb-2"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {laptopProducts.map((product) => (
+          {electronicsProducts.map((product) => (
             <div
               key={product.id}
               className="shrink-0 flex flex-col"
@@ -191,7 +191,7 @@ export default function LaptopFeaturedProducts() {
 
       <div className="flex justify-center mt-6">
         <Link
-          to="/laptops"
+          to="/electronics"
           className="
             flex items-center gap-2
             bg-[#00416A] hover:bg-[#003557] text-white

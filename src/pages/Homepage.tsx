@@ -1,6 +1,6 @@
 import Banner from "@/components/modules/HomePage/Banner";
 import DecorFeaturedProducts from "@/components/modules/HomePage/DecorFeaturedProducts";
-import LaptopFeaturedProducts from "@/components/modules/HomePage/LaptopFeaturedProducts";
+import ElectronicsFeaturedProducts from "@/components/modules/HomePage/ElectronicsFeaturedProducts";
 import Logistics from "@/components/modules/HomePage/Logistics";
 import OurBlogs from "@/components/modules/HomePage/OurBlogs";
 import ShopByCategory from "@/components/modules/HomePage/ShopByCategory";
@@ -23,7 +23,7 @@ export default function Homepage() {
                 <Banner />
                 <ShopByCategory />
                 <DecorFeaturedProducts />
-                <LaptopFeaturedProducts />
+                <ElectronicsFeaturedProducts />
                 <Logistics />
                 <OurBlogs />
             </div>

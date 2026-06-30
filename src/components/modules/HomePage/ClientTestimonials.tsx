@@ -26,7 +26,7 @@ const testimonials: Testimonial[] = [
     id: 1,
     name: "Chan Man",
     date: "22 January 2024",
-    avatar: "/avatars/avatar1.jpg",
+    avatar: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782847213/men1_o2gnb2.jpg",
     review: "Innovative idea is one who idea was good results.",
     rating: 3,
   },
@@ -34,7 +34,7 @@ const testimonials: Testimonial[] = [
     id: 2,
     name: "Solvak",
     date: "13 February 2024",
-    avatar: "/avatars/avatar2.jpg",
+    avatar: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782847213/men3_i1ubev.jpg",
     review: "Innovative idea is a non rich company.",
     rating: 5,
   },
@@ -42,7 +42,7 @@ const testimonials: Testimonial[] = [
     id: 3,
     name: "Zaan Vai",
     date: "11 March 2024",
-    avatar: "/avatars/avatar3.jpg",
+    avatar: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782847213/men2_zcwnkg.jpg",
     review: "Work is very dedicated and clear.",
     rating: 5,
   },
@@ -50,7 +50,7 @@ const testimonials: Testimonial[] = [
     id: 4,
     name: "Rifat",
     date: "25 March 2024",
-    avatar: "/avatars/avatar4.jpg",
+    avatar: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782847213/men4_qwrt4l.jpg",
     review: "Innovative idea solution exactly from the best results and work with exceptional quality.",
     rating: 5,
   },
@@ -176,7 +176,7 @@ export default function ClientTestimonials() {
       {/* View All Button */}
       <div className="flex justify-center mt-8">
         <button className="
-          bg-blue-500 hover:bg-blue-600 text-white
+          bg-[#00416A] hover:bg-[#003557] text-white
           text-sm font-semibold px-8 py-2.5 rounded-full
           transition-colors duration-200
         ">

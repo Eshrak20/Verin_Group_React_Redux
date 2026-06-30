@@ -9,16 +9,16 @@ interface Client {
 }
 
 const clients: Client[] = [
-  { id: 1, name: "TechCorp", logo: "/clients/client1.png" },
-  { id: 2, name: "Devmark", logo: "/clients/client2.png" },
-  { id: 3, name: "Rapid Space", logo: "/clients/client3.png" },
-  { id: 4, name: "Webmaster", logo: "/clients/client4.png" },
-  { id: 5, name: "Plumbing", logo: "/clients/client5.png" },
-  { id: 6, name: "Connection", logo: "/clients/client6.png" },
-  { id: 7, name: "Patsy", logo: "/clients/client7.png" },
-  { id: 8, name: "Happy Partners", logo: "/clients/client8.png" },
-  { id: 9, name: "BuildCo", logo: "/clients/client9.png" },
-  { id: 10, name: "NextGen", logo: "/clients/client10.png" },
+  { id: 1, name: "TechCorp", logo: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782846240/client1_mplbml.jpg" },
+  { id: 2, name: "Devmark", logo: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782846239/client2_ymcgih.jpg" },
+  { id: 3, name: "Rapid Space", logo: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782846230/client3_flwpwq.jpg" },
+  { id: 4, name: "Webmaster", logo: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782846230/client4_kfuvt7.jpg" },
+  { id: 5, name: "Plumbing", logo: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782846231/client5_lx8zhp.jpg" },
+  { id: 6, name: "Connection", logo: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782846240/client6_gnog0m.jpg" },
+  { id: 7, name: "Patsy", logo: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782846230/client7_cuusns.jpg" },
+  { id: 8, name: "Happy Partners", logo: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782846231/client8_zl8wm8.jpg" },
+  { id: 9, name: "BuildCo", logo: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782846238/client9_tv72qo.jpg" },
+  { id: 10, name: "NextGen", logo: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782846231/client10_xtkip1.jpg" },
 ];
 
 const VISIBLE = 8;
@@ -127,17 +127,18 @@ export default function OurClients() {
             >
               {/* Logo box */}
               <div className="
-                w-full aspect-square rounded-xl
-                border border-gray-200 dark:border-gray-700
+                  w-full aspect-square rounded-xl
+                  border border-gray-200 dark:border-gray-700
                 bg-white dark:bg-slate-800
-                flex items-center justify-center
-                transition-all duration-300
+                  flex items-center justify-center
+                  overflow-hidden
+                  transition-all duration-300
                 group-hover:border-blue-400 group-hover:shadow-md
               ">
                 <img
                   src={client.logo}
                   alt={client.name}
-                  className="w-3/4 h-3/4 object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+                  className="w-3/4 h-3/4 object-contain transition-transform duration-300 group-hover:scale-110"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.style.display = "none";
@@ -175,9 +176,9 @@ export default function OurClients() {
       {/* Show More Button */}
       <div className="flex justify-center mt-8">
         <button className="
-          bg-blue-500 hover:bg-blue-600 text-white
+          bg-[#00416A] hover:bg-[#003557] text-white
           text-sm font-semibold px-8 py-2.5 rounded-full
-          transition-colors duration-200
+          transition-colors duration-200 cursor-pointer
         ">
           Show More
         </button>
