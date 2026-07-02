@@ -6,6 +6,7 @@ import GlobalErrorPage from "@/components/layout/GlobalErrorPage";
 import DecorPage from "@/pages/DecorPage";
 import LogisticsPage from "@/pages/LogisticsPage";
 import LaptopsPage from "@/pages/LaptopsPage";
+import ProductDetailsPage from "@/pages/ProductDetailsPage";
 
 
 
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
                 path: "laptops",
                 Component: LaptopsPage
             },
+            {
+                path: "/products/:slug",
+                Component: ProductDetailsPage,
+            }
             // {
             //     path: "contact",
             //     Component: ContactUs
@@ -53,5 +58,5 @@ export const router = createBrowserRouter([
         path: "*",
         element: <GlobalErrorPage />,
     },
-    
+
 ])

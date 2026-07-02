@@ -1,5 +1,5 @@
 // src/components/Footer.tsx
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { useGetFooterSettingsQuery } from "@/redux/services/homepage/homePage.api";
 import { getSocialIcon } from "@/utils/getSocialIcon";
@@ -22,12 +22,25 @@ const customerServiceLinks = [
   { label: "Orders FAQs", path: "/faq" },
 ];
 
+// export default function Footer() {
 export default function Footer() {
+  const { pathname } = useLocation();
   const { data } = useGetFooterSettingsQuery();
 
-  // homepage এর footer = page_key "0"
+  const pageKey = pathname.startsWith("/decor")
+    ? "1"
+    : pathname.startsWith("/laptops")
+      ? "2"
+      : "0";
+
+  const footerBg = pathname.startsWith("/decor")
+    ? "bg-[#1a1a2e]"   
+    : pathname.startsWith("/laptops")
+      ? "bg-[#0f3460]"  
+      : "bg-white/40";
+
   const footer = data?.success
-    ? data.data.find((f) => f.page_key === "0")
+    ? data.data.find((f) => f.page_key === pageKey)
     : undefined;
 
   const logoUrl = footer
@@ -48,7 +61,7 @@ export default function Footer() {
     footer?.links?.slice().sort((a, b) => Number(a.sort_order) - Number(b.sort_order)) || [];
 
   return (
-    <footer className="bg-white/40 text-white">
+    <footer className={`${footerBg} text-white`}>
       {/* Main Footer */}
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="grid grid-cols-4 gap-8">

@@ -20,7 +20,7 @@ export default function CommonLayout({ children }: IProps) {
                 {children}
             </div>
 
-            <Footer />
+            <Footer /> 
         </div>
     );
 }

@@ -3,24 +3,11 @@
 import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
+import { decorProducts } from "@/data/products/decorProducts";
+import { useNavigate } from "react-router-dom";
 
-interface Product {
-  id: number;
-  name: string;
-  image: string;
-  price: number;
-  oldPrice: number;
-}
 
-const decorProducts: Product[] = [
-  { id: 1, name: "Panda Leaf Luxury", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822555/decor_1_b8csaa.jpg", price: 5499, oldPrice: 7000 },
-  { id: 2, name: "Xiaomi S3 Car", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822790/decor_2_aqxj8w.jpg", price: 11000, oldPrice: 13000 },
-  { id: 3, name: "Die-Cast Frame", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822789/decor_3_m0sclb.jpg", price: 5490, oldPrice: 6500 },
-  { id: 4, name: "Die-Cast Frame", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822790/decor_4_hvjd08.jpg", price: 5490, oldPrice: 6500 },
-  { id: 5, name: "Die-Cast Frame", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822790/decor_5_utdsbf.jpg", price: 1190, oldPrice: 14000 },
-  { id: 6, name: "Wooden Frame", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822790/decor_6_c8mj8j.jpg", price: 5490, oldPrice: 6500 },
-  { id: 7, name: "Wall Decor", image: "https://res.cloudinary.com/gu08e9ha/image/upload/v1782822789/decor_7_yfpmas.jpg", price: 1190, oldPrice: 14000 },
-];
+
 
 const VISIBLE = 5;
 const GAP = 12;
@@ -30,6 +17,7 @@ export default function DecorFeaturedProducts() {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const navigate = useNavigate();
 
   const getCardWidth = () => {
     const el = scrollRef.current;
@@ -143,11 +131,13 @@ export default function DecorFeaturedProducts() {
                   translate-y-2 group-hover:translate-y-0
                   transition-all duration-300
                 ">
-                  <button className="
+                  <button
+                    onClick={() => navigate(`/products/${product.slug}`)}
+                    className="
                     bg-white text-gray-900 text-xs font-bold
                     px-4 py-1.5 rounded-full shadow-md
                     hover:bg-gray-100 transition-colors whitespace-nowrap
-                    flex items-center gap-1
+                    flex items-center gap-1 hover:cursor-pointer
                   ">
                     <ShoppingCart size={12} />
                     Buy Now
@@ -165,7 +155,7 @@ export default function DecorFeaturedProducts() {
                     ৳{product.price.toLocaleString()}
                   </span>
                   <span className="text-xs text-white line-through">
-                    ৳{product.oldPrice.toLocaleString()}
+                    ৳{product.oldPrice!.toLocaleString()}
                   </span>
                 </div>
               </div>
