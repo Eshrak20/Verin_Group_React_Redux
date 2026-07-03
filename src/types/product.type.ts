@@ -15,9 +15,11 @@ export interface Product {
   sku: string;
   brand: string;
   category: string;
+  subCategory: string;
   tags: string[];
   isFeatured: boolean;
   isNew: boolean;
+  isHotSell: boolean;
   sizes: string[];
   colors: { name: string; code: string }[];
 }
