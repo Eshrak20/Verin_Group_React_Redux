@@ -10,6 +10,7 @@ import ProductDetailsPage from "@/pages/ProductDetailsPage";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import Login from "@/pages/Login";
 import Signup from "@/pages/SignUp";
+import ContactUs from "@/pages/ContactUs";
 
 
 
@@ -43,10 +44,10 @@ export const router = createBrowserRouter([
                 path: "privacy-policy",
                 Component: PrivacyPolicy
             },
-            // {
-            //     path: "contact",
-            //     Component: ContactUs
-            // },
+            {
+                path: "contact",
+                Component: ContactUs
+            },
             // {
             //     path: "faq",
             //     Component: FAQ
