@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import { useGetFooterSettingsQuery } from "@/redux/services/homepage/homePage.api";
 
 interface NavLink {
   label: string;
@@ -29,14 +30,34 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [pillStyle, setPillStyle] = useState({ width: 0, translateX: 0 });
   const [searchOpen, setSearchOpen] = useState(false);
-const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [user, setUser] = useState<FakeUser | null>(null);
+  const { data } = useGetFooterSettingsQuery();
 
 
   const navRef = useRef<HTMLDivElement>(null);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const searchRef = useRef<HTMLInputElement>(null);
 
+
+
+  const companyKey = location.pathname.startsWith("/decor")
+    ? "verin-decor"
+    : location.pathname.startsWith("/laptops")
+      ? "verin-electronics"
+      : "verin-group";
+
+  const navbar = data?.success
+    ? data.data.find((f) => f.company_key === companyKey)
+    : undefined;
+
+  const logoUrl = navbar?.image_url
+    ? navbar.image_url
+    : navbar?.logo
+      ? `https://v.veringroup.com/storage/${navbar.logo}`
+      : null;
+
+  const companyName = navbar?.company_name || "Verin Group";
 
   useEffect(() => {
     const savedUser = getCookie("auth_user");
@@ -52,13 +73,13 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
     }
   }, [location.pathname]);
 
-useEffect(() => {
-  const handleScroll = () => {
-    if (dropdownOpen) setDropdownOpen(false);
-  };
-  window.addEventListener("scroll", handleScroll, { passive: true });
-  return () => window.removeEventListener("scroll", handleScroll);
-}, [dropdownOpen]);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (dropdownOpen) setDropdownOpen(false);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [dropdownOpen]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -67,13 +88,13 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
-  const activeIndex = navLinks.findIndex((link) => link.path === location.pathname);
-  if (activeIndex !== -1) {
-    updatePill(activeIndex);
-  } else {
-    setPillStyle({ width: 0, translateX: 0 }); // pill hide করো
-  }
-}, [location.pathname]);
+    const activeIndex = navLinks.findIndex((link) => link.path === location.pathname);
+    if (activeIndex !== -1) {
+      updatePill(activeIndex);
+    } else {
+      setPillStyle({ width: 0, translateX: 0 }); // pill hide করো
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     if (searchOpen) searchRef.current?.focus();
@@ -111,20 +132,24 @@ useEffect(() => {
             flex max-w-full items-center justify-between rounded-full bg-home
             border px-5 backdrop-blur-md transition-all duration-500
             ${scrolled
-  ? "h-14 border-gray-300/70 bg-white/90 shadow-lg shadow-black/5"
-  : "h-16 border-gray-300/50  shadow-none"
-}
+              ? "h-14 border-gray-300/70 bg-white/90 shadow-lg shadow-black/5"
+              : "h-16 border-gray-300/50  shadow-none"
+            }
           `}
         >
           {/* Logo */}
           <div className="relative min-w-0 shrink-0">
-            <Link to="/">
-              <img
-                src="/logo.png"
-                alt="Logo"
-                className={`w-auto object-contain transition-all duration-500 hover:scale-105 ${scrolled ? "h-8" : "h-10"
-                  }`}
-              />
+            <Link to="/" className="flex items-center gap-3">
+              {logoUrl ? (
+                <img
+                  src={logoUrl}
+                  alt={companyName}
+                  className="h-7 w-auto object-contain"
+                />
+              ) : null}
+              <span className="text-xl font-bold home-black-text whitespace-nowrap">
+                {companyName}
+              </span>
             </Link>
           </div>
 
@@ -246,7 +271,7 @@ useEffect(() => {
                       src={user.image}
                       alt={user.name}
                       className="h-10 w-10 rounded-full border-2 border-[#00416A] object-cover pointer-events-none"
-    
+
                     />
                   </button>
                 </DropdownMenuTrigger>
