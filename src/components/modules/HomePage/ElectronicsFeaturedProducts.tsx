@@ -85,7 +85,7 @@ export default function ElectronicsFeaturedProducts() {
 
   return (
     <section className="px-6 py-8 max-w-6xl mx-auto">
-      <h2 className="text-center text-4xl font-bold text-white dark:text-white mb-6">
+      <h2 className="text-center text-4xl font-bold home-black-text mb-6">
         Electronics Featured Products
       </h2>
 
@@ -157,14 +157,14 @@ export default function ElectronicsFeaturedProducts() {
 
               {/* Info */}
               <div className="mt-2 px-0.5">
-                <p className="text-xs text-white dark:text-gray-300 font-medium truncate">
+                <p className="text-lg home-black-text font-medium truncate">
                   {product.name}
                 </p>
                 <div className="flex items-center gap-1.5 mt-1">
-                  <span className="text-sm font-bold text-white dark:text-white">
+                  <span className="text-sm font-bold home-black-text">
                     ৳{product.price.toLocaleString()}
                   </span>
-                  <span className="text-xs text-white line-through">
+                  <span className="text-xs home-red-text line-through">
                     ৳{product.oldPrice.toLocaleString()}
                   </span>
                 </div>
@@ -194,7 +194,7 @@ export default function ElectronicsFeaturedProducts() {
           to="/electronics"
           className="
             flex items-center gap-2
-            bg-[#00416A] hover:bg-[#003557] text-white
+            bg-[#262626] hover:bg-[#003557] text-white
             text-sm font-semibold px-6 py-2.5 rounded-full
             transition-colors duration-200
           "

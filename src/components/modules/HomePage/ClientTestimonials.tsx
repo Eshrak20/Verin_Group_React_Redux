@@ -107,11 +107,11 @@ export default function ClientTestimonials() {
     <section className="py-12 px-6 max-w-6xl mx-auto">
       {/* Header */}
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-white dark:text-white">
-          What <span className="text-blue-500">Our Clients</span> Say
+        <h2 className="text-2xl font-bold home-black-text dark:text-white">
+          What Our Clients Say
         </h2>
-        <div className="w-12 h-0.5 bg-blue-500 mx-auto mt-2 mb-3" />
-        <p className="text-sm text-white dark:text-gray-400">
+        <div className="w-12 h-0.5 bg-[#262626] mx-auto mt-2 mb-3" />
+        <p className="text-sm home-black-text">
           Real feedback from businesses we've grown with and helped to their success.
         </p>
       </div>
@@ -176,7 +176,7 @@ export default function ClientTestimonials() {
       {/* View All Button */}
       <div className="flex justify-center mt-8">
         <button className="
-          bg-[#00416A] hover:bg-[#003557] text-white
+          bg-[#262626] hover:bg-[#003557] text-white
           text-sm font-semibold px-8 py-2.5 rounded-full
           transition-colors duration-200
         ">

@@ -104,22 +104,22 @@ export default function OurBlogs() {
     <section className="py-12 px-6 max-w-6xl mx-auto">
       {/* Header */}
       <div className="text-center mb-4">
-        <h2 className="text-2xl font-bold text-white dark:text-white">
-          Our <span className="text-blue-500">Blogs</span>
+        <h2 className="text-2xl font-bold home-black-text">
+          Our Blogs
         </h2>
-        <div className="w-12 h-0.5 bg-blue-500 mx-auto mt-2" />
+        <div className="w-12 h-0.5 bg-[#262626] mx-auto mt-2" />
       </div>
 
       {/* Top Row — Toggle + View All */}
       <div className="flex items-center justify-between mb-6">
         {/* Language Toggle */}
-        <div className="flex items-center gap-2 bg-gray-100 dark:bg-slate-800 rounded-full p-1">
+        <div className="flex items-center gap-2 bg-white dark:bg-slate-800 rounded-full p-1">
           <button
             onClick={() => setIsBangla(true)}
             className={`
               px-4 py-1.5 rounded-full text-xs hover:cursor-pointer font-semibold transition-all duration-300
               ${isBangla
-                ? "bg-[#00416A] hover:bg-[#003557] hover:cursor-pointer text-white shadow-sm"
+                ? "bg-[#262626] hover:bg-[#003557] hover:cursor-pointer text-white shadow-sm"
                 : "text-gray-500 dark:text-gray-400 hover:cursor-pointer hover:text-gray-700 dark:hover:text-white"
               }
             `}
@@ -131,7 +131,7 @@ export default function OurBlogs() {
             className={`
               px-4 py-1.5 rounded-full text-xs hover:cursor-pointer font-semibold transition-all duration-300
               ${!isBangla
-                ? "bg-[#00416A] hover:bg-[#003557] hover:cursor-pointer text-white shadow-sm"
+                ? "bg-[#262626] hover:bg-[#003557] hover:cursor-pointer text-white shadow-sm"
                 : "text-gray-500 dark:text-gray-400 hover:cursor-pointer hover:text-gray-700 dark:hover:text-white"
               }
             `}
@@ -143,7 +143,7 @@ export default function OurBlogs() {
         {/* View All */}
         <Link
           to="/blogs"
-          className="text-sm text-white hover:text-blue-600 hover:underline transition-colors duration-200"
+          className="text-sm home-black-text hover:text-blue-600 hover:underline transition-colors duration-200"
         >
           {isBangla ? "সব ব্লগ দেখুন" : "View All Blogs"}
         </Link>
@@ -183,7 +183,7 @@ export default function OurBlogs() {
                 <span className="
                   text-xs font-semibold px-3 py-1 rounded-full
                   bg-blue-50 dark:bg-blue-900/30
-                  text-blue-600 dark:text-blue-400
+                  home-black-text
                 ">
                   {isBangla ? blog.categoryBn : blog.categoryEn}
                 </span>
@@ -194,9 +194,9 @@ export default function OurBlogs() {
 
               {/* Title */}
               <h3 className="
-                text-sm font-bold text-gray-900 dark:text-white
+                text-sm font-bold home-black-text
                 line-clamp-2 leading-snug
-                group-hover:text-blue-500 transition-colors duration-200
+                 transition-colors duration-200
               ">
                 {isBangla ? blog.titleBn : blog.titleEn}
               </h3>
@@ -208,8 +208,7 @@ export default function OurBlogs() {
 
               {/* Read More */}
               <span className="
-                text-xs font-semibold text-blue-500
-                group-hover:text-blue-600
+                text-xs font-semibold home-black-text hover:text-blue-600 hover:underline
                 transition-colors duration-200 mt-1
               ">
                 {isBangla ? "আরও পড়ুন →" : "Read More →"}

@@ -1,18 +1,7 @@
-// src/components/Footer.tsx
 import { Link, useLocation } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { useGetFooterSettingsQuery } from "@/redux/services/homepage/homePage.api";
 import { getSocialIcon } from "@/utils/getSocialIcon";
-
-
-
-const informationLinks = [
-  { label: "About Us", path: "/about" },
-  { label: "Blogs", path: "/blogs" },
-  { label: "Shop", path: "/shop" },
-  { label: "Contact us", path: "/contact" },
-  { label: "My Account", path: "/account" },
-];
 
 const customerServiceLinks = [
   { label: "Shipping", path: "/shipping" },
@@ -22,34 +11,39 @@ const customerServiceLinks = [
   { label: "Orders FAQs", path: "/faq" },
 ];
 
-// export default function Footer() {
 export default function Footer() {
   const { pathname } = useLocation();
   const { data } = useGetFooterSettingsQuery();
 
-  const pageKey = pathname.startsWith("/decor")
-    ? "1"
+
+  const companyKey = pathname.startsWith("/decor")
+    ? "verin-decor"
     : pathname.startsWith("/laptops")
-      ? "2"
-      : "0";
+      ? "verin-electronics"
+      : "verin-group";
 
   const footerBg = pathname.startsWith("/decor")
-    ? "bg-[#1a1a2e]"   
+    ? "bg-[#1a1a2e]"
     : pathname.startsWith("/laptops")
-      ? "bg-[#0f3460]"  
-      : "bg-white/40";
+      ? "bg-[#0f3460]"
+      : "bg-[#FFFFFF]";
+
+
 
   const footer = data?.success
-    ? data.data.find((f) => f.page_key === pageKey)
+    ? data.data.find((f) => f.company_key === companyKey)
     : undefined;
 
-  const logoUrl = footer
-    ? `https://v.veringroup.com/storage/${footer.logo}`
-    : null;
+
+  const logoUrl = footer?.image_url
+    ? footer.image_url
+    : footer?.logo
+      ? `https://v.veringroup.com/storage/${footer.logo}`
+      : null;
 
   const companyName = footer?.company_name || "YourBrand";
   const description = footer?.description || "";
-  const copyrightText = footer?.copyright_text || "© 2026 Maven Zone. All Rights Reserved.";
+  const copyrightText = footer?.copyright_text || "© 2026 All rights reserved.";
   const phone = footer?.contact_info?.phone || "";
   const email = footer?.contact_info?.email || "";
   const address = footer?.contact_info?.address || "";
@@ -58,11 +52,12 @@ export default function Footer() {
     footer?.social_links?.filter((s) => s.is_active === "1") || [];
 
   const footerLinks =
-    footer?.links?.slice().sort((a, b) => Number(a.sort_order) - Number(b.sort_order)) || [];
+    footer?.links
+      ?.slice()
+      .sort((a, b) => Number(a.sort_order) - Number(b.sort_order)) || [];
 
   return (
-    <footer className={`${footerBg} text-white`}>
-      {/* Main Footer */}
+    <footer className={`${footerBg} ${pathname === "/" ? "home-black-text" : "text-white"}`}>
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="grid grid-cols-4 gap-8">
 
@@ -79,51 +74,54 @@ export default function Footer() {
                     target.style.display = "none";
                     const parent = target.parentElement;
                     if (parent) {
-                      parent.innerHTML = `<span style="color:#f97316;font-size:22px;font-weight:800;">${companyName}</span>`;
+                      parent.innerHTML = `<span style="color:#262626;font-size:22px;font-weight:800;">${companyName}</span>`;
                     }
                   }}
                 />
               ) : (
-                <span style={{ color: "#f97316", fontSize: "22px", fontWeight: 800 }}>
+                <span style={{ color: "#262626", fontSize: "22px", fontWeight: 800 }}>
                   {companyName}
                 </span>
               )}
             </Link>
+            <div>
+              <h1 className="home-black-text font-bold text-2xl">{companyName}</h1>
+            </div>
 
-            <p className="text-sm text-white leading-relaxed">
-              {description}
-            </p>
+            <div
+              className="text-sm home-black-text leading-relaxed [&_p]:mb-0"
+              dangerouslySetInnerHTML={{ __html: description }}
+            />
 
             <div className="flex flex-col gap-2.5">
               {email && (
                 <a
                   href={`mailto:${email}`}
-                  className="flex items-center gap-2 text-sm hover:text-orange-400 transition-colors duration-200"
+                  className="flex items-center gap-2 text-sm home-black-text transition-colors duration-200"
                 >
-                  <Mail size={15} className="text-orange-400 shrink-0" />
+                  <Mail size={15} className="home-black-text shrink-0" />
                   {email}
                 </a>
               )}
               {phone && (
                 <a
                   href={`tel:${phone.replace(/\s/g, "")}`}
-                  className="flex items-center gap-2 text-sm hover:text-orange-400 transition-colors duration-200"
+                  className="flex items-center gap-2 text-sm home-black-text transition-colors duration-200"
                 >
-                  <Phone size={15} className="text-orange-400 shrink-0" />
+                  <Phone size={15} className="home-black-text shrink-0" />
                   {phone}
                 </a>
               )}
               {address && (
                 <div className="flex items-start gap-2">
-                  <MapPin size={15} className="text-orange-400 shrink-0 mt-0.5" />
-                  <span className="text-sm leading-relaxed">
+                  <MapPin size={15} className="home-black-text shrink-0 mt-0.5 " />
+                  <span className="text-sm home-black-text leading-relaxed">
                     {address}
                   </span>
                 </div>
               )}
             </div>
 
-            {/* Social Icons */}
             {socialLinks.length > 0 && (
               <div className="flex items-center gap-2 mt-1">
                 {socialLinks.map((s) => (
@@ -134,56 +132,45 @@ export default function Footer() {
                     rel="noreferrer"
                     aria-label={s.platform}
                     className="
-                      w-9 h-9 rounded-full border border-white
-                      flex items-center justify-center
-                      hover:text-white hover:border-orange-400
-                      hover:bg-orange-400/10 transition-all duration-200
-                    "
+                      w-10 h-10 rounded-full bg-white border border-[#262626] flex items-center justify-center text-gray-700 shadow-[0_8px_25px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_35px_rgba(0,0,0,0.22)] hover:-translate-y-1 transition-all duration-300
+                      "
                   >
                     {getSocialIcon(s.platform)}
                   </a>
                 ))}
               </div>
             )}
+
           </div>
 
-          {/* Col 2 — Information (API links দিয়ে replace) */}
+          {/* Col 2 — Information */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-white font-bold text-base">Information</h3>
+            <h3 className="home-black-text font-bold text-base">Information</h3>
             <ul className="flex flex-col gap-2.5">
-              {(footerLinks.length > 0 ? footerLinks : informationLinks.map((l, i) => ({ id: i, title: l.label, url: l.path, open_new_tab: "0" }))).map((link) => (
-                <li key={link.id ?? link.title}>
-                  {"url" in link && link.url.startsWith("http") ? (
-                    <a
-                      href={link.url}
-                      target={link.open_new_tab === "1" ? "_blank" : "_self"}
-                      rel="noreferrer"
-                      className="text-sm hover:text-orange-400 transition-colors duration-200"
-                    >
-                      {link.title}
-                    </a>
-                  ) : (
-                    <Link
-                      to={link.url}
-                      className="text-sm hover:text-orange-400 transition-colors duration-200"
-                    >
-                      {link.title}
-                    </Link>
-                  )}
+              {footerLinks.map((link) => (
+                <li key={link.id}>
+                  <a
+                    href={link.url}
+                    target={link.open_new_tab === "1" ? "_blank" : "_self"}
+                    rel="noreferrer"
+                    className="text-sm text-gray-700 hover:home-black-text  transition-colors duration-200"
+                  >
+                    {link.title}
+                  </a>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Col 3 — Customer Services (static, API তে নেই) */}
+          {/* Col 3 — Customer Services */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-white font-bold text-base">Customer Services</h3>
+            <h3 className="home-black-text font-bold text-base">Customer Services</h3>
             <ul className="flex flex-col gap-2.5">
               {customerServiceLinks.map((link) => (
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-sm hover:text-orange-400 transition-colors duration-200"
+                    className="text-sm text-gray-700 hover:home-black-text transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -192,10 +179,10 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 4 — Newsletter (static, API তে নেই) */}
+          {/* Col 4 — Newsletter */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-white font-bold text-base">Newsletter</h3>
-            <p className="text-sm leading-relaxed">
+            <h3 className="home-black-text font-bold text-base">Newsletter</h3>
+            <p className="text-sm text-gray-700 leading-relaxed">
               Sign up for our newsletter and get 10% off your first purchase
             </p>
             <div className="flex items-center">
@@ -203,15 +190,15 @@ export default function Footer() {
                 type="email"
                 placeholder="Enter your e-mail..."
                 className="
-                  flex-1 bg-[#1a2535] border border-gray-600
-                  text-sm text-gray-300 placeholder-gray-500
-                  px-4 py-2 rounded-l-lg outline-none
-                  focus:border-orange-400 transition-colors duration-200
+                  flex-1 bg-white/5 border border-gray-600
+                  text-sm text-gray-700 placeholder-gray-500
+                  px-4 py-1.75 rounded-l-lg outline-none
+                  focus:border-black transition-colors duration-200
                 "
               />
               <button className="
-                bg-orange-500 hover:bg-orange-600
-                text-white px-4 py-2.75 rounded-r-lg
+                bg-[#262626]
+                text-white px-4 py-2.5 rounded-r-lg
                 transition-colors duration-200
                 flex items-center justify-center shrink-0
               ">
@@ -228,7 +215,7 @@ export default function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-gray-700/50">
         <div className="max-w-6xl mx-auto px-6 py-4">
-          <p className="text-center text-sm text-white">
+          <p className="text-center text-sm text-gray-500">
             {copyrightText}
           </p>
         </div>
@@ -236,8 +223,6 @@ export default function Footer() {
     </footer>
   );
 }
-
-
 
 
 

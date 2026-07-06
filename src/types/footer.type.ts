@@ -1,4 +1,3 @@
-
 interface SocialLink {
   id: number;
   platform: string;
@@ -23,13 +22,11 @@ interface ContactInfo {
   address: string;
 }
 
-
-
-
 interface FooterSetting {
   id: number;
-  page_key: string;
-  logo: string;
+  company_key: string;  
+  logo: string | null;
+  image_url: string | null;
   company_name: string;
   description: string;
   copyright_text: string;
@@ -39,7 +36,6 @@ interface FooterSetting {
   links: FooterLink[];
   contact_info: ContactInfo;
 }
-
 
 export interface FooterResponse {
   success: boolean;
