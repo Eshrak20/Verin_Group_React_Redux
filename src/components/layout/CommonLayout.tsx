@@ -14,8 +14,10 @@ interface IProps {
 
 export default function CommonLayout({ children }: IProps) {
     return (
-        <div className="relative min-h-screen flex flex-col">
-            <Navbar />
+        <div className="relative min-h-screen flex flex-col bg-home">
+            <div>
+                <Navbar />
+            </div>
             <div className="grow pt-24">
                 {children}
             </div>

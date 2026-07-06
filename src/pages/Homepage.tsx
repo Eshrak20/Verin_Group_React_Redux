@@ -9,17 +9,7 @@ import ShopByCategory from "@/components/modules/HomePage/ShopByCategory";
 export default function Homepage() {
     return (
         <div>
-            <div
-                className="absolute inset-0 -z-10 opacity-90"
-                style={{
-                    backgroundImage: "url('/bg.png')",
-                    backgroundSize: "cover",
-                    backgroundPosition: "top center",
-                    backgroundRepeat: "no-repeat",
-                }}
-            />
-
-            <div className="w-full px-12">
+            <div className="w-full px-12 bg-home">
                 <Banner />
                 <ShopByCategory />
                 <DecorFeaturedProducts />

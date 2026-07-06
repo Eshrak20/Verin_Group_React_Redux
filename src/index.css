@@ -6,6 +6,19 @@
 @custom-variant dark (&:is(.dark *));
 
 
+@utility bg-home {
+  background-color: #F9F8F6;
+}
+
+@utility home-black-text {
+  color: #262626;
+}
+
+
+@utility home-red-text {
+  color: #BE1A1A;
+}
+
 @theme inline {
     --font-heading: var(--font-sans);
     --font-sans: 'Inter Variable', sans-serif;

@@ -83,13 +83,13 @@ export default function ShopByCategory() {
   }, [categories.length]);
 
   return (
-    <section className="py-10 px-4">
+    <section className="py-10 px-4 home-black-text">
       {/* Header */}
       <div className="text-center mb-8">
-        <h2 className="text-4xl font-bold text-white dark:text-white">
+        <h2 className="text-4xl font-bold home-black-text">
           Shop By Category
         </h2>
-        <p className="text-sm text-white mt-1">
+        <p className="text-sm home-black-text mt-1">
           Explore our curated collections.
         </p>
       </div>
@@ -200,7 +200,7 @@ export default function ShopByCategory() {
                 </div>
 
                 {/* Name */}
-                <p className="mt-3 text-sm font-semibold uppercase tracking-widest text-white dark:text-gray-300">
+                <p className="mt-3 text-sm font-semibold uppercase tracking-widest home-black-text">
                   {cat.name}
                 </p>
               </div>

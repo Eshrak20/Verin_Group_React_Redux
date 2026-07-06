@@ -202,7 +202,7 @@ export default function ProductCatalog() {
 
                   {/* View Details Button */}
                   <Link
-                    to={`/product/${product.slug}`}
+                    to={`/products/${product.slug}`}
                     className="
                       w-full bg-gray-900 dark:bg-white
                       text-white dark:text-gray-900

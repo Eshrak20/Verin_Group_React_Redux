@@ -67,9 +67,13 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
-    const activeIndex = navLinks.findIndex((link) => link.path === location.pathname);
-    if (activeIndex !== -1) updatePill(activeIndex);
-  }, [location.pathname]);
+  const activeIndex = navLinks.findIndex((link) => link.path === location.pathname);
+  if (activeIndex !== -1) {
+    updatePill(activeIndex);
+  } else {
+    setPillStyle({ width: 0, translateX: 0 }); // pill hide করো
+  }
+}, [location.pathname]);
 
   useEffect(() => {
     if (searchOpen) searchRef.current?.focus();
@@ -94,9 +98,9 @@ useEffect(() => {
   };
 
   return (
-    <nav className="fixed left-0 right-0 top-4 z-50 w-full overflow-x-hidden px-3 md:px-0">
+    <nav className="fixed left-0  right-0 top-4 z-50 w-full overflow-x-hidden px-3 md:px-0">
       <div
-        className="mx-auto px-0 transition-all duration-500"
+        className="mx-auto px-0 transition-all duration-500 "
         style={{
           maxWidth: "1400px",
           width: scrolled ? "75%" : "85%",
@@ -104,12 +108,12 @@ useEffect(() => {
       >
         <div
           className={`
-            flex max-w-full items-center justify-between rounded-full
+            flex max-w-full items-center justify-between rounded-full bg-home
             border px-5 backdrop-blur-md transition-all duration-500
             ${scrolled
-              ? "h-14 border-gray-300/70 bg-white/60 shadow-lg shadow-black/5 dark:border-gray-400 dark:bg-slate-950/80"
-              : "h-16 border-gray-300/50 bg-white shadow-none dark:border-gray-400/80 dark:bg-slate-950/50"
-            }
+  ? "h-14 border-gray-300/70 bg-white/90 shadow-lg shadow-black/5"
+  : "h-16 border-gray-300/50  shadow-none"
+}
           `}
         >
           {/* Logo */}
@@ -149,7 +153,7 @@ useEffect(() => {
                     transition-colors duration-300 xl:px-4 xl:text-[13px]
                     ${isActive
                       ? "text-white dark:text-[#00416A]"
-                      : "text-slate-700 hover:bg-gray-200/60 dark:text-white dark:hover:text-[#00416A]"
+                      : "text-slate-700 hover:bg-gray-200/60"
                     }
                   `}
                 >
@@ -238,13 +242,13 @@ useEffect(() => {
               <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen} modal={false}>
                 <DropdownMenuTrigger asChild>
                   <button className="focus:outline-none cursor-pointer hover:scale-105 transition-transform duration-200">
-  <img
-    src={user.image}
-    alt={user.name}
-    className="h-10 w-10 rounded-full border-2 border-[#00416A] object-cover pointer-events-none"
+                    <img
+                      src={user.image}
+                      alt={user.name}
+                      className="h-10 w-10 rounded-full border-2 border-[#00416A] object-cover pointer-events-none"
     
-  />
-</button>
+                    />
+                  </button>
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent
