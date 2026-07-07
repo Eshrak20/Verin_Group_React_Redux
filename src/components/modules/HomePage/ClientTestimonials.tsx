@@ -104,7 +104,7 @@ function Avatar({ src, name }: { src: string; name: string }) {
 
 export default function ClientTestimonials() {
   return (
-    <section className="py-12 px-6 max-w-6xl mx-auto">
+    <section className="py-12">
       {/* Header */}
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold home-black-text dark:text-white">

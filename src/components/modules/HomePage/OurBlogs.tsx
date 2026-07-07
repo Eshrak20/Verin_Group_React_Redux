@@ -101,9 +101,9 @@ export default function OurBlogs() {
   const [isBangla, setIsBangla] = useState(true);
 
   return (
-    <section className="py-12 px-6 max-w-6xl mx-auto">
+    <section className="py-12">
       {/* Header */}
-      <div className="text-center mb-4">
+      <div className="text-center mb-6">
         <h2 className="text-2xl font-bold home-black-text">
           Our Blogs
         </h2>
