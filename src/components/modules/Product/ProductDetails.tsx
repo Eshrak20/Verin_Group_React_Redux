@@ -27,14 +27,14 @@ function InfoCard({
 export default function ProductDetails() {
   const { slug } = useParams<{ slug: string }>();
 
- 
+
   const { data: response, isLoading } = useGetProductsQuery({ per_page: 100 });
   const products: Product[] = response?.data || [];
 
- 
+
   const product = products.find((item) => item.slug === slug);
 
- 
+
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [selectedImage, setSelectedImage] = useState<number>(0);
 
@@ -82,7 +82,7 @@ export default function ProductDetails() {
     ? Math.round(((price - salePrice) / price) * 100)
     : 0;
 
- 
+
   const productImages: string[] = currentVariant?.images && currentVariant.images.length > 0
     ? currentVariant.images.map((img) => img.image_url)
     : [product.thumbnail || "https://placehold.co/600x400/e2e8f0/94a3b8?text=No+Image"];
@@ -131,9 +131,13 @@ export default function ProductDetails() {
                 {product.name}
               </h1>
 
-              <p className="mt-4 leading-8 text-slate-600">
+              {/* <p className="mt-4 leading-8 text-slate-600">
                 {product.short_description}
-              </p>
+              </p> */}
+              <div
+                className="mt-4 leading-8 text-slate-600"
+                dangerouslySetInnerHTML={{ __html: product.short_description }}
+              />
 
               {/* Price Calculation */}
               <div className="mt-6 flex items-center gap-4">
