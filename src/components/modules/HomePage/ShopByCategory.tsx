@@ -29,7 +29,7 @@ export default function ShopByCategory() {
 
   const { data, isLoading } = useGetCategoriesQuery();
 
-  // API category কে UI structure এ map করা হচ্ছে — UI অপরিবর্তিত
+ 
   const categories =
     data?.status && data.data.length > 0
       ? data.data.map((cat, i) => ({
@@ -83,7 +83,7 @@ export default function ShopByCategory() {
   }, [categories.length]);
 
   return (
-    <section className="py-10 px-4 home-black-text">
+    <section className="py-10 home-black-text">
       {/* Header */}
       <div className="text-center mb-8">
         <h2 className="text-4xl font-bold home-black-text">
@@ -121,10 +121,10 @@ export default function ShopByCategory() {
             <button
               onClick={() => { stopAuto(); scroll("left"); startAuto(); }}
               className="
-                absolute -left-4 top-1/2 -translate-y-1/2 z-10
+                absolute left-4 top-1/2 -translate-y-1/2 z-10
                 w-9 h-9 rounded-full bg-white dark:bg-slate-800
                 border border-gray-200 dark:border-gray-600
-                flex items-center justify-center
+                flex items-center justify-center hover:cursor-pointer
                 shadow-md hover:shadow-lg transition-all duration-200
                 text-gray-700 dark:text-white
               "
@@ -142,7 +142,7 @@ export default function ShopByCategory() {
             style={{
               scrollbarWidth: "none",
               msOverflowStyle: "none",
-              maxWidth: `${(CARD_WIDTH + GAP) * 4 - GAP}px`,
+              maxWidth: "full",
               margin: "0 auto",
             }}
           >
@@ -212,10 +212,10 @@ export default function ShopByCategory() {
             <button
               onClick={() => { stopAuto(); scroll("right"); startAuto(); }}
               className="
-                absolute -right-4 top-1/2 -translate-y-1/2 z-10
+                absolute right-4 top-1/2 -translate-y-1/2 z-10
                 w-9 h-9 rounded-full bg-white dark:bg-slate-800
                 border border-gray-200 dark:border-gray-600
-                flex items-center justify-center
+                flex items-center justify-center hover:cursor-pointer
                 shadow-md hover:shadow-lg transition-all duration-200
                 text-gray-700 dark:text-white
               "
