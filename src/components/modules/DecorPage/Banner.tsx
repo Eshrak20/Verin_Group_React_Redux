@@ -2,7 +2,7 @@
 
 export default function Banner() {
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-8">
+    <div className="w-full py-8">
       {/* Main Banner Container */}
       <div className="bg-[#dfd9cf] text-stone-900 rounded-[2rem] md:rounded-[2.5rem] grid lg:grid-cols-12 overflow-hidden relative">
         

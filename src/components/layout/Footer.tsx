@@ -23,7 +23,7 @@ export default function Footer() {
       : "verin-group";
 
   const footerBg = pathname.startsWith("/decor")
-    ? "bg-[#1a1a2e]"
+    ? "bg-[#FFFFFF]"
     : pathname.startsWith("/laptops")
       ? "bg-[#0f3460]"
       : "bg-[#FFFFFF]";

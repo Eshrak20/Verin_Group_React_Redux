@@ -109,7 +109,7 @@ export default function DecorFeaturedProducts() {
               absolute left-4 top-[40%] -translate-y-1/2 z-10
               w-8 h-8 rounded-full bg-white dark:bg-slate-700
               border border-gray-200 dark:border-gray-600
-              flex items-center justify-center shadow-md
+              flex items-center justify-center shadow-md hover:cursor-pointer
               text-gray-700 dark:text-white hover:shadow-lg transition-all duration-200
             "
           >
@@ -202,7 +202,7 @@ export default function DecorFeaturedProducts() {
               absolute right-4 top-[40%] -translate-y-1/2 z-10
               w-8 h-8 rounded-full bg-white dark:bg-slate-700
               border border-gray-200 dark:border-gray-600
-              flex items-center justify-center shadow-md
+              flex items-center justify-center shadow-md hover:cursor-pointer
               text-gray-700 dark:text-white hover:shadow-lg transition-all duration-200
             "
           >
