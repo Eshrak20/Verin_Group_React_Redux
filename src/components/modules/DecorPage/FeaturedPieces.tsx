@@ -158,7 +158,7 @@ const { data, isLoading } = useGetProductsQuery({per_page: 100});
 
                       <button
                         onClick={() => navigate(`/products/${product.slug}`)}
-                        className="w-full bg-[#1c1c1c] text-white text-xs font-bold uppercase tracking-widest py-3.5 rounded-full transition-all duration-300 hover:bg-stone-800 hover:shadow-md cursor-pointer"
+                        className="w-full bg-[#1c1c1c] text-white text-xs font-bold uppercase tracking-widest py-3.5 rounded-full transition-all duration-300 hover:bg-[#5A5A40] hover:shadow-md cursor-pointer"
                       >
                         View Details
                       </button>

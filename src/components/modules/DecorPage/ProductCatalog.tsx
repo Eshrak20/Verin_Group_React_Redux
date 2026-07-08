@@ -122,7 +122,7 @@ export default function ProductCatalog() {
                 appearance-none
                 bg-white dark:bg-slate-800
                 border border-gray-200 dark:border-gray-600
-                text-gray-800 dark:text-white
+                text-black dark:text-white
                 py-2.5 pl-4 pr-10
                 rounded-full
                 font-medium
@@ -170,8 +170,8 @@ export default function ProductCatalog() {
               duration-200
               text-sm
               ${selectedCategory === cat
-                ? "bg-[#00416A] text-white shadow-md"
-                : "bg-white dark:bg-slate-800 text-gray-700 dark:text-white border border-gray-200 dark:border-gray-600 hover:border-[#00416A] dark:hover:border-gray-400"
+                ? "bg-[#5A5A40] text-white shadow-md"
+                : " dark:bg-slate-800 text-black dark:text-white border border-gray-200 dark:border-gray-600 hover:border-[#00416A] hover:cursor-pointer dark:hover:border-gray-400" 
               }
             `}
           >
@@ -341,7 +341,7 @@ export default function ProductCatalog() {
                         text-[10px]
                         font-bold
                         tracking-widest
-                        hover:bg-[#00416A]
+                        hover:bg-[#5A5A40]
                         dark:hover:bg-gray-100
                         transition-colors
                         duration-200

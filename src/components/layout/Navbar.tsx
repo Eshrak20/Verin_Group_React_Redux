@@ -159,7 +159,7 @@ export default function Navbar() {
             className="relative hidden items-center gap-1 rounded-full p-1 lg:flex"
           >
             <span
-              className="pointer-events-none absolute left-0 top-1 h-[calc(100%-8px)] rounded-full bg-[#00416A] transition-all duration-300 dark:bg-white"
+              className="pointer-events-none absolute left-0 top-1 h-[calc(100%-8px)] rounded-full bg-[#262626] home-black-text  transition-all duration-300 dark:bg-white"
               style={{
                 width: pillStyle.width,
                 transform: `translateX(${pillStyle.translateX}px)`,
@@ -178,7 +178,7 @@ export default function Navbar() {
                     transition-colors duration-300 xl:px-4 xl:text-[13px]
                     ${isActive
                       ? "text-white dark:text-[#00416A]"
-                      : "text-slate-700 hover:bg-gray-200/60"
+                      : "home-black-text hover:bg-gray-200/60"
                     }
                   `}
                 >
@@ -239,7 +239,7 @@ export default function Navbar() {
               "
             >
               <Heart size={16} />
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#00416A] text-[9px] font-bold text-white dark:bg-white dark:text-[#00416A]">
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#262626] text-[9px] font-bold text-white dark:bg-white dark:text-[#00416A]">
                 2
               </span>
             </button>
@@ -257,7 +257,7 @@ export default function Navbar() {
               "
             >
               <ShoppingCart size={16} />
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#00416A] text-[9px] font-bold text-white dark:bg-white dark:text-[#00416A]">
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#262626] text-[9px] font-bold text-white dark:bg-white dark:text-[#00416A]">
                 3
               </span>
             </button>
@@ -325,7 +325,7 @@ export default function Navbar() {
                 to="/login"
                 className="
                   flex h-10 px-5 shrink-0 items-center justify-center rounded-full
-                  border border-[#00416A]/30 bg-transparent text-[#00416A] text-sm font-semibold
+                  border border-[#00416A]/30 bg-transparent home-black-text text-sm font-semibold
                   transition-all duration-300 hover:border-[#00416A]
                 hover:bg-[#00416A] hover:text-white
                 "
