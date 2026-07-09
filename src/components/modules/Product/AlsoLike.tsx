@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGetProductsQuery } from "@/redux/services/product/product.api";
 import type { Product } from "@/types/product.type";
 
 interface AlsoLikeProps {
-  subCategoryId: string | number; 
-  currentSlug: string;           
+  subCategoryId: string | number;
+  currentSlug: string;
 }
 
 function getDiscount(price: string, salePrice: string): number {
@@ -35,7 +35,7 @@ export default function AlsoLike({ subCategoryId, currentSlug }: AlsoLikeProps) 
 
   const { data, isLoading } = useGetProductsQuery({
     sub_category_id: Number(targetSubCategoryId),
-    per_page: 50, 
+    per_page: 50,
   });
 
 
@@ -44,14 +44,14 @@ export default function AlsoLike({ subCategoryId, currentSlug }: AlsoLikeProps) 
       ?.filter((product) => {
         const isNotCurrent = product.slug !== currentSlug;
         const hasVariants = (product.variants?.length ?? 0) > 0;
-        
+
         const matchesSubCategory =
           String(product.sub_category_id) === targetSubCategoryId ||
           (product.sub_category && String(product.sub_category.id) === targetSubCategoryId);
 
         return isNotCurrent && hasVariants && matchesSubCategory;
       })
-      .slice(0, 4) || []; 
+      .slice(0, 4) || [];
 
   // --- ⏳ LOADING SKELETON STATE ---
   if (isLoading) {
@@ -95,9 +95,13 @@ export default function AlsoLike({ subCategoryId, currentSlug }: AlsoLikeProps) 
           <h2 className="text-3xl font-serif text-stone-900">
             You may also like
           </h2>
-          <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 hover:opacity-70 transition-opacity cursor-pointer">
+          <Link
+            to="/decor"
+            state={{ currentCategory: "decor" }}
+            className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 hover:opacity-70 transition-opacity cursor-pointer"
+          >
             View All <span className="text-sm">→</span>
-          </button>
+          </Link>
         </div>
 
         {/* PRODUCT GRID */}
@@ -107,7 +111,7 @@ export default function AlsoLike({ subCategoryId, currentSlug }: AlsoLikeProps) 
             const price = variant?.price || "0";
             const salePrice = variant?.sale_price || "0";
             const sku = variant?.sku || "";
-            
+
             const discount = getDiscount(price, salePrice);
             const displayPrice = getDisplayPrice(price, salePrice);
             const originalPrice = parseFloat(price);

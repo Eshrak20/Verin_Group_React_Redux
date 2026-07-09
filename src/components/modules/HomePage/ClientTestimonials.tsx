@@ -1,9 +1,6 @@
 
 
-interface Stat {
-  value: string;
-  label: string;
-}
+
 
 interface Testimonial {
   id: number;
@@ -14,12 +11,12 @@ interface Testimonial {
   rating: number;
 }
 
-const stats: Stat[] = [
-  { value: "98%", label: "Client Satisfaction" },
-  { value: "150+", label: "Project Delivered" },
-  { value: "4.9", label: "Average Rating" },
-  { value: "95%", label: "Repeat Clients" },
-];
+// const stats: Stat[] = [
+//   { value: "98%", label: "Client Satisfaction" },
+//   { value: "150+", label: "Project Delivered" },
+//   { value: "4.9", label: "Average Rating" },
+//   { value: "95%", label: "Repeat Clients" },
+// ];
 
 const testimonials: Testimonial[] = [
   {
@@ -117,7 +114,7 @@ export default function ClientTestimonials() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
+      {/* <div className="grid grid-cols-4 gap-4 mb-8">
         {stats.map((stat) => (
           <div
             key={stat.label}
@@ -135,7 +132,7 @@ export default function ClientTestimonials() {
             </p>
           </div>
         ))}
-      </div>
+      </div> */}
 
       {/* Testimonial Cards */}
       <div className="grid grid-cols-4 gap-4">

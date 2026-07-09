@@ -1,3 +1,15 @@
+
+
+
+
+
+
+
+
+
+
+
+
 import { Link, useLocation } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { useGetFooterSettingsQuery } from "@/redux/services/homepage/homePage.api";
@@ -16,17 +28,31 @@ export default function Footer() {
   const { data } = useGetFooterSettingsQuery();
 
 
-  const companyKey = pathname.startsWith("/decor")
-    ? "verin-decor"
-    : pathname.startsWith("/laptops")
-      ? "verin-electronics"
-      : "verin-group";
+  // const companyKey = pathname.startsWith("/decor")
+  //   ? "verin-decor"
+  //   : pathname.startsWith("/laptops")
+  //     ? "verin-electronics"
+  //     : "verin-group";
+  const companyKey =
+    pathname.startsWith("/decor") || pathname.startsWith("/products")
+      ? "verin-decor"
+      : pathname.startsWith("/laptops")
+        ? "verin-electronics"
+        : "verin-group";
 
-  const footerBg = pathname.startsWith("/decor")
-    ? "bg-[#FFFFFF]"
-    : pathname.startsWith("/laptops")
-      ? "bg-[#0f3460]"
-      : "bg-[#FFFFFF]";
+
+  // const footerBg = pathname.startsWith("/decor")
+  //   ? "bg-[#FFFFFF]"
+  //   : pathname.startsWith("/laptops")
+  //     ? "bg-[#0f3460]"
+  //     : "bg-[#FFFFFF]";
+
+  const footerBg =
+    pathname.startsWith("/decor") || pathname.startsWith("/products")
+      ? "bg-[#FFFFFF]"
+      : pathname.startsWith("/laptops")
+        ? "bg-[#0f3460]"
+        : "bg-[#FFFFFF]";
 
 
 
