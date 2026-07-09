@@ -87,8 +87,8 @@ export default function AlsoLike({ subCategoryId, currentSlug }: AlsoLikeProps) 
 
   // --- ✨ MAIN DESIGN RENDER ---
   return (
-    <section className="bg-[#FAF9F6] py-16 px-6 md:px-12">
-      <div className="max-w-6xl mx-auto">
+    <section className="bg-[#FAF9F6] mt-32 pb-16">
+      <div className="">
 
         {/* HEADER SECTION */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
