@@ -1,3 +1,5 @@
+
+
 /* eslint-disable react-hooks/exhaustive-deps */
 // src/components/ShopByCategory.tsx
 import { useRef, useEffect, useState } from "react";
@@ -5,7 +7,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useGetCategoriesQuery } from "@/redux/services/homepage/homePage.api";
 
-const CARD_WIDTH = 280;
+const CARD_WIDTH = 276;
 const GAP = 16; // gap-4 = 16px
 const SCROLL_AMOUNT = CARD_WIDTH + GAP;
 

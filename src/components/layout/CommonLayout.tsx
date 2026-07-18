@@ -18,7 +18,7 @@ export default function CommonLayout({ children }: IProps) {
             <div>
                 <Navbar />
             </div>
-            <div className="grow pt-24">
+            <div className="grow pt-22 max-w-6xl mx-auto w-full">
                 {children}
             </div>
 

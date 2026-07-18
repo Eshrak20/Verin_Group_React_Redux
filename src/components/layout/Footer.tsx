@@ -84,7 +84,7 @@ export default function Footer() {
 
   return (
     <footer className={`${footerBg} ${pathname === "/" ? "home-black-text" : "text-white"}`}>
-      <div className="p-12">
+      <div className="py-12 max-w-6xl mx-auto w-full">
         <div className="grid grid-cols-4 gap-8">
 
           {/* Col 1 — Brand */}

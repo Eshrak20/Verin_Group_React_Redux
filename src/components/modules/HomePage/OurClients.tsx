@@ -83,7 +83,7 @@ export default function OurClients() {
   }, []);
 
   return (
-    <section className="py-12">
+    <section className="py-12 max-w-6xl mx-auto w-full">
       {/* Header */}
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold home-black-text">

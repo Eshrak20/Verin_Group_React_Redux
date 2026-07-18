@@ -9,7 +9,7 @@ import ShopByCategory from "@/components/modules/HomePage/ShopByCategory";
 export default function Homepage() {
     return (
         <div>
-            <div className="w-full px-12 bg-home">
+            <div className="w-full bg-home">
                 <Banner />
                 <ShopByCategory />
                 <DecorFeaturedProducts />

@@ -68,7 +68,7 @@ export default function Banner() {
   }, [current, goTo]);
 
   return (
-    <div className="grid grid-cols-[2fr_1fr] gap-2 w-full h-72 md:h-80 lg:h-108">
+    <div className="grid grid-cols-[2fr_1fr] gap-2 w-full h-72 md:h-80 lg:h-122">
 
       {/* Left — Slider (fixed size container) */}
       <div className="relative h-full w-full rounded-xl overflow-hidden">
