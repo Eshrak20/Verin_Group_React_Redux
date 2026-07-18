@@ -37,7 +37,8 @@ export default function ShopByCategory() {
           id: cat.id,
           name: cat.name,
           image: cat.image_url,
-          path: `/category/${cat.slug}`,
+          // path: `/category/${cat.slug}`,
+          path: `/category/${cat.name.toLowerCase().replace(/\s+/g, "-")}`, 
           bg: fallbackBgs[i % fallbackBgs.length],
         }))
       : [];

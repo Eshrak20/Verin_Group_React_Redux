@@ -4,7 +4,7 @@ import ProductCatalog from "@/components/modules/DecorPage/ProductCatalog";
 
 export default function DecorPage() {
     return (
-        <div className="px-12 ">
+        <div className="">
             <Banner />
             <FeaturedPieces />
             <ProductCatalog />

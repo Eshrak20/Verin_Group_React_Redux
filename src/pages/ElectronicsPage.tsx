@@ -1,7 +1,7 @@
 import { Clock, Heart, Star } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa6";
 
-export default function LaptopsPage() {
+export default function ElectronicsPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#0F172A] px-4 py-24">
       {/* Main Card */}

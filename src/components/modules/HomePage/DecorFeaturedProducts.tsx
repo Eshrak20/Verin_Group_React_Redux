@@ -131,7 +131,6 @@ export default function DecorFeaturedProducts() {
             const oldPrice = Number(variant?.price ?? 0);
 
             return (
-              /* 🎯 পুরো কার্ডটিকে ক্লিকে নেভিগেট করার জন্য wrapper div-এ onClick হ্যান্ডলার ও hover ইফেক্ট দেওয়া হয়েছে */
               <div
                 key={product.id}
                 onClick={() => navigate(`/products/${product.slug}`)}
@@ -160,13 +159,12 @@ export default function DecorFeaturedProducts() {
                     translate-y-2 group-hover:translate-y-0
                     transition-all duration-300
                   ">
-                    {/* 🎯 এখানে এক্সট্রা onClick বা লজিক চেঞ্জের প্রয়োজন নেই, বাটন ডিজাইন ঠিক রাখা হয়েছে */}
                     <span className="
                       bg-white text-gray-900 text-xs font-bold
                       px-4 py-1.5 rounded-full shadow-md
                       hover:bg-gray-100 transition-colors whitespace-nowrap items-center gap-1 inline-block
                     ">
-                      <ShoppingCart size={12} className="inline-block" />
+                      <ShoppingCart size={12} className="inline-block mr-1" />
                       Buy Now
                     </span>
                   </div>

@@ -5,12 +5,13 @@ import Homepage from "@/pages/Homepage";
 import GlobalErrorPage from "@/components/layout/GlobalErrorPage";
 import DecorPage from "@/pages/DecorPage";
 import LogisticsPage from "@/pages/LogisticsPage";
-import LaptopsPage from "@/pages/LaptopsPage";
 import ProductDetailsPage from "@/pages/ProductDetailsPage";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import Login from "@/pages/Login";
 import Signup from "@/pages/SignUp";
 import ContactUs from "@/pages/ContactUs";
+import ClothingPage from "@/pages/ClothingPage";
+import ElectronicsPage from "@/pages/ElectronicsPage";
 
 
 
@@ -29,12 +30,20 @@ export const router = createBrowserRouter([
                 Component: DecorPage
             },
             {
+                path: "verin_decor",
+                Component: DecorPage
+            },
+            {
+                path: "clothing",
+                Component: ClothingPage
+            },
+            {
                 path: "logistics",
                 Component: LogisticsPage
             },
             {
-                path: "laptops",
-                Component: LaptopsPage
+                path: "/electronics",
+                Component: ElectronicsPage
             },
             {
                 path: "/products/:slug",

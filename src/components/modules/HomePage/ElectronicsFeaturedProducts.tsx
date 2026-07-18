@@ -4,7 +4,6 @@ import { useRef, useState, useEffect, useMemo } from "react";
 import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 
-// 🎯 এপিআই এবং টাইপস ইম্পোর্ট করা হয়েছে
 import { useGetProductsQuery } from "@/redux/services/product/product.api";
 import type { Product } from "@/types/product.type";
 
@@ -17,16 +16,14 @@ export default function ElectronicsFeaturedProducts() {
   const [canScrollRight, setCanScrollRight] = useState(true);
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // 🎯 এপিআই থেকে ডেটা কল করা হয়েছে
   const { data, isLoading } = useGetProductsQuery({ per_page: 100 });
 
-  // 🎯 এখানে কন্ডিশন পরিবর্তন করে শুধুমাত্র Electronics এবং Featured প্রোডাক্ট ফিল্টার করা হয়েছে
   const electronicsProducts = useMemo(() => {
     const allProducts = data?.data ?? [];
     return allProducts.filter(
       (p) =>
         p.category?.name?.toLowerCase().includes("electronics") &&
-        p.is_featured === "1" // 🎯 শুধুমাত্র ফিচার্ড প্রোডাক্ট চেক করার কন্ডিশন
+        p.is_featured === "1" 
     );
   }, [data]);
 
@@ -84,7 +81,7 @@ export default function ElectronicsFeaturedProducts() {
     return () => stopAuto();
   }, [electronicsProducts]);
 
-  // 🎯 লোডিং স্টেট হ্যান্ডেলিং
+  
   if (isLoading) {
     return (
       <section className="py-8">
@@ -145,7 +142,7 @@ export default function ElectronicsFeaturedProducts() {
                 "https://placehold.co/170x170/e2e8f0/94a3b8?text=No+Image";
 
               return (
-                /* 🎯 পুরো কার্ডটিকে একটি একক Link ট্যাগ দিয়ে মুড়িয়ে দেওয়া হয়েছে */
+                
                 <Link
                   key={product.id}
                   to={`/products/${product.slug}`}
@@ -177,13 +174,13 @@ export default function ElectronicsFeaturedProducts() {
                       translate-y-2 group-hover:translate-y-0
                       transition-all duration-300
                     ">
-                      {/* 🎯 নেস্টেড জটিলতা এড়াতে বাটনটিকে স্প্যান (span) করা হয়েছে, ডিজাইন একই থাকবে */}
+                      
                       <span className="
                         bg-white text-gray-900 text-xs font-bold
                         px-4 py-1.5 rounded-full shadow-md
                         hover:bg-gray-100 transition-colors whitespace-nowrap items-center gap-1 inline-block
                       ">
-                        <ShoppingCart size={12} className="inline-block" />
+                        <ShoppingCart size={12} className="inline-block mr-1" />
                         Buy Now
                       </span>
                     </div>
