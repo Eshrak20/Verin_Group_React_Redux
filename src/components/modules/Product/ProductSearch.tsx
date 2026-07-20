@@ -100,7 +100,7 @@ export default function ProductSearch({ searchOpen, setSearchOpen }: ProductSear
             ${searchOpen ? "w-full opacity-100 px-1" : "w-0 opacity-0 pointer-events-none"}
           `}
         />
-        <Search size={16} className="text-gray-400 shrink-0" />
+        <Search size={16} className="text-[#00416A] shrink-0" />
       </div>
 
       {/* Dropdown Floating Panel */}
@@ -206,7 +206,7 @@ export default function ProductSearch({ searchOpen, setSearchOpen }: ProductSear
                         className="w-11 h-11 object-cover rounded-xl bg-gray-50 shrink-0 border border-gray-100"
                       />
                       <div className="flex flex-col min-w-0">
-                        <span className="text-sm font-semibold text-gray-800 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                        <span className="text-sm font-semibold home-black-text line-clamp-1 ">
                           {product.name}
                         </span>
                         <span className="text-[10px] text-gray-400 uppercase tracking-wider mt-0.5 truncate">
@@ -233,7 +233,7 @@ export default function ProductSearch({ searchOpen, setSearchOpen }: ProductSear
                   setSearchOpen(false);
                   setSearchTerm("");
                 }}
-                className="block w-full text-center py-2 text-xs font-bold text-blue-600 hover:text-blue-700 transition-all"
+                className="block w-full text-center py-2 text-xs font-bold home-black-text hover:underline hover:cursor-pointer transition-all"
               >
                 View all results
               </Link>

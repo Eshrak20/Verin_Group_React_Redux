@@ -208,7 +208,7 @@ export default function OurBlogs() {
 
               {/* Read More */}
               <span className="
-                text-xs font-semibold home-black-text hover:text-blue-600 hover:underline
+                text-xs font-semibold home-black-text  hover:underline
                 transition-colors duration-200 mt-1
               ">
                 {isBangla ? "আরও পড়ুন →" : "Read More →"}

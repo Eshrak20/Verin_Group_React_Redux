@@ -13,6 +13,11 @@ import ContactUs from "@/pages/ContactUs";
 import ClothingPage from "@/pages/ClothingPage";
 import ElectronicsPage from "@/pages/ElectronicsPage";
 import SearchPage from "@/pages/SearchPage";
+import FurniturePage from "@/pages/FurniturePage";
+import BooksPage from "@/pages/BooksPage";
+import GamingPage from "@/pages/GamingPage";
+import KitchenPage from "@/pages/KitchenPage";
+import BlogDetailsPage from "@/pages/BlogDetailsPage";
 
 
 
@@ -55,8 +60,28 @@ export const router = createBrowserRouter([
                 Component: ContactUs
             },
             {
+                path: "furniture",
+                Component: FurniturePage
+            },
+            {
+                path: "books",
+                Component: BooksPage
+            },
+            {
+                path: "gaming",
+                Component: GamingPage
+            },
+            {
+                path: "kitchen",
+                Component: KitchenPage
+            },
+            {
                 path: "search",
                 Component: SearchPage
+            },
+            {
+                path: "/blogs/:id",
+                Component: BlogDetailsPage
             }
             // {
             //     path: "faq",
