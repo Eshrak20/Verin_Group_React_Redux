@@ -12,6 +12,7 @@ import Signup from "@/pages/SignUp";
 import ContactUs from "@/pages/ContactUs";
 import ClothingPage from "@/pages/ClothingPage";
 import ElectronicsPage from "@/pages/ElectronicsPage";
+import SearchPage from "@/pages/SearchPage";
 
 
 
@@ -27,10 +28,6 @@ export const router = createBrowserRouter([
             },
             {
                 path: "decor",
-                Component: DecorPage
-            },
-            {
-                path: "verin_decor",
                 Component: DecorPage
             },
             {
@@ -57,6 +54,10 @@ export const router = createBrowserRouter([
                 path: "contact",
                 Component: ContactUs
             },
+            {
+                path: "search",
+                Component: SearchPage
+            }
             // {
             //     path: "faq",
             //     Component: FAQ

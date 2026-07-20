@@ -31,17 +31,31 @@ export default function ShopByCategory() {
 
   const { data, isLoading } = useGetCategoriesQuery();
 
+  // const categories =
+  //   data?.status && data.data.length > 0
+  //     ? data.data.map((cat, i) => ({
+  //         id: cat.id,
+  //         name: cat.name,
+  //         image: cat.image_url,
+  //         // path: `/category/${cat.slug}`,
+  //         path: `/category/${cat.name.toLowerCase().replace(/\s+/g, "-")}`, 
+  //         bg: fallbackBgs[i % fallbackBgs.length],
+  //       }))
+  //     : [];
   const categories =
-    data?.status && data.data.length > 0
-      ? data.data.map((cat, i) => ({
+  data?.status && data.data.length > 0
+    ? data.data.map((cat, i) => {
+        const cleanSlug = cat.slug.replace("verin_", ""); 
+        
+        return {
           id: cat.id,
           name: cat.name,
           image: cat.image_url,
-          // path: `/category/${cat.slug}`,
-          path: `/category/${cat.name.toLowerCase().replace(/\s+/g, "-")}`, 
+          path: `/${cleanSlug}`, 
           bg: fallbackBgs[i % fallbackBgs.length],
-        }))
-      : [];
+        };
+      })
+    : [];
 
   const checkScroll = () => {
     const el = scrollRef.current;
