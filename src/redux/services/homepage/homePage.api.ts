@@ -57,6 +57,16 @@ export const categoriesApi = baseApi.injectEndpoints({
 });
 
 
+export const clientReviewsApi = baseApi.injectEndpoints({ 
+  endpoints: (builder) => ({
+    getReviews: builder.query({
+      query: () => "/client-reviews",
+      providesTags: ["ClientReviews"],
+    }),
+  }),
+});
+
+
 
 export const footerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -72,3 +82,4 @@ export const footerApi = baseApi.injectEndpoints({
 export const { useGetHomeBannerQuery } = bannerApi;
 export const { useGetCategoriesQuery } = categoriesApi;
 export const { useGetFooterSettingsQuery } = footerApi;
+export const { useGetReviewsQuery } = clientReviewsApi;

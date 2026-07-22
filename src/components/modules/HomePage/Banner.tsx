@@ -91,7 +91,8 @@ export default function Banner() {
               <img
                 src={slide.image}
                 alt={`Banner ${slide.id}`}
-                className="w-full h-full object-cover"
+                // className="w-full h-full object-contain"
+                className="w-full h-full object-fill"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
@@ -107,7 +108,7 @@ export default function Banner() {
             absolute left-3 top-1/2 -translate-y-1/2 z-10
             w-8 h-8 rounded-full flex items-center justify-center
             bg-white/20 border border-white/30 text-white
-            hover:bg-white/35 transition-all duration-200
+            hover:bg-white/35 hover:cursor-pointer transition-all duration-200
             backdrop-blur-sm
           "
         >
@@ -120,7 +121,7 @@ export default function Banner() {
           className="
             absolute right-3 top-1/2 -translate-y-1/2 z-10
             w-8 h-8 rounded-full flex items-center justify-center
-            bg-white/20 border border-white/30 text-white
+            bg-white/20 border hover:cursor-pointer border-white/30 text-white
             hover:bg-white/35 transition-all duration-200
             backdrop-blur-sm
           "
@@ -135,7 +136,7 @@ export default function Banner() {
               key={index}
               onClick={() => goTo(index)}
               className={`
-                h-2 rounded-full transition-all duration-300
+                h-2 rounded-full hover:cursor-pointer transition-all duration-300
                 ${index === current ? "w-5 bg-white" : "w-2 bg-white/40"}
               `}
             />
@@ -161,7 +162,7 @@ export default function Banner() {
                 <img
                   src={img.image}
                   alt={`Side banner ${img.id}`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-fill"
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = "none";
                   }}

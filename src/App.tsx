@@ -1,11 +1,13 @@
 
 import { Outlet } from "react-router"
 import CommonLayout from "./components/layout/CommonLayout"
+import ScrollToTop from "./components/layout/ScrollToTop"
 
 function App() {
 
   return (
     <CommonLayout>
+      <ScrollToTop />
       <Outlet />
     </CommonLayout>
   )

@@ -18,6 +18,8 @@ import BooksPage from "@/pages/BooksPage";
 import GamingPage from "@/pages/GamingPage";
 import KitchenPage from "@/pages/KitchenPage";
 import BlogDetailsPage from "@/pages/BlogDetailsPage";
+import BlogsPage from "@/pages/BlogsPage";
+import TestimonialsPage from "@/pages/TestimonialsPage";
 
 
 
@@ -80,8 +82,16 @@ export const router = createBrowserRouter([
                 Component: SearchPage
             },
             {
+                path: "/blogs",
+                Component: BlogsPage
+            },
+            {
                 path: "/blogs/:id",
                 Component: BlogDetailsPage
+            },
+            {
+                path: "testimonials",
+                Component: TestimonialsPage
             }
             // {
             //     path: "faq",

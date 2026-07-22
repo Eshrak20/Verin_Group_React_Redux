@@ -8,6 +8,7 @@ import { Provider } from 'react-redux'
 import { store } from './redux/store'
 import { ActiveCategoryProvider } from './utils/ActiveCategoryContext'
 
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ActiveCategoryProvider>

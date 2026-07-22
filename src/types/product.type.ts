@@ -44,7 +44,8 @@ export interface Product {
   short_description: string;
   description: string;
   thumbnail: string | null;
-  is_featured: string;
+  is_featured: boolean | string | number;
+  // is_featured: string;
   status: string;
   created_at: string;
   updated_at: string;

@@ -1,3 +1,17 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { useRef, useState, useEffect, useMemo } from "react";
@@ -18,13 +32,22 @@ export default function ElectronicsFeaturedProducts() {
 
   const { data, isLoading } = useGetProductsQuery({ per_page: 100 });
 
+  
   const electronicsProducts = useMemo(() => {
     const allProducts = data?.data ?? [];
-    return allProducts.filter(
-      (p) =>
-        p.category?.name?.toLowerCase().includes("electronics") &&
-        p.is_featured === "1" 
-    );
+
+    return allProducts.filter((p) => {
+      
+      const isElectronics = p.category?.name?.toLowerCase().includes("electronics");
+
+      
+      const isFeatured =
+        p.is_featured === true ||
+        p.is_featured === 1 ||
+        p.is_featured === "1";
+
+      return isElectronics && isFeatured;
+    });
   }, [data]);
 
   const getCardWidth = () => {
@@ -81,7 +104,7 @@ export default function ElectronicsFeaturedProducts() {
     return () => stopAuto();
   }, [electronicsProducts]);
 
-  
+
   if (isLoading) {
     return (
       <section className="py-8">
@@ -142,7 +165,7 @@ export default function ElectronicsFeaturedProducts() {
                 "https://placehold.co/170x170/e2e8f0/94a3b8?text=No+Image";
 
               return (
-                
+
                 <Link
                   key={product.id}
                   to={`/products/${product.slug}`}
@@ -174,7 +197,7 @@ export default function ElectronicsFeaturedProducts() {
                       translate-y-2 group-hover:translate-y-0
                       transition-all duration-300
                     ">
-                      
+
                       <span className="
                         bg-white text-gray-900 text-xs font-bold
                         px-4 py-1.5 rounded-full shadow-md
