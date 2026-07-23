@@ -178,7 +178,7 @@ export default function Navbar() {
       <div>
         <div className="flex items-center justify-between bg-white border-b-2 border-gray-200/70 h-14 shadow-lg shadow-black/5 backdrop-blur-md">
           {/* Main Container */}
-          <div className="max-w-6xl mx-auto flex w-full items-center justify-between px-3 sm:px-4 lg:px-0">
+          <div className="max-w-6xl mx-auto flex w-full items-center justify-between px-4 sm:px-4 lg:px-0">
             
             {/* 1. Left Section: Dynamic Logo & Link */}
             <div className="relative min-w-0 shrink-0 z-10 max-w-[50%] sm:max-w-none">
