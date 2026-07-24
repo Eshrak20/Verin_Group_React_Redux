@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useGetProductsQuery } from "@/redux/services/product/product.api";
 import type { Product } from "@/types/product.type";
 
@@ -25,7 +25,7 @@ function getDisplayPrice(price: string | number, salePrice: string | number): nu
 }
 
 export default function FeaturedPieces() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { data, isLoading } = useGetProductsQuery({ per_page: 100 });
 
   // 🎯 ElectronicsFeaturedProducts এর মতো সেফ ফিল্টারিং
@@ -90,12 +90,12 @@ export default function FeaturedPieces() {
               Our currently hottest selling items.
             </p>
           </div>
-          <button
+          {/* <button
             onClick={() => navigate("/products")}
             className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-stone-900 hover:opacity-70 transition-opacity cursor-pointer whitespace-nowrap"
           >
             View All <span className="text-xs sm:text-sm">→</span>
-          </button>
+          </button> */}
         </div>
 
         {/* PRODUCT GRID */}
