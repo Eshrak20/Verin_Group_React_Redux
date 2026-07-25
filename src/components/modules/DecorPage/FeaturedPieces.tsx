@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGetProductsQuery } from "@/redux/services/product/product.api";
 import type { Product } from "@/types/product.type";
 
@@ -25,27 +25,29 @@ function getDisplayPrice(price: string | number, salePrice: string | number): nu
 }
 
 export default function FeaturedPieces() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { data, isLoading } = useGetProductsQuery({ per_page: 100 });
 
-  // 🎯 ElectronicsFeaturedProducts এর মতো সেফ ফিল্টারিং
+  // 🎯 ElectronicsFeaturedProducts এর মতো সেফ ফিল্টারিং + ১. সর্বশেষ ৪টি আইটেম সিলেক্ট
   const featuredItems = useMemo(() => {
     const allProducts = Array.isArray(data)
       ? data
       : data?.data ?? [];
 
-    return allProducts.filter((p) => {
-      const isDecor = p.category?.name?.toLowerCase().includes("decor");
+    return allProducts
+      .filter((p) => {
+        const isDecor = p.category?.name?.toLowerCase().includes("decor");
 
-      const isFeatured =
-        p.is_featured === true ||
-        p.is_featured === 1 ||
-        p.is_featured === "1";
+        const isFeatured =
+          p.is_featured === true ||
+          p.is_featured === 1 ||
+          p.is_featured === "1";
 
-      const hasVariants = (p.variants?.length ?? 0) > 0;
+        const hasVariants = (p.variants?.length ?? 0) > 0;
 
-      return isDecor && isFeatured && hasVariants;
-    });
+        return isDecor && isFeatured && hasVariants;
+      })
+      .slice(0, 4); // ✅ শুধুমাত্র লেটেস্ট ৪টি প্রোডাক্ট ফিল্টার করবে
   }, [data]);
 
   if (isLoading) {
@@ -90,12 +92,14 @@ export default function FeaturedPieces() {
               Our currently hottest selling items.
             </p>
           </div>
-          {/* <button
-            onClick={() => navigate("/products")}
+
+          {/* VIEW ALL BUTTON (২. নেভিগেশন স্টেপ) */}
+          <button
+            onClick={() => navigate("/decor-featured-products")}
             className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-stone-900 hover:opacity-70 transition-opacity cursor-pointer whitespace-nowrap"
           >
             View All <span className="text-xs sm:text-sm">→</span>
-          </button> */}
+          </button>
         </div>
 
         {/* PRODUCT GRID */}
@@ -193,4 +197,9 @@ export default function FeaturedPieces() {
     </section>
   );
 }
+
+
+
+
+
 

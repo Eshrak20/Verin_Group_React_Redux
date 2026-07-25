@@ -38,7 +38,6 @@ export default function AlsoLike({ subCategoryId, currentSlug }: AlsoLikeProps) 
     per_page: 50,
   });
 
-
   const relatedProducts =
     data?.data
       ?.filter((product) => {
@@ -117,10 +116,17 @@ export default function AlsoLike({ subCategoryId, currentSlug }: AlsoLikeProps) 
             const originalPrice = parseFloat(price);
             const image = getImage(product);
 
+            // 🎯 Navigate Function
+            const handleCardClick = () => {
+              navigate(`/products/${product.slug}`);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            };
+
             return (
               <div
                 key={product.id}
-                className="bg-white rounded-[2.2rem] p-4 border border-stone-100 shadow-xs flex flex-col justify-between group"
+                onClick={handleCardClick}
+                className="bg-white rounded-[2.2rem] p-4 border border-stone-100 shadow-xs flex flex-col justify-between group cursor-pointer"
               >
                 {/* IMAGE WITH BADGES */}
                 <div className="relative aspect-4/5 w-full rounded-[1.8rem] overflow-hidden bg-stone-100">
@@ -185,11 +191,8 @@ export default function AlsoLike({ subCategoryId, currentSlug }: AlsoLikeProps) 
                     </div>
 
                     <button
-                      onClick={() => {
-                        navigate(`/products/${product.slug}`);
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }}
-                      className="w-full bg-[#1c1c1c] text-white text-xs font-bold uppercase tracking-widest py-3.5 rounded-full transition-all duration-300 hover:bg-[#5A5A40] hover:shadow-md cursor-pointer"
+                      type="button"
+                      className="w-full bg-[#1c1c1c] text-white text-xs font-bold uppercase tracking-widest py-3.5 rounded-full transition-all duration-300 group-hover:bg-[#5A5A40] group-hover:shadow-md cursor-pointer"
                     >
                       View Details
                     </button>
@@ -204,5 +207,7 @@ export default function AlsoLike({ subCategoryId, currentSlug }: AlsoLikeProps) 
     </section>
   );
 }
+
+
 
 

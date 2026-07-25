@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import { useState, useEffect, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { MessageCircle, PackageCheck, Tag, X } from "lucide-react";
 
 import { useGetProductsQuery } from "@/redux/services/product/product.api";
@@ -11,6 +11,8 @@ import { useActiveCategory } from "@/utils/ActiveCategoryContext";
 
 export default function ProductDetails() {
   const { slug } = useParams<{ slug: string }>();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const { data: response, isLoading } = useGetProductsQuery({ per_page: 100 });
   const products: Product[] = response?.data || [];
@@ -24,6 +26,22 @@ export default function ProductDetails() {
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
+
+  // 🎯 Dynamic Back Handler Function
+  const handleBackNavigation = () => {
+    // ১. যদি state-এ 'from' লোকেশন পাঠানো থাকে
+    if (location.state?.from) {
+      navigate(location.state.from);
+    } 
+    // ২. যদি ব্রাউজারে প্রিভিয়াস হিস্ট্রি থাকে (window.history.key "default" না হয়)
+    else if (window.history.length > 2) {
+      navigate(-1);
+    } 
+    // ৩. ডিফল্ট ব্যাকগ্রাউন্ড রাউট
+    else {
+      navigate("/decor");
+    }
+  };
 
   useEffect(() => {
     if (product?.variants && product.variants.length > 0) {
@@ -136,7 +154,7 @@ export default function ProductDetails() {
             />
           </div>
 
-          {/* Modal Thumbnails (যদি একের অধিক ছবি থাকে) */}
+          {/* Modal Thumbnails */}
           {productImages.length > 1 && (
             <div
               className="flex gap-2 sm:gap-3 mt-4 overflow-x-auto p-2 max-w-[95vw] sm:max-w-[90vw] hide-scrollbar"
@@ -164,14 +182,15 @@ export default function ProductDetails() {
         </div>
       )}
 
-      {/* BACK */}
+      {/* ✅ UPDATED BACK TO CATALOG BUTTON */}
       <div className="mb-6 sm:mb-8">
-        <Link
-          to="/decor"
-          className="text-xs sm:text-sm font-bold tracking-widest text-gray-500 hover:text-gray-900 flex items-center gap-1.5 uppercase"
+        <button
+          type="button"
+          onClick={handleBackNavigation}
+          className="text-xs sm:text-sm font-bold tracking-widest text-gray-500 hover:text-gray-900 flex items-center gap-1.5 uppercase cursor-pointer"
         >
           ← BACK TO CATALOG
-        </Link>
+        </button>
       </div>
 
       {/* MAIN LAYOUT */}
@@ -180,7 +199,7 @@ export default function ProductDetails() {
         {/* LEFT */}
         <div className="w-full lg:w-1/2 flex flex-col gap-3 sm:gap-4">
 
-          {/* Main image card — ✅ cursor-zoom-in + onClick */}
+          {/* Main image card */}
           <div
             className="w-full bg-white rounded-2xl sm:rounded-[32px] overflow-hidden shadow-sm relative border border-gray-100 cursor-zoom-in"
             onClick={() => setModalOpen(true)}
@@ -343,6 +362,15 @@ export default function ProductDetails() {
     </section>
   );
 }
+
+
+
+
+
+
+
+
+
 
 
 

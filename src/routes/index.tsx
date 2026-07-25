@@ -20,6 +20,7 @@ import KitchenPage from "@/pages/KitchenPage";
 import BlogDetailsPage from "@/pages/BlogDetailsPage";
 import BlogsPage from "@/pages/BlogsPage";
 import TestimonialsPage from "@/pages/TestimonialsPage";
+import DecorFeaturedProductsPage from "@/components/modules/DecorPage/DecorFeaturedProductsPage";
 
 
 
@@ -92,6 +93,10 @@ export const router = createBrowserRouter([
             {
                 path: "testimonials",
                 Component: TestimonialsPage
+            },
+            {
+                path: "/decor-featured-products",
+                Component: DecorFeaturedProductsPage
             }
             // {
             //     path: "faq",
