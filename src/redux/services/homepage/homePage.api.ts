@@ -68,6 +68,17 @@ export const clientReviewsApi = baseApi.injectEndpoints({
 
 
 
+export const clientApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    getClient: builder.query({
+      query: () => "/clients",
+      providesTags: ["Client"],
+    }),
+  })
+})
+
+
+
 export const footerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getFooterSettings: builder.query<FooterResponse, void>({
@@ -83,3 +94,4 @@ export const { useGetHomeBannerQuery } = bannerApi;
 export const { useGetCategoriesQuery } = categoriesApi;
 export const { useGetFooterSettingsQuery } = footerApi;
 export const { useGetReviewsQuery } = clientReviewsApi;
+export const { useGetClientQuery } = clientApi;

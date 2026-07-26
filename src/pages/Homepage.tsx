@@ -1,9 +1,9 @@
 import Banner from "@/components/modules/HomePage/Banner";
 import DecorFeaturedProducts from "@/components/modules/HomePage/DecorFeaturedProducts";
 import ElectronicsFeaturedProducts from "@/components/modules/HomePage/ElectronicsFeaturedProducts";
-import Logistics from "@/components/modules/HomePage/Logistics";
 import OurBlogs from "@/components/modules/HomePage/OurBlogs";
 import ShopByCategory from "@/components/modules/HomePage/ShopByCategory";
+import Clients from "@/components/modules/HomePage/Clients";
 
 
 export default function Homepage() {
@@ -14,7 +14,7 @@ export default function Homepage() {
                 <ShopByCategory />
                 <DecorFeaturedProducts />
                 <ElectronicsFeaturedProducts />
-                <Logistics />
+                <Clients />
                 <OurBlogs />
             </div>
         </div>

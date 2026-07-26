@@ -1,16 +1,16 @@
 import { useGetReviewsQuery } from "@/redux/services/homepage/homePage.api";
 
-
+// API Response Item Type Definition (সঠিক টাইপ দিয়ে আপডেট করা হয়েছে)
 interface ApiReview {
   id: number;
   client_name: string;
   client_position: string | null;
   client_image: string;
-  rating: string;
+  rating: number | string;
   review: string;
   item: string;
-  is_active: string;
-  sort_order: string;
+  is_active: number | string;
+  sort_order: number | string;
   created_at: string;
   updated_at: string;
   image_url: string;
@@ -73,13 +73,13 @@ export default function TestimonialsPage() {
 
   const reviewsList: ApiReview[] = data?.data ?? [];
 
-  // শুধুমাত্র active রিভিউগুলো শর্ট অর্ডার অথবা নতুন ডেট অনুযায়ী ফিল্টার করা
+  // ✅ number এবং string উভয় ফরম্যাট সেইফলি হ্যান্ডেল করার জন্য Number() চেক ব্যবহার করা হয়েছে
   const activeReviews = [...reviewsList]
-    .filter((item) => item.is_active === "1")
+    .filter((item) => Number(item.is_active) === 1)
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div className="min-h-screen py-12 lg:px-0 px-4 max-w-7xl mx-auto">
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
@@ -176,3 +176,8 @@ export default function TestimonialsPage() {
     </div>
   );
 }
+
+
+
+
+
