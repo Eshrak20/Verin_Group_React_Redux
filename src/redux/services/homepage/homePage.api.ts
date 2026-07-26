@@ -34,6 +34,38 @@ interface CategoryResponse {
 
 
 
+// Blog interface
+interface Blog {
+  id: number;
+  title: string;
+  title_bng: string | null;
+  slug: string;
+  content: string;
+  content_bng: string | null;
+  summary: string | null;
+  summary_bng: string | null;
+  excerpt: string | null;
+  featured_image: string | null;
+  category_id: number | null;
+  author_id: number | null;
+  status: string;
+  meta_title: string | null;
+  meta_description: string | null;
+  views: number;
+  is_featured: boolean;
+  reading_time: number;
+  published_at: string | null;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+  image_url: string;
+}
+
+interface BlogResponse {
+  current_page: number;
+  data: Blog[];
+}
+
 
 
 // banner api
@@ -78,6 +110,15 @@ export const clientApi = baseApi.injectEndpoints({
 })
 
 
+export const blogApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    getBlog: builder.query<BlogResponse, void>({
+      query: () => "/blogs",
+      providesTags: ["Blog"],
+    }),
+  }),
+});
+
 
 export const footerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -95,3 +136,4 @@ export const { useGetCategoriesQuery } = categoriesApi;
 export const { useGetFooterSettingsQuery } = footerApi;
 export const { useGetReviewsQuery } = clientReviewsApi;
 export const { useGetClientQuery } = clientApi;
+export const { useGetBlogQuery } = blogApi;

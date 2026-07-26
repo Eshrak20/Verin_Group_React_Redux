@@ -112,10 +112,21 @@ export default function ProductDetails() {
       ? currentVariant.images.map((img) => img.image_url)
       : [product.thumbnail || "https://placehold.co/600x400/e2e8f0/94a3b8?text=No+Image"];
 
-  const whatsappNumber = "8801XXXXXXXXX";
-  const whatsappMessage = encodeURIComponent(
-    `Hello, I want to order this product:\n\nName: ${product.name}\nSKU: ${currentVariant?.sku || "N/A"}\nPrice: TK ${(hasDiscount ? salePrice : price).toLocaleString()}.00`
-  );
+ // WhatsApp Configuration
+  const whatsappNumber = "8801805734585";
+  const productUrl = window.location.href;
+  const currentPrice = hasDiscount ? salePrice : price;
+
+  // Custom Formatted WhatsApp Message with exact %0A break
+  const rawText = `Hello, I am interested in this product.
+
+Product Name: ${product.name}
+Price: TK ${currentPrice.toLocaleString()}.00
+Product URL: ${productUrl}
+
+Please provide more details.`;
+
+  const whatsappMessage = encodeURIComponent(rawText);
 
   return (
     <section className="min-h-screen bg-[#FAF9F6] pt-4 sm:pt-6 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-0 max-w-6xl mx-auto w-full">
@@ -335,7 +346,7 @@ export default function ProductDetails() {
             </div>
           )}
 
-          <div>
+          {/* <div>
             <a
               href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
               target="_blank"
@@ -345,7 +356,18 @@ export default function ProductDetails() {
               <MessageCircle size={18} className="sm:w-5 sm:h-5" />
               BUY NOW ON WHATSAPP
             </a>
-          </div>
+          </div> */}
+          <div>
+    <a
+      href={`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${whatsappMessage}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center justify-center gap-2.5 sm:gap-3 bg-[#1A1A1A] text-white w-full sm:w-auto px-6 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-xs tracking-widest hover:bg-[#5A5A40] transition-colors"
+    >
+      <MessageCircle size={18} className="sm:w-5 sm:h-5" />
+      BUY NOW ON WHATSAPP
+    </a>
+  </div>
 
           <p className="text-[10px] text-[#1A1A1A]/50 uppercase mt-3 sm:mt-4 tracking-wider text-center md:text-left">
             Clicking this will open a prefilled WhatsApp chat to process your order.
@@ -362,16 +384,5 @@ export default function ProductDetails() {
     </section>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
