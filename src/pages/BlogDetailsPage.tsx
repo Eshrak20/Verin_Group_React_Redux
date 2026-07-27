@@ -3,12 +3,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { 
-  ArrowLeft, MessageCircle, Send
-} from "lucide-react";
+import { ArrowLeft, MessageCircle, Send } from "lucide-react";
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 import { useGetBlogQuery } from "@/redux/services/homepage/homePage.api";
 import { useGetProductsQuery } from "@/redux/services/product/product.api";
+import { motion } from "framer-motion";
 
 interface Blog {
   id: number;
@@ -40,7 +39,7 @@ export default function BlogDetailsPage() {
   const rawBlogs: Blog[] = blogData?.data ?? [];
   const products = productsData?.data ?? [];
 
-  // র‍্যান্ডমলি ২টি প্রোডাক্ট নেওয়ার জন্য useMemo
+  // র‍্যান্ডমলি ৫টি প্রোডাক্ট নেওয়ার জন্য useMemo
   const suggestedProducts = useMemo(() => {
     if (!products.length) return [];
     return [...products]
@@ -48,7 +47,7 @@ export default function BlogDetailsPage() {
       .slice(0, 5);
   }, [products, id]);
 
-  // ID অথবা Slug উভয় দিয়ে ব্লগ ম্যাচিং এর সুবিধা
+  // ID অথবা Slug উভয় দিয়ে ব্লগ ম্যাচিং
   const currentBlog = rawBlogs.find(
     (b) => b.id === Number(id) || b.slug === id
   );
@@ -74,12 +73,12 @@ export default function BlogDetailsPage() {
       <div className="min-h-screen bg-[#fceef5]/40 dark:bg-slate-900 pb-16 font-sans">
         <div className="max-w-6xl mx-auto px-4 lg:px-0 pt-8">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div className="lg:col-span-3 bg-white dark:bg-slate-800 rounded-xl p-8 space-y-4 animate-pulse">
-              <div className="h-4 bg-gray-200 dark:bg-slate-700 w-1/4 rounded" />
-              <div className="h-8 bg-gray-200 dark:bg-slate-700 w-3/4 rounded" />
-              <div className="h-4 bg-gray-200 dark:bg-slate-700 w-1/3 rounded" />
-              <div className="aspect-video bg-gray-200 dark:bg-slate-700 rounded-xl" />
-              <div className="h-20 bg-gray-200 dark:bg-slate-700 rounded" />
+            <div className="lg:col-span-3 bg-white dark:bg-slate-800 rounded-xl p-8 space-y-4 animate-pulse border border-gray-200/50 dark:border-slate-700">
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 w-1/4 rounded animate-pulse" />
+              <div className="h-8 bg-gray-200 dark:bg-slate-700 w-3/4 rounded animate-pulse" />
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 w-1/3 rounded animate-pulse" />
+              <div className="aspect-video bg-gray-200 dark:bg-slate-700 rounded-xl animate-pulse" />
+              <div className="h-20 bg-gray-200 dark:bg-slate-700 rounded animate-pulse" />
             </div>
             <div className="lg:col-span-1 space-y-4">
               <div className="h-32 bg-gray-200 dark:bg-slate-700 rounded-xl animate-pulse" />
@@ -95,12 +94,18 @@ export default function BlogDetailsPage() {
   if (isError || !currentBlog) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center gap-4 bg-[#fbf5f8] dark:bg-slate-900">
-        <h2 className="text-lg font-bold text-gray-700 dark:text-gray-200">
+        <motion.h2 
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+          className="text-lg font-bold text-gray-700 dark:text-gray-200"
+        >
           {isBangla ? "ব্লগ পাওয়া যায়নি" : "Blog Not Found"}
-        </h2>
+        </motion.h2>
         <button
           onClick={() => navigate("/")}
-          className="px-4 py-2 bg-[#262626] text-white rounded-xl text-xs hover:cursor-pointer"
+          className="px-4 py-2 bg-[#262626] text-white rounded-xl text-xs hover:cursor-pointer hover:bg-black transition-all duration-300 hover:scale-105 active:scale-95 shadow-md"
         >
           {isBangla ? "হোমে ফিরে যান" : "Back Home"}
         </button>
@@ -124,44 +129,57 @@ export default function BlogDetailsPage() {
   const date = formatDate(currentBlog.created_at, isBangla);
 
   return (
-    <div className="min-h-screen bg-[#fceef5]/40 dark:bg-slate-900 pb-16 font-sans">
+    <div className="min-h-screen bg-[#fceef5]/40 dark:bg-slate-900 pb-16 font-sans transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 lg:px-0">
-        {/* ল্যাঙ্গুয়েজ টগল ও ব্যাক বাটন অ্যাকশন */}
-        <div className="flex justify-between items-center mb-6 pt-6">
+        {/* ল্যাঙ্গুয়েজ টগল ও ব্যাক বাটন */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="flex justify-between items-center mb-6 pt-6"
+        >
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 hover:cursor-pointer text-xs font-bold text-gray-500 hover:text-black dark:hover:text-white transition-colors"
+            className="flex items-center gap-2 hover:cursor-pointer text-xs font-bold text-gray-500 hover:text-black dark:hover:text-white transition-all duration-300 hover:-translate-x-1 group"
           >
-            <ArrowLeft size={14} /> {isBangla ? "ফিরে যান" : "Go Back"}
+            <ArrowLeft size={14} className="transition-transform duration-300 group-hover:-translate-x-1" />{" "}
+            {isBangla ? "ফিরে যান" : "Go Back"}
           </button>
 
           <div className="flex bg-white dark:bg-slate-800 rounded-full p-1 border dark:border-slate-700 shadow-sm">
             <button
               onClick={() => setIsBangla(true)}
-              className={`px-4 py-1 rounded-full text-[11px] hover:cursor-pointer font-bold transition-all duration-200 ${
+              className={`px-4 py-1 rounded-full text-[11px] hover:cursor-pointer font-bold transition-all duration-300 ease-in-out transform ${
                 isBangla
-                  ? "bg-[#262626] text-white shadow-sm"
-                  : "text-gray-500"
+                  ? "bg-[#262626] text-white shadow-md scale-105"
+                  : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
               }`}
             >
               বাংলা
             </button>
             <button
               onClick={() => setIsBangla(false)}
-              className={`px-4 py-1 rounded-full text-[11px] hover:cursor-pointer font-bold transition-all duration-200 ${
+              className={`px-4 py-1 rounded-full text-[11px] hover:cursor-pointer font-bold transition-all duration-300 ease-in-out transform ${
                 !isBangla
-                  ? "bg-[#262626] text-white shadow-sm"
-                  : "text-gray-500"
+                  ? "bg-[#262626] text-white shadow-md scale-105"
+                  : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
               }`}
             >
               English
             </button>
           </div>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-          {/* ================= বামের মেইন ব্লগ কন্টেন্ট কার্ড ================= */}
-          <div className="lg:col-span-3 bg-white dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700 rounded-xl p-6 md:p-8 shadow-sm space-y-5">
+          {/* ================= বামের মেইন ব্লগ কন্টেন্ট কার্ড (Scroll Fade Up) ================= */}
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="lg:col-span-3 bg-white dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700 rounded-xl p-6 md:p-8 shadow-sm space-y-5 transition-all duration-500 hover:shadow-md"
+          >
             <div className="text-[11px] text-gray-400 font-medium">
               Home &gt; Blog &gt;{" "}
               <span className="text-gray-600 dark:text-gray-300">
@@ -169,7 +187,7 @@ export default function BlogDetailsPage() {
               </span>
             </div>
 
-            <h1 className="text-xl md:text-2xl font-black text-slate-800 dark:text-white leading-snug">
+            <h1 className="text-xl md:text-2xl font-black text-slate-800 dark:text-white leading-snug transition-colors duration-300">
               {title}
             </h1>
 
@@ -179,16 +197,16 @@ export default function BlogDetailsPage() {
             </div>
 
             {excerpt && (
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium transition-opacity duration-300">
                 {excerpt}
               </p>
             )}
 
-            <div className="rounded-xl overflow-hidden aspect-video border dark:border-slate-700 bg-gray-50 dark:bg-slate-950">
+            <div className="rounded-xl overflow-hidden aspect-video border dark:border-slate-700 bg-gray-50 dark:bg-slate-950 group">
               <img
                 src={currentBlog.image_url}
                 alt={title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src =
                     "https://placehold.co/800x450/e2e8f0/94a3b8?text=Blog+Image";
@@ -198,98 +216,105 @@ export default function BlogDetailsPage() {
 
             {/* API Content Renderer */}
             <div
-              className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 space-y-5 leading-relaxed pt-2 prose dark:prose-invert max-w-none"
+              className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 space-y-5 leading-relaxed pt-2 prose dark:prose-invert max-w-none transition-all duration-300"
               dangerouslySetInnerHTML={{ __html: content || "" }}
             />
-          </div>
+          </motion.div>
 
-          {/* ================= ডানের উইজেট সাইডবার ================= */}
+          {/* ================= ডানের উইজেট সাইডবার (Scroll Animations) ================= */}
           <div className="lg:col-span-1 space-y-5 lg:sticky lg:top-24">
-           
-{/* ১. শেয়ার বক্স উইজেট (Dynamic Path & Fallback Integrated) */}
-<div className="bg-white dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700 rounded-xl p-4 shadow-sm">
-  <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2.5">
-    {isBangla ? "পোস্টটি শেয়ার করুন" : "Share This Post"}
-  </h4>
-  
-  {(() => {
-    // ১. আপনার বর্তমান ব্রাউজারের অরিজিনাল পাথ (যেমন: /blogs/slug-name)
-    const currentPath = window.location.pathname;
+            {/* ১. শেয়ার বক্স উইজেট */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-30px" }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="bg-white dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-300"
+            >
+              <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2.5">
+                {isBangla ? "পোস্টটি শেয়ার করুন" : "Share This Post"}
+              </h4>
 
-    // ২. লাইভ ডোমেইনের সাথে পাথ যুক্ত করে ১০০% নিখুঁত শেয়ার লিংক তৈরি
-    const shareUrl = `https://v.veringroup.com${currentPath}`;
+              {(() => {
+                const currentPath = window.location.pathname;
+                const shareUrl = `https://v.veringroup.com${currentPath}`;
 
-    return (
-      <div className="flex items-center gap-2">
-        {/* Facebook Share */}
-        <a
-          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="p-1.5 rounded bg-blue-600 text-white hover:opacity-90 transition-opacity flex items-center justify-center"
-          title="Share on Facebook"
-        >
-          <FaFacebookF size={13} />
-        </a>
+                return (
+                  <div className="flex items-center gap-2">
+                    {/* Facebook Share */}
+                    <a
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded bg-blue-600 text-white hover:opacity-90 hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center shadow-sm"
+                      title="Share on Facebook"
+                    >
+                      <FaFacebookF size={13} />
+                    </a>
 
-        {/* Twitter / X Share */}
-        <a
-          href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(title)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="p-1.5 rounded bg-sky-400 text-white hover:opacity-90 transition-opacity flex items-center justify-center"
-          title="Share on Twitter"
-        >
-          <FaTwitter size={13} />
-        </a>
+                    {/* Twitter / X Share */}
+                    <a
+                      href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(title)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded bg-sky-400 text-white hover:opacity-90 hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center shadow-sm"
+                      title="Share on Twitter"
+                    >
+                      <FaTwitter size={13} />
+                    </a>
 
-        {/* LinkedIn Share */}
-        <a
-          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="p-1.5 rounded bg-blue-700 text-white hover:opacity-90 transition-opacity flex items-center justify-center"
-          title="Share on LinkedIn"
-        >
-          <FaLinkedinIn size={13} />
-        </a>
+                    {/* LinkedIn Share */}
+                    <a
+                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded bg-blue-700 text-white hover:opacity-90 hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center shadow-sm"
+                      title="Share on LinkedIn"
+                    >
+                      <FaLinkedinIn size={13} />
+                    </a>
 
-        {/* WhatsApp Share */}
-        <a
-          href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${title} - ${shareUrl}`)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="p-1.5 rounded bg-emerald-500 text-white hover:opacity-90 transition-opacity flex items-center justify-center"
-          title="Share on WhatsApp"
-        >
-          <MessageCircle size={13} />
-        </a>
+                    {/* WhatsApp Share */}
+                    <a
+                      href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${title} - ${shareUrl}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded bg-emerald-500 text-white hover:opacity-90 hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center shadow-sm"
+                      title="Share on WhatsApp"
+                    >
+                      <MessageCircle size={13} />
+                    </a>
 
-        {/* Telegram Share */}
-        <a
-          href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(title)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="p-1.5 rounded bg-teal-500 text-white hover:opacity-90 transition-opacity flex items-center justify-center"
-          title="Share on Telegram"
-        >
-          <Send size={13} />
-        </a>
-      </div>
-    );
-  })()}
-</div>
+                    {/* Telegram Share */}
+                    <a
+                      href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(title)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded bg-teal-500 text-white hover:opacity-90 hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center shadow-sm"
+                      title="Share on Telegram"
+                    >
+                      <Send size={13} />
+                    </a>
+                  </div>
+                );
+              })()}
+            </motion.div>
 
-            {/* ২. প্রোডাক্ট সাজেশন্স উইজেট (Dynamic Random from API) */}
-            <div className="bg-white dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700 rounded-xl p-4 shadow-sm space-y-3">
+            {/* ২. প্রোডাক্ট সাজেশন্স উইজেট (Scroll down হলে একটির পর একটি স্লাইড ইন করবে) */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-30px" }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="bg-white dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-300 space-y-3"
+            >
               <h4 className="text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider pb-2 border-b border-gray-100 dark:border-slate-700">
                 {isBangla ? "পছন্দসই প্রোডাক্টস" : "Recommended Products"}
               </h4>
 
               <div className="space-y-3">
                 {suggestedProducts.length > 0 ? (
-                  suggestedProducts.map((product: any) => {
-                    // ভ্যারিয়েন্ট থেকে প্রাইস ও ইমেজ বের করা
+                  suggestedProducts.map((product: any, index: number) => {
                     const firstVariant = product.variants?.[0];
 
                     const displayPrice =
@@ -305,33 +330,43 @@ export default function BlogDetailsPage() {
                       "https://placehold.co/100x100/e2e8f0/94a3b8?text=Product";
 
                     return (
-                      <Link
+                      <motion.div
                         key={product.id}
-                        to={`/products/${product.slug ?? product.id}`}
-                        className="flex gap-3 group items-center p-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
+                        initial={{ opacity: 0, x: 25 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          duration: 0.4,
+                          delay: index * 0.1, // স্ক্রোল করে সাইডবারে আসলে ১টি ১টি করে স্লাইড ইন হবে
+                          ease: "easeOut",
+                        }}
                       >
-                        <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-slate-700 border border-gray-200/80 dark:border-slate-600">
-                          <img
-                            src={displayImage}
-                            alt={product.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h5 className="text-xs font-bold text-slate-800 dark:text-gray-200 truncate transition-colors ">
-                            {product.name}
-                          </h5>
+                        <Link
+                          to={`/products/${product.slug ?? product.id}`}
+                          className="flex gap-3 group items-center p-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-all duration-300 hover:translate-x-1"
+                        >
+                          <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-slate-700 border border-gray-200/80 dark:border-slate-600">
+                            <img
+                              src={displayImage}
+                              alt={product.name}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h5 className="text-xs font-bold text-slate-800 dark:text-gray-200 truncate transition-colors group-hover:text-black dark:group-hover:text-white">
+                              {product.name}
+                            </h5>
 
-                          {/* প্রাইস প্রদর্শন */}
-                          <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
-                            ৳ {displayPrice}
-                          </p>
+                            <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+                              ৳ {displayPrice}
+                            </p>
 
-                          <span className="text-[10px] font-semibold  hover:underline">
-                            {isBangla ? "অর্ডার করুন →" : "Buy Now →"}
-                          </span>
-                        </div>
-                      </Link>
+                            <span className="text-[10px] font-semibold hover:underline inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform duration-200">
+                              {isBangla ? "অর্ডার করুন →" : "Buy Now →"}
+                            </span>
+                          </div>
+                        </Link>
+                      </motion.div>
                     );
                   })
                 ) : (
@@ -340,15 +375,374 @@ export default function BlogDetailsPage() {
                   </p>
                 )}
               </div>
-            </div>
-
-           
+            </motion.div>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+// /* eslint-disable react-hooks/exhaustive-deps */
+// /* eslint-disable react-hooks/purity */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
+// import { useState, useEffect, useMemo } from "react";
+// import { useParams, useNavigate, Link } from "react-router-dom";
+// import { 
+//   ArrowLeft, MessageCircle, Send
+// } from "lucide-react";
+// import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
+// import { useGetBlogQuery } from "@/redux/services/homepage/homePage.api";
+// import { useGetProductsQuery } from "@/redux/services/product/product.api";
+
+// interface Blog {
+//   id: number;
+//   title: string;
+//   title_bng: string | null;
+//   slug: string;
+//   content: string;
+//   content_bng: string | null;
+//   summary: string | null;
+//   summary_bng: string | null;
+//   excerpt: string | null;
+//   featured_image: string | null;
+//   category_id: number | null;
+//   author_id: number | null;
+//   status: string;
+//   created_at: string;
+//   image_url: string;
+// }
+
+// export default function BlogDetailsPage() {
+//   const { id } = useParams<{ id: string }>();
+//   const navigate = useNavigate();
+//   const [isBangla, setIsBangla] = useState(true);
+
+//   // RTK Query hooks
+//   const { data: blogData, isLoading, isError } = useGetBlogQuery();
+//   const { data: productsData } = useGetProductsQuery({});
+
+//   const rawBlogs: Blog[] = blogData?.data ?? [];
+//   const products = productsData?.data ?? [];
+
+//   // র‍্যান্ডমলি ২টি প্রোডাক্ট নেওয়ার জন্য useMemo
+//   const suggestedProducts = useMemo(() => {
+//     if (!products.length) return [];
+//     return [...products]
+//       .sort(() => 0.5 - Math.random())
+//       .slice(0, 5);
+//   }, [products, id]);
+
+//   // ID অথবা Slug উভয় দিয়ে ব্লগ ম্যাচিং এর সুবিধা
+//   const currentBlog = rawBlogs.find(
+//     (b) => b.id === Number(id) || b.slug === id
+//   );
+
+//   useEffect(() => {
+//     window.scrollTo({ top: 0, behavior: "smooth" });
+//   }, [id]);
+
+//   // Date Format Helper
+//   const formatDate = (dateString: string, isBn: boolean) => {
+//     if (!dateString) return "";
+//     const date = new Date(dateString);
+//     return date.toLocaleDateString(isBn ? "bn-BD" : "en-US", {
+//       year: "numeric",
+//       month: "long",
+//       day: "numeric",
+//     });
+//   };
+
+//   // Loading State
+//   if (isLoading) {
+//     return (
+//       <div className="min-h-screen bg-[#fceef5]/40 dark:bg-slate-900 pb-16 font-sans">
+//         <div className="max-w-6xl mx-auto px-4 lg:px-0 pt-8">
+//           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+//             <div className="lg:col-span-3 bg-white dark:bg-slate-800 rounded-xl p-8 space-y-4 animate-pulse">
+//               <div className="h-4 bg-gray-200 dark:bg-slate-700 w-1/4 rounded" />
+//               <div className="h-8 bg-gray-200 dark:bg-slate-700 w-3/4 rounded" />
+//               <div className="h-4 bg-gray-200 dark:bg-slate-700 w-1/3 rounded" />
+//               <div className="aspect-video bg-gray-200 dark:bg-slate-700 rounded-xl" />
+//               <div className="h-20 bg-gray-200 dark:bg-slate-700 rounded" />
+//             </div>
+//             <div className="lg:col-span-1 space-y-4">
+//               <div className="h-32 bg-gray-200 dark:bg-slate-700 rounded-xl animate-pulse" />
+//               <div className="h-48 bg-gray-200 dark:bg-slate-700 rounded-xl animate-pulse" />
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     );
+//   }
+
+//   // Blog Not Found / Error State
+//   if (isError || !currentBlog) {
+//     return (
+//       <div className="min-h-[70vh] flex flex-col items-center justify-center gap-4 bg-[#fbf5f8] dark:bg-slate-900">
+//         <h2 className="text-lg font-bold text-gray-700 dark:text-gray-200">
+//           {isBangla ? "ব্লগ পাওয়া যায়নি" : "Blog Not Found"}
+//         </h2>
+//         <button
+//           onClick={() => navigate("/")}
+//           className="px-4 py-2 bg-[#262626] text-white rounded-xl text-xs hover:cursor-pointer"
+//         >
+//           {isBangla ? "হোমে ফিরে যান" : "Back Home"}
+//         </button>
+//       </div>
+//     );
+//   }
+
+//   // Dynamic values selection
+//   const title = isBangla
+//     ? currentBlog.title_bng || currentBlog.title
+//     : currentBlog.title;
+
+//   const excerpt = isBangla
+//     ? currentBlog.summary_bng || currentBlog.excerpt || currentBlog.summary
+//     : currentBlog.excerpt || currentBlog.summary;
+
+//   const content = isBangla
+//     ? currentBlog.content_bng || currentBlog.content
+//     : currentBlog.content;
+
+//   const date = formatDate(currentBlog.created_at, isBangla);
+
+//   return (
+//     <div className="min-h-screen bg-[#fceef5]/40 dark:bg-slate-900 pb-16 font-sans">
+//       <div className="max-w-6xl mx-auto px-4 lg:px-0">
+//         {/* ল্যাঙ্গুয়েজ টগল ও ব্যাক বাটন অ্যাকশন */}
+//         <div className="flex justify-between items-center mb-6 pt-6">
+//           <button
+//             onClick={() => navigate(-1)}
+//             className="flex items-center gap-2 hover:cursor-pointer text-xs font-bold text-gray-500 hover:text-black dark:hover:text-white transition-colors"
+//           >
+//             <ArrowLeft size={14} /> {isBangla ? "ফিরে যান" : "Go Back"}
+//           </button>
+
+//           <div className="flex bg-white dark:bg-slate-800 rounded-full p-1 border dark:border-slate-700 shadow-sm">
+//             <button
+//               onClick={() => setIsBangla(true)}
+//               className={`px-4 py-1 rounded-full text-[11px] hover:cursor-pointer font-bold transition-all duration-200 ${
+//                 isBangla
+//                   ? "bg-[#262626] text-white shadow-sm"
+//                   : "text-gray-500"
+//               }`}
+//             >
+//               বাংলা
+//             </button>
+//             <button
+//               onClick={() => setIsBangla(false)}
+//               className={`px-4 py-1 rounded-full text-[11px] hover:cursor-pointer font-bold transition-all duration-200 ${
+//                 !isBangla
+//                   ? "bg-[#262626] text-white shadow-sm"
+//                   : "text-gray-500"
+//               }`}
+//             >
+//               English
+//             </button>
+//           </div>
+//         </div>
+
+//         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+//           {/* ================= বামের মেইন ব্লগ কন্টেন্ট কার্ড ================= */}
+//           <div className="lg:col-span-3 bg-white dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700 rounded-xl p-6 md:p-8 shadow-sm space-y-5">
+//             <div className="text-[11px] text-gray-400 font-medium">
+//               Home &gt; Blog &gt;{" "}
+//               <span className="text-gray-600 dark:text-gray-300">
+//                 {isBangla ? "টিউটোরিয়াল" : "Tutorial"}
+//               </span>
+//             </div>
+
+//             <h1 className="text-xl md:text-2xl font-black text-slate-800 dark:text-white leading-snug">
+//               {title}
+//             </h1>
+
+//             <div className="text-[11px] text-gray-400 font-medium pb-2 flex flex-wrap gap-2">
+//               <span>By Admin • </span>
+//               <span>{date}</span>
+//             </div>
+
+//             {excerpt && (
+//               <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
+//                 {excerpt}
+//               </p>
+//             )}
+
+//             <div className="rounded-xl overflow-hidden aspect-video border dark:border-slate-700 bg-gray-50 dark:bg-slate-950">
+//               <img
+//                 src={currentBlog.image_url}
+//                 alt={title}
+//                 className="w-full h-full object-cover"
+//                 onError={(e) => {
+//                   (e.target as HTMLImageElement).src =
+//                     "https://placehold.co/800x450/e2e8f0/94a3b8?text=Blog+Image";
+//                 }}
+//               />
+//             </div>
+
+//             {/* API Content Renderer */}
+//             <div
+//               className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 space-y-5 leading-relaxed pt-2 prose dark:prose-invert max-w-none"
+//               dangerouslySetInnerHTML={{ __html: content || "" }}
+//             />
+//           </div>
+
+//           {/* ================= ডানের উইজেট সাইডবার ================= */}
+//           <div className="lg:col-span-1 space-y-5 lg:sticky lg:top-24">
+           
+// {/* ১. শেয়ার বক্স উইজেট (Dynamic Path & Fallback Integrated) */}
+// <div className="bg-white dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700 rounded-xl p-4 shadow-sm">
+//   <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2.5">
+//     {isBangla ? "পোস্টটি শেয়ার করুন" : "Share This Post"}
+//   </h4>
+  
+//   {(() => {
+//     // ১. আপনার বর্তমান ব্রাউজারের অরিজিনাল পাথ (যেমন: /blogs/slug-name)
+//     const currentPath = window.location.pathname;
+
+//     // ২. লাইভ ডোমেইনের সাথে পাথ যুক্ত করে ১০০% নিখুঁত শেয়ার লিংক তৈরি
+//     const shareUrl = `https://v.veringroup.com${currentPath}`;
+
+//     return (
+//       <div className="flex items-center gap-2">
+//         {/* Facebook Share */}
+//         <a
+//           href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+//           target="_blank"
+//           rel="noopener noreferrer"
+//           className="p-1.5 rounded bg-blue-600 text-white hover:opacity-90 transition-opacity flex items-center justify-center"
+//           title="Share on Facebook"
+//         >
+//           <FaFacebookF size={13} />
+//         </a>
+
+//         {/* Twitter / X Share */}
+//         <a
+//           href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(title)}`}
+//           target="_blank"
+//           rel="noopener noreferrer"
+//           className="p-1.5 rounded bg-sky-400 text-white hover:opacity-90 transition-opacity flex items-center justify-center"
+//           title="Share on Twitter"
+//         >
+//           <FaTwitter size={13} />
+//         </a>
+
+//         {/* LinkedIn Share */}
+//         <a
+//           href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+//           target="_blank"
+//           rel="noopener noreferrer"
+//           className="p-1.5 rounded bg-blue-700 text-white hover:opacity-90 transition-opacity flex items-center justify-center"
+//           title="Share on LinkedIn"
+//         >
+//           <FaLinkedinIn size={13} />
+//         </a>
+
+//         {/* WhatsApp Share */}
+//         <a
+//           href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${title} - ${shareUrl}`)}`}
+//           target="_blank"
+//           rel="noopener noreferrer"
+//           className="p-1.5 rounded bg-emerald-500 text-white hover:opacity-90 transition-opacity flex items-center justify-center"
+//           title="Share on WhatsApp"
+//         >
+//           <MessageCircle size={13} />
+//         </a>
+
+//         {/* Telegram Share */}
+//         <a
+//           href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(title)}`}
+//           target="_blank"
+//           rel="noopener noreferrer"
+//           className="p-1.5 rounded bg-teal-500 text-white hover:opacity-90 transition-opacity flex items-center justify-center"
+//           title="Share on Telegram"
+//         >
+//           <Send size={13} />
+//         </a>
+//       </div>
+//     );
+//   })()}
+// </div>
+
+//             {/* ২. প্রোডাক্ট সাজেশন্স উইজেট (Dynamic Random from API) */}
+//             <div className="bg-white dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700 rounded-xl p-4 shadow-sm space-y-3">
+//               <h4 className="text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider pb-2 border-b border-gray-100 dark:border-slate-700">
+//                 {isBangla ? "পছন্দসই প্রোডাক্টস" : "Recommended Products"}
+//               </h4>
+
+//               <div className="space-y-3">
+//                 {suggestedProducts.length > 0 ? (
+//                   suggestedProducts.map((product: any) => {
+//                     // ভ্যারিয়েন্ট থেকে প্রাইস ও ইমেজ বের করা
+//                     const firstVariant = product.variants?.[0];
+
+//                     const displayPrice =
+//                       firstVariant?.sale_price ||
+//                       firstVariant?.price ||
+//                       product.price ||
+//                       "N/A";
+
+//                     const displayImage =
+//                       firstVariant?.images?.[0]?.image_url ||
+//                       product.image_url ||
+//                       product.thumbnail ||
+//                       "https://placehold.co/100x100/e2e8f0/94a3b8?text=Product";
+
+//                     return (
+//                       <Link
+//                         key={product.id}
+//                         to={`/products/${product.slug ?? product.id}`}
+//                         className="flex gap-3 group items-center p-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
+//                       >
+//                         <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-slate-700 border border-gray-200/80 dark:border-slate-600">
+//                           <img
+//                             src={displayImage}
+//                             alt={product.name}
+//                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+//                           />
+//                         </div>
+//                         <div className="flex-1 min-w-0">
+//                           <h5 className="text-xs font-bold text-slate-800 dark:text-gray-200 truncate transition-colors ">
+//                             {product.name}
+//                           </h5>
+
+//                           {/* প্রাইস প্রদর্শন */}
+//                           <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+//                             ৳ {displayPrice}
+//                           </p>
+
+//                           <span className="text-[10px] font-semibold  hover:underline">
+//                             {isBangla ? "অর্ডার করুন →" : "Buy Now →"}
+//                           </span>
+//                         </div>
+//                       </Link>
+//                     );
+//                   })
+//                 ) : (
+//                   <p className="text-[11px] text-gray-400 text-center py-2">
+//                     {isBangla ? "কোনো প্রোডাক্ট পাওয়া যায়নি" : "No products available"}
+//                   </p>
+//                 )}
+//               </div>
+//             </div>
+
+           
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
 
 
