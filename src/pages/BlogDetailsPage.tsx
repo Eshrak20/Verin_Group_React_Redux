@@ -4,7 +4,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { 
-  ArrowLeft, MessageCircle, Send, Globe, Award, Headphones
+  ArrowLeft, MessageCircle, Send
 } from "lucide-react";
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 import { useGetBlogQuery } from "@/redux/services/homepage/homePage.api";
@@ -45,7 +45,7 @@ export default function BlogDetailsPage() {
     if (!products.length) return [];
     return [...products]
       .sort(() => 0.5 - Math.random())
-      .slice(0, 2);
+      .slice(0, 5);
   }, [products, id]);
 
   // ID অথবা Slug উভয় দিয়ে ব্লগ ম্যাচিং এর সুবিধা
@@ -205,9 +205,7 @@ export default function BlogDetailsPage() {
 
           {/* ================= ডানের উইজেট সাইডবার ================= */}
           <div className="lg:col-span-1 space-y-5 lg:sticky lg:top-24">
-            {/* ১. শেয়ার বক্স উইজেট */}
-            {/* ১. শেয়ার বক্স উইজেট (Fully Functional) */}
-{/* ১. শেয়ার বক্স উইজেট (Exact Path Integrated) */}
+           
 {/* ১. শেয়ার বক্স উইজেট (Dynamic Path & Fallback Integrated) */}
 <div className="bg-white dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700 rounded-xl p-4 shadow-sm">
   <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2.5">
@@ -344,50 +342,7 @@ export default function BlogDetailsPage() {
               </div>
             </div>
 
-            {/* ৩. স্ট্যাটিস্টিকস উইজেট */}
-            <div className="bg-white dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700 rounded-xl p-4 shadow-sm text-[11px] space-y-3 text-gray-500 dark:text-gray-400 font-medium">
-              <div className="flex items-center gap-3">
-                <div className="p-1.5 rounded bg-purple-50 dark:bg-slate-700 text-purple-600 dark:text-purple-400">
-                  <Globe size={13} />
-                </div>
-                <div>
-                  <p className="font-bold text-slate-800 dark:text-white text-xs">
-                    5800+
-                  </p>
-                  <p className="text-[10px] text-gray-400">
-                    Global Job Placements
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="p-1.5 rounded bg-pink-50 dark:bg-slate-700 text-pink-600 dark:text-pink-400">
-                  <Award size={13} />
-                </div>
-                <div>
-                  <p className="font-bold text-slate-800 dark:text-white text-xs">
-                    2000+
-                  </p>
-                  <p className="text-[10px] text-gray-400">
-                    Remote Job Placements
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="p-1.5 rounded bg-blue-50 dark:bg-slate-700 text-blue-600 dark:text-blue-400">
-                  <Headphones size={13} />
-                </div>
-                <div>
-                  <p className="font-bold text-slate-800 dark:text-white text-xs">
-                    24/7
-                  </p>
-                  <p className="text-[10px] text-gray-400">
-                    Personal Coding Support
-                  </p>
-                </div>
-              </div>
-            </div>
+           
           </div>
         </div>
       </div>

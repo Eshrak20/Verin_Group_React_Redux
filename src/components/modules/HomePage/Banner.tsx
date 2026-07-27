@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/refs */
 /* eslint-disable react-hooks/preserve-manual-memoization */
 // src/components/HeroBanner.tsx
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react"; // 🎯 useRef যোগ করা হয়েছে
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useGetHomeBannerQuery } from "@/redux/services/homepage/homePage.api";
+import { motion } from "framer-motion"; // 🎯 framer-motion ইমপোর্ট করা হয়েছে
 
 const slideBgs = [
   "from-[#1a1a2e] to-[#0f3460]",
@@ -17,6 +19,7 @@ const sideBgs = [
 
 export default function Banner() {
   const [current, setCurrent] = useState(0);
+  const isFirstRender = useRef(true); // 🎯 প্রথমবার লোড ট্র্যাক করার জন্য ref
   const { data, isLoading } = useGetHomeBannerQuery();
 
   const allBanners =
@@ -26,7 +29,6 @@ export default function Banner() {
         )
       : [];
 
-  // ✅ 1 / 0 কে Number/String উভয় ক্ষেত্রেই সেফলি চেক করার জন্য (Number(b.is_slide) === 1) ব্যবহার করা হয়েছে
   const slideBanners = allBanners.filter((b) => Number(b.is_slide) === 1);
   const sideBanners = allBanners.filter((b) => Number(b.is_slide) === 0).slice(0, 2);
 
@@ -58,6 +60,7 @@ export default function Banner() {
 
   const goTo = useCallback(
     (index: number) => {
+      isFirstRender.current = false; // 🎯 একবার স্লাইড চেঞ্জ হলে জুম অ্যানিমেশন বন্ধ করে দেওয়া
       setCurrent((index + slides.length) % slides.length);
     },
     [slides.length]
@@ -89,13 +92,21 @@ export default function Banner() {
             `}
           >
             {slide.image && (
-              <img
+              // 🎯 img কে motion.img করা হয়েছে শুধুমাত্র হালকা জুম অ্যানিমেশনের জন্য
+              <motion.img
                 src={slide.image}
                 alt={`Banner ${slide.id}`}
                 className="w-full h-full object-fill"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
+                // 🎯 অ্যানিমেশন লজিক:
+                // initial: একটু বড় স্কেল থেকে শুরু হবে (যদি প্রথমবার লোড হয় এবং প্রথম স্লাইড হয়)
+                initial={isFirstRender.current && index === 0 ? { scale: 1.08 } : { scale: 1 }}
+                // animate: নরমাল স্কেলে আসবে
+                animate={{ scale: 1 }}
+                // transition: ১.২ সেকেন্ড ধরে ধীরে ধীরে হবে (easeOut)
+                transition={isFirstRender.current && index === 0 ? { duration: 1.2, ease: "easeOut" } : { duration: 0 }}
               />
             )}
           </div>
@@ -175,6 +186,191 @@ export default function Banner() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+// /* eslint-disable react-hooks/preserve-manual-memoization */
+// // src/components/HeroBanner.tsx
+// import { useState, useEffect, useCallback } from "react";
+// import { ChevronLeft, ChevronRight } from "lucide-react";
+// import { useGetHomeBannerQuery } from "@/redux/services/homepage/homePage.api";
+
+// const slideBgs = [
+//   "from-[#1a1a2e] to-[#0f3460]",
+//   "from-[#2d1b69] to-[#11998e]",
+//   "from-[#c94b4b] to-[#4b134f]",
+// ];
+
+// const sideBgs = [
+//   "from-[#f7971e] to-[#ffd200]",
+//   "from-[#11998e] to-[#38ef7d]",
+// ];
+
+// export default function Banner() {
+//   const [current, setCurrent] = useState(0);
+//   const { data, isLoading } = useGetHomeBannerQuery();
+
+//   const allBanners =
+//     data?.success && data.data.length > 0
+//       ? [...data.data].sort(
+//           (a, b) => Number(a.sorting_number) - Number(b.sorting_number)
+//         )
+//       : [];
+
+//   // ✅ 1 / 0 কে Number/String উভয় ক্ষেত্রেই সেফলি চেক করার জন্য (Number(b.is_slide) === 1) ব্যবহার করা হয়েছে
+//   const slideBanners = allBanners.filter((b) => Number(b.is_slide) === 1);
+//   const sideBanners = allBanners.filter((b) => Number(b.is_slide) === 0).slice(0, 2);
+
+//   const slides =
+//     slideBanners.length > 0
+//       ? slideBanners.map((b, i) => ({
+//           id: b.id,
+//           image: b.image_url,
+//           bg: slideBgs[i % slideBgs.length],
+//         }))
+//       : [
+//           { id: 1, image: "", bg: slideBgs[0] },
+//           { id: 2, image: "", bg: slideBgs[1] },
+//           { id: 3, image: "", bg: slideBgs[2] },
+//         ];
+
+//   const sideImages =
+//     sideBanners.length > 0
+//       ? sideBanners.map((b, i) => ({
+//           id: b.id,
+//           image: b.image_url,
+//           bg: sideBgs[i % sideBgs.length],
+//           link: "#",
+//         }))
+//       : [
+//           { id: 1, image: "", bg: sideBgs[0], link: "/offer1" },
+//           { id: 2, image: "", bg: sideBgs[1], link: "/offer2" },
+//         ];
+
+//   const goTo = useCallback(
+//     (index: number) => {
+//       setCurrent((index + slides.length) % slides.length);
+//     },
+//     [slides.length]
+//   );
+
+//   useEffect(() => {
+//     const timer = setInterval(() => goTo(current + 1), 3500);
+//     return () => clearInterval(timer);
+//   }, [current, goTo]);
+
+//   return (
+//     <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-2 w-full h-auto lg:h-122">
+
+//       {/* Left — Slider (fixed size container) */}
+//       <div className="relative h-48 sm:h-64 md:h-80 lg:h-full w-full rounded-xl overflow-hidden">
+
+//         {isLoading && (
+//           <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-xl" />
+//         )}
+
+//         {!isLoading && slides.map((slide, index) => (
+//           <div
+//             key={slide.id}
+//             className={`
+//               absolute inset-0
+//               transition-opacity duration-500
+//               bg-linear-to-br ${slide.bg}
+//               ${index === current ? "opacity-100" : "opacity-0"}
+//             `}
+//           >
+//             {slide.image && (
+//               <img
+//                 src={slide.image}
+//                 alt={`Banner ${slide.id}`}
+//                 className="w-full h-full object-fill"
+//                 onError={(e) => {
+//                   (e.target as HTMLImageElement).style.display = "none";
+//                 }}
+//               />
+//             )}
+//           </div>
+//         ))}
+
+//         {/* Prev Button */}
+//         <button
+//           onClick={() => goTo(current - 1)}
+//           className="
+//             absolute left-3 top-1/2 -translate-y-1/2 z-10
+//             w-8 h-8 rounded-full flex items-center justify-center
+//             bg-white/20 border border-white/30 text-white
+//             hover:bg-white/35 hover:cursor-pointer transition-all duration-200
+//             backdrop-blur-sm
+//           "
+//         >
+//           <ChevronLeft size={16} />
+//         </button>
+
+//         {/* Next Button */}
+//         <button
+//           onClick={() => goTo(current + 1)}
+//           className="
+//             absolute right-3 top-1/2 -translate-y-1/2 z-10
+//             w-8 h-8 rounded-full flex items-center justify-center
+//             bg-white/20 border hover:cursor-pointer border-white/30 text-white
+//             hover:bg-white/35 transition-all duration-200
+//             backdrop-blur-sm
+//           "
+//         >
+//           <ChevronRight size={16} />
+//         </button>
+
+//         {/* Dots */}
+//         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
+//           {slides.map((_, index) => (
+//             <button
+//               key={index}
+//               onClick={() => goTo(index)}
+//               className={`
+//                 h-2 rounded-full hover:cursor-pointer transition-all duration-300
+//                 ${index === current ? "w-5 bg-white" : "w-2 bg-white/40"}
+//               `}
+//             />
+//           ))}
+//         </div>
+//       </div>
+
+//       {/* Right — Static Images (fixed size container, is_slide === 0) */}
+//       <div className="grid grid-cols-2 lg:flex lg:flex-col h-28 sm:h-36 lg:h-full w-full gap-2">
+//         {sideImages.map((img) => (
+//           <a
+//             key={img.id}
+//             href={img.link}
+//             className={`
+//               relative block min-h-0 flex-1 basis-0
+//               overflow-hidden rounded-xl
+//               bg-linear-to-br ${img.bg}
+//               hover:scale-[1.01] transition-transform duration-200
+//             `}
+//           >
+//             <div className="absolute inset-0">
+//               {img.image && (
+//                 <img
+//                   src={img.image}
+//                   alt={`Side banner ${img.id}`}
+//                   className="w-full h-full object-fill"
+//                   onError={(e) => {
+//                     (e.target as HTMLImageElement).style.display = "none";
+//                   }}
+//                 />
+//               )}
+//             </div>
+//           </a>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
 
 
 
