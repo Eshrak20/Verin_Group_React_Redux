@@ -1,41 +1,33 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/immutability */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/set-state-in-effect */
-/* eslint-disable react-hooks/immutability */
 import { useState, useRef, useEffect } from "react";
-import { Link, useLocation, useSearchParams } from "react-router-dom";
-import { Menu, X } from "lucide-react";
-import { useGetCategoriesQuery, useGetFooterSettingsQuery } from "@/redux/services/homepage/homePage.api";
+import { useLocation, useSearchParams } from "react-router-dom";
+import {
+  useGetCategoriesQuery,
+  useGetFooterSettingsQuery,
+} from "@/redux/services/homepage/homePage.api";
 import { useActiveCategory } from "@/utils/ActiveCategoryContext";
 
-// 🎯 ProductSearch কম্পোনেন্ট
 import ProductSearch from "@/components/modules/Product/ProductSearch";
 
-interface NavLink {
-  label: string;
-  path: string;
-}
-
-const navLinks: NavLink[] = [
-  { label: "Home", path: "/" },
-  { label: "Decor", path: "/decor" },
-  { label: "Clothing", path: "/clothing" },
-  { label: "Electronics", path: "/electronics" },
-];
+// import { navLinks, checkIsActive, getCompanyKey, getLogoPath } from "@/navbar.utils";
+import type { PillStyle } from "@/types/navbar.type";
+import  { checkIsActive, getCompanyKey, getLogoPath, navLinks } from "@/utils/navbar.utils";
+import { NavLogo } from "../modules/Navbar/NavLogo";
+import { MobileNav } from "../modules/Navbar/MobileNav";
+import { DesktopNav } from "../modules/Navbar/DesktopNav";
 
 export default function Navbar() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const currentCategoryId = searchParams.get("category_id");
-  
-  // 🎯 URL Parameter থেকে company বের করা (যেমন: ?company=verin-decor)
   const currentCompanyParam = searchParams.get("company");
 
-  // ✅ Category API থেকে ডাটা ফেচ করা হচ্ছে
   const { data: categoriesData } = useGetCategoriesQuery();
   const categories = categoriesData?.data || [];
 
-  const [pillStyle, setPillStyle] = useState({ width: 0, translateX: 0 });
+  const [pillStyle, setPillStyle] = useState<PillStyle>({ width: 0, translateX: 0 });
   const [searchOpen, setSearchOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -46,90 +38,19 @@ export default function Navbar() {
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
-  // ✅ ডাইনামিক Active status চেক করার ফানশন (Updated)
-  const checkIsActive = (link: NavLink) => {
-    // ১. ইউআরএল প্যারামিটারে company থাকলে (যেমন: /shipping?company=verin-decor)
-    if (currentCompanyParam) {
-      if (currentCompanyParam === "verin-decor" && link.path === "/decor") return true;
-      if (currentCompanyParam === "verin-electronics" && link.path === "/electronics") return true;
-      if (currentCompanyParam === "verin-clothing" && link.path === "/clothing") return true;
-      if (currentCompanyParam === "verin-group" && link.path === "/") return true;
-    }
+  // Helper bindings
+  const isLinkActive = (link: (typeof navLinks)[0]) =>
+    checkIsActive(
+      link,
+      location.pathname,
+      currentCompanyParam,
+      currentCategoryId,
+      activeCategory,
+      categories
+    );
 
-    // ২. হোম পেজ
-    if (link.path === "/") {
-      return location.pathname === "/";
-    }
-
-    // ৩. সার্চ পেজে থাকলে dynamic category_id ম্যাচ করা
-    if (location.pathname === "/search" && currentCategoryId) {
-      const matchedCategory = categories.find(
-        (cat: any) => cat.name?.toLowerCase() === link.label.toLowerCase()
-      );
-
-      if (matchedCategory && Number(currentCategoryId) === Number(matchedCategory.id)) {
-        return true;
-      }
-    }
-
-    // ৪. নির্দিষ্ট পেজের রুটে থাকলে (যেমন: /decor, /clothing, /electronics)
-    if (location.pathname.startsWith(link.path)) {
-      return true;
-    }
-
-    // ৫. সিঙ্গেল প্রোডাক্ট পেজে থাকলে
-    if (
-      location.pathname.startsWith("/products") &&
-      activeCategory &&
-      link.label.toLowerCase() === activeCategory.toLowerCase()
-    ) {
-      return true;
-    }
-
-    return false;
-  };
-
-  const getCompanyKey = (pathname: string) => {
-    if (currentCompanyParam) {
-      return currentCompanyParam;
-    }
-    if (pathname.startsWith("/decor") || pathname.startsWith("/products")) {
-      return "verin-decor";
-    }
-    if (pathname.startsWith("/electronics")) {
-      return "verin-electronics";
-    }
-    if (pathname.startsWith("/clothing")) {
-      return "verin-clothing";
-    }
-    return "verin-group";
-  };
-
-  const companyKey = getCompanyKey(location.pathname);
-
-  const getLogoPath = (pathname: string) => {
-    if (currentCompanyParam) {
-      if (currentCompanyParam === "verin-decor") return "/decor";
-      if (currentCompanyParam === "verin-electronics") return "/electronics";
-      if (currentCompanyParam === "verin-clothing") return "/clothing";
-      if (currentCompanyParam === "verin-group") return "/";
-    }
-
-    if (pathname.startsWith("/decor")) return "/decor";
-    if (pathname.startsWith("/electronics")) return "/electronics";
-    if (pathname.startsWith("/clothing")) return "/clothing";
-
-    if (activeCategory) {
-      const cat = activeCategory.toLowerCase();
-      if (cat.includes("decor")) return "/decor";
-      if (cat.includes("electronics")) return "/electronics";
-      if (cat.includes("clothing")) return "/clothing";
-    }
-
-    return "/";
-  };
-
-  const logoPath = getLogoPath(location.pathname);
+  const companyKey = getCompanyKey(location.pathname, currentCompanyParam);
+  const logoPath = getLogoPath(location.pathname, currentCompanyParam, activeCategory);
 
   const navbar = data?.success
     ? data.data.find((f) => f.company_key === companyKey)
@@ -138,8 +59,8 @@ export default function Navbar() {
   const logoUrl = navbar?.image_url
     ? navbar.image_url
     : navbar?.logo
-      ? `https://v.veringroup.com/storage/${navbar.logo}`
-      : null;
+    ? `https://v.veringroup.com/storage/${navbar.logo}`
+    : null;
 
   const companyName = navbar?.company_name || "Verin Group";
 
@@ -178,14 +99,20 @@ export default function Navbar() {
   }, [dropdownOpen, mobileMenuOpen]);
 
   useEffect(() => {
-    const activeIndex = navLinks.findIndex((link) => checkIsActive(link));
+    const activeIndex = navLinks.findIndex((link) => isLinkActive(link));
 
     if (activeIndex !== -1) {
       updatePill(activeIndex);
     } else {
       setPillStyle({ width: 0, translateX: 0 });
     }
-  }, [location.pathname, activeCategory, currentCategoryId, currentCompanyParam, categories]);
+  }, [
+    location.pathname,
+    activeCategory,
+    currentCategoryId,
+    currentCompanyParam,
+    categories,
+  ]);
 
   const updatePill = (index: number) => {
     const navEl = navRef.current;
@@ -205,70 +132,25 @@ export default function Navbar() {
         <div className="flex items-center justify-between bg-white border-b-2 border-gray-200/70 h-14 shadow-lg shadow-black/5 backdrop-blur-md">
           {/* Main Container */}
           <div className="max-w-6xl mx-auto flex w-full items-center justify-between px-4 sm:px-4 lg:px-0">
-            
-            {/* 1. Left Section: Dynamic Logo & Link */}
-            <div className="relative min-w-0 shrink-0 z-10 max-w-[50%] sm:max-w-none">
-              <Link to={logoPath} className="flex items-center gap-1.5 sm:gap-3">
-                {logoUrl ? (
-                  <img
-                    src={logoUrl}
-                    alt={companyName}
-                    className="h-6 sm:h-7 w-auto object-contain"
-                  />
-                ) : null}
-                <span className="text-base sm:text-xl font-bold home-black-text truncate sm:whitespace-nowrap">
-                  {companyName}
-                </span>
-              </Link>
-            </div>
+            {/* 1. Left Section: Logo */}
+            <NavLogo
+              logoPath={logoPath}
+              logoUrl={logoUrl}
+              companyName={companyName}
+            />
 
-            {/* 2. Middle Section: Desktop Nav Links */}
-            <div className="absolute inset-x-0 flex justify-center pointer-events-none transition-all duration-300">
-              <div
-                ref={navRef}
-                className={`
-                  relative hidden items-center gap-1 rounded-full p-1 lg:flex pointer-events-auto
-                  transition-all duration-300
-                  ${searchOpen ? "-translate-x-12 xl:-translate-x-16" : "translate-x-0"}
-                `}
-              >
-                <span
-                  className="pointer-events-none absolute left-0 top-1 h-[calc(100%-8px)] rounded-full bg-[#262626] home-black-text transition-all duration-300 dark:bg-white"
-                  style={{
-                    width: pillStyle.width,
-                    transform: `translateX(${pillStyle.translateX}px)`,
-                  }}
-                />
-                {navLinks.map((link, index) => {
-                  const isActive = checkIsActive(link);
-                  return (
-                    <Link
-                      key={link.path}
-                      to={link.path}
-                      ref={(el) => {
-                        linkRefs.current[index] = el;
-                      }}
-                      className={`
-                        relative z-10 block rounded-full px-3.5 py-2
-                        text-xs font-bold uppercase tracking-wide
-                        transition-colors duration-300 xl:px-4 xl:text-[13px]
-                        ${
-                          isActive
-                            ? "text-white dark:text-[#00416A]"
-                            : "home-black-text hover:bg-gray-200/60"
-                        }
-                      `}
-                    >
-                      {link.label}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
+            {/* 2. Middle Section: Desktop Navigation */}
+            <DesktopNav
+              navLinks={navLinks}
+              searchOpen={searchOpen}
+              pillStyle={pillStyle}
+              navRef={navRef}
+              linkRefs={linkRefs}
+              checkIsActive={isLinkActive}
+            />
 
-            {/* 3. Right Section: Actions */}
+            {/* 3. Right Section: Search & Mobile Navigation */}
             <div className="flex shrink-0 items-center gap-1.5 sm:gap-3 lg:ml-auto z-10">
-              {/* ProductSearch */}
               <div className="flex items-center">
                 <ProductSearch
                   searchOpen={searchOpen}
@@ -276,54 +158,13 @@ export default function Navbar() {
                 />
               </div>
 
-              {/* Mobile Menu Container */}
-              <div ref={mobileMenuRef} className="relative lg:hidden">
-                <button
-                  aria-label="Toggle mobile menu"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="
-                    relative flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center
-                    rounded-full bg-[#00416A]/10 text-[#00416A]
-                    transition-all duration-300 hover:bg-[#00416A]/15
-                    shrink-0
-                  "
-                >
-                  {mobileMenuOpen ? (
-                    <X className="w-4 h-4 sm:w-5 sm:h-5" />
-                  ) : (
-                    <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
-                  )}
-                </button>
-
-                {/* Mobile Dropdown Navigation Menu */}
-                {mobileMenuOpen && (
-                  <div className="absolute top-full right-0 mt-2 w-52 bg-white/95 backdrop-blur-md border border-gray-200/80 rounded-2xl p-2 shadow-xl animate-in fade-in slide-in-from-top-2 duration-200 z-50">
-                    <div className="flex flex-col space-y-0.5">
-                      {navLinks.map((link) => {
-                        const isActive = checkIsActive(link);
-
-                        return (
-                          <Link
-                            key={link.path}
-                            to={link.path}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className={`
-                              px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors
-                              ${
-                                isActive
-                                  ? "bg-[#00416A] text-white"
-                                  : "text-slate-700 hover:bg-gray-100"
-                              }
-                            `}
-                          >
-                            {link.label}
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
+              <MobileNav
+                navLinks={navLinks}
+                mobileMenuOpen={mobileMenuOpen}
+                setMobileMenuOpen={setMobileMenuOpen}
+                mobileMenuRef={mobileMenuRef}
+                checkIsActive={isLinkActive}
+              />
             </div>
           </div>
         </div>
@@ -331,6 +172,349 @@ export default function Navbar() {
     </nav>
   );
 }
+
+
+
+
+
+
+
+
+
+
+// /* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable react-hooks/exhaustive-deps */
+// /* eslint-disable react-hooks/set-state-in-effect */
+// /* eslint-disable react-hooks/immutability */
+// import { useState, useRef, useEffect } from "react";
+// import { Link, useLocation, useSearchParams } from "react-router-dom";
+// import { Menu, X } from "lucide-react";
+// import { useGetCategoriesQuery, useGetFooterSettingsQuery } from "@/redux/services/homepage/homePage.api";
+// import { useActiveCategory } from "@/utils/ActiveCategoryContext";
+
+// // 🎯 ProductSearch কম্পোনেন্ট
+// import ProductSearch from "@/components/modules/Product/ProductSearch";
+
+// interface NavLink {
+//   label: string;
+//   path: string;
+// }
+
+// const navLinks: NavLink[] = [
+//   { label: "Home", path: "/" },
+//   { label: "Decor", path: "/decor" },
+//   { label: "Clothing", path: "/clothing" },
+//   { label: "Electronics", path: "/electronics" },
+// ];
+
+// export default function Navbar() {
+//   const location = useLocation();
+//   const [searchParams] = useSearchParams();
+//   const currentCategoryId = searchParams.get("category_id");
+  
+//   // 🎯 URL Parameter থেকে company বের করা (যেমন: ?company=verin-decor)
+//   const currentCompanyParam = searchParams.get("company");
+
+//   // ✅ Category API থেকে ডাটা ফেচ করা হচ্ছে
+//   const { data: categoriesData } = useGetCategoriesQuery();
+//   const categories = categoriesData?.data || [];
+
+//   const [pillStyle, setPillStyle] = useState({ width: 0, translateX: 0 });
+//   const [searchOpen, setSearchOpen] = useState(false);
+//   const [dropdownOpen, setDropdownOpen] = useState(false);
+//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+//   const { data } = useGetFooterSettingsQuery();
+//   const { activeCategory } = useActiveCategory();
+
+//   const navRef = useRef<HTMLDivElement>(null);
+//   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+//   const mobileMenuRef = useRef<HTMLDivElement>(null);
+
+//   // ✅ ডাইনামিক Active status চেক করার ফানশন (Updated)
+//   const checkIsActive = (link: NavLink) => {
+//     // ১. ইউআরএল প্যারামিটারে company থাকলে (যেমন: /shipping?company=verin-decor)
+//     if (currentCompanyParam) {
+//       if (currentCompanyParam === "verin-decor" && link.path === "/decor") return true;
+//       if (currentCompanyParam === "verin-electronics" && link.path === "/electronics") return true;
+//       if (currentCompanyParam === "verin-clothing" && link.path === "/clothing") return true;
+//       if (currentCompanyParam === "verin-group" && link.path === "/") return true;
+//     }
+
+//     // ২. হোম পেজ
+//     if (link.path === "/") {
+//       return location.pathname === "/";
+//     }
+
+//     // ৩. সার্চ পেজে থাকলে dynamic category_id ম্যাচ করা
+//     if (location.pathname === "/search" && currentCategoryId) {
+//       const matchedCategory = categories.find(
+//         (cat: any) => cat.name?.toLowerCase() === link.label.toLowerCase()
+//       );
+
+//       if (matchedCategory && Number(currentCategoryId) === Number(matchedCategory.id)) {
+//         return true;
+//       }
+//     }
+
+//     // ৪. নির্দিষ্ট পেজের রুটে থাকলে (যেমন: /decor, /clothing, /electronics)
+//     if (location.pathname.startsWith(link.path)) {
+//       return true;
+//     }
+
+//     // ৫. সিঙ্গেল প্রোডাক্ট পেজে থাকলে
+//     if (
+//       location.pathname.startsWith("/products") &&
+//       activeCategory &&
+//       link.label.toLowerCase() === activeCategory.toLowerCase()
+//     ) {
+//       return true;
+//     }
+
+//     return false;
+//   };
+
+//   const getCompanyKey = (pathname: string) => {
+//     if (currentCompanyParam) {
+//       return currentCompanyParam;
+//     }
+//     if (pathname.startsWith("/decor") || pathname.startsWith("/products")) {
+//       return "verin-decor";
+//     }
+//     if (pathname.startsWith("/electronics")) {
+//       return "verin-electronics";
+//     }
+//     if (pathname.startsWith("/clothing")) {
+//       return "verin-clothing";
+//     }
+//     return "verin-group";
+//   };
+
+//   const companyKey = getCompanyKey(location.pathname);
+
+//   const getLogoPath = (pathname: string) => {
+//     if (currentCompanyParam) {
+//       if (currentCompanyParam === "verin-decor") return "/decor";
+//       if (currentCompanyParam === "verin-electronics") return "/electronics";
+//       if (currentCompanyParam === "verin-clothing") return "/clothing";
+//       if (currentCompanyParam === "verin-group") return "/";
+//     }
+
+//     if (pathname.startsWith("/decor")) return "/decor";
+//     if (pathname.startsWith("/electronics")) return "/electronics";
+//     if (pathname.startsWith("/clothing")) return "/clothing";
+
+//     if (activeCategory) {
+//       const cat = activeCategory.toLowerCase();
+//       if (cat.includes("decor")) return "/decor";
+//       if (cat.includes("electronics")) return "/electronics";
+//       if (cat.includes("clothing")) return "/clothing";
+//     }
+
+//     return "/";
+//   };
+
+//   const logoPath = getLogoPath(location.pathname);
+
+//   const navbar = data?.success
+//     ? data.data.find((f) => f.company_key === companyKey)
+//     : undefined;
+
+//   const logoUrl = navbar?.image_url
+//     ? navbar.image_url
+//     : navbar?.logo
+//       ? `https://v.veringroup.com/storage/${navbar.logo}`
+//       : null;
+
+//   const companyName = navbar?.company_name || "Verin Group";
+
+//   useEffect(() => {
+//     setMobileMenuOpen(false);
+//   }, [location.pathname]);
+
+//   useEffect(() => {
+//     function handleClickOutside(event: MouseEvent | TouchEvent) {
+//       if (
+//         mobileMenuRef.current &&
+//         !mobileMenuRef.current.contains(event.target as Node)
+//       ) {
+//         setMobileMenuOpen(false);
+//       }
+//     }
+
+//     if (mobileMenuOpen) {
+//       document.addEventListener("mousedown", handleClickOutside);
+//       document.addEventListener("touchstart", handleClickOutside);
+//     }
+
+//     return () => {
+//       document.removeEventListener("mousedown", handleClickOutside);
+//       document.removeEventListener("touchstart", handleClickOutside);
+//     };
+//   }, [mobileMenuOpen]);
+
+//   useEffect(() => {
+//     const handleScroll = () => {
+//       if (dropdownOpen) setDropdownOpen(false);
+//       if (mobileMenuOpen) setMobileMenuOpen(false);
+//     };
+//     window.addEventListener("scroll", handleScroll, { passive: true });
+//     return () => window.removeEventListener("scroll", handleScroll);
+//   }, [dropdownOpen, mobileMenuOpen]);
+
+//   useEffect(() => {
+//     const activeIndex = navLinks.findIndex((link) => checkIsActive(link));
+
+//     if (activeIndex !== -1) {
+//       updatePill(activeIndex);
+//     } else {
+//       setPillStyle({ width: 0, translateX: 0 });
+//     }
+//   }, [location.pathname, activeCategory, currentCategoryId, currentCompanyParam, categories]);
+
+//   const updatePill = (index: number) => {
+//     const navEl = navRef.current;
+//     const linkEl = linkRefs.current[index];
+//     if (!navEl || !linkEl) return;
+//     const navRect = navEl.getBoundingClientRect();
+//     const linkRect = linkEl.getBoundingClientRect();
+//     setPillStyle({
+//       width: linkRect.width,
+//       translateX: linkRect.left - navRect.left,
+//     });
+//   };
+
+//   return (
+//     <nav className="fixed top-0 left-0 right-0 w-full z-50">
+//       <div>
+//         <div className="flex items-center justify-between bg-white border-b-2 border-gray-200/70 h-14 shadow-lg shadow-black/5 backdrop-blur-md">
+//           {/* Main Container */}
+//           <div className="max-w-6xl mx-auto flex w-full items-center justify-between px-4 sm:px-4 lg:px-0">
+            
+//             {/* 1. Left Section: Dynamic Logo & Link */}
+//             <div className="relative min-w-0 shrink-0 z-10 max-w-[50%] sm:max-w-none">
+//               <Link to={logoPath} className="flex items-center gap-1.5 sm:gap-3">
+//                 {logoUrl ? (
+//                   <img
+//                     src={logoUrl}
+//                     alt={companyName}
+//                     className="h-6 sm:h-7 w-auto object-contain"
+//                   />
+//                 ) : null}
+//                 <span className="text-base sm:text-xl font-bold home-black-text truncate sm:whitespace-nowrap">
+//                   {companyName}
+//                 </span>
+//               </Link>
+//             </div>
+
+//             {/* 2. Middle Section: Desktop Nav Links */}
+//             <div className="absolute inset-x-0 flex justify-center pointer-events-none transition-all duration-300">
+//               <div
+//                 ref={navRef}
+//                 className={`
+//                   relative hidden items-center gap-1 rounded-full p-1 lg:flex pointer-events-auto
+//                   transition-all duration-300
+//                   ${searchOpen ? "-translate-x-12 xl:-translate-x-16" : "translate-x-0"}
+//                 `}
+//               >
+//                 <span
+//                   className="pointer-events-none absolute left-0 top-1 h-[calc(100%-8px)] rounded-full bg-[#262626] home-black-text transition-all duration-300 dark:bg-white"
+//                   style={{
+//                     width: pillStyle.width,
+//                     transform: `translateX(${pillStyle.translateX}px)`,
+//                   }}
+//                 />
+//                 {navLinks.map((link, index) => {
+//                   const isActive = checkIsActive(link);
+//                   return (
+//                     <Link
+//                       key={link.path}
+//                       to={link.path}
+//                       ref={(el) => {
+//                         linkRefs.current[index] = el;
+//                       }}
+//                       className={`
+//                         relative z-10 block rounded-full px-3.5 py-2
+//                         text-xs font-bold uppercase tracking-wide
+//                         transition-colors duration-300 xl:px-4 xl:text-[13px]
+//                         ${
+//                           isActive
+//                             ? "text-white dark:text-[#00416A]"
+//                             : "home-black-text hover:bg-gray-200/60"
+//                         }
+//                       `}
+//                     >
+//                       {link.label}
+//                     </Link>
+//                   );
+//                 })}
+//               </div>
+//             </div>
+
+//             {/* 3. Right Section: Actions */}
+//             <div className="flex shrink-0 items-center gap-1.5 sm:gap-3 lg:ml-auto z-10">
+//               {/* ProductSearch */}
+//               <div className="flex items-center">
+//                 <ProductSearch
+//                   searchOpen={searchOpen}
+//                   setSearchOpen={setSearchOpen}
+//                 />
+//               </div>
+
+//               {/* Mobile Menu Container */}
+//               <div ref={mobileMenuRef} className="relative lg:hidden">
+//                 <button
+//                   aria-label="Toggle mobile menu"
+//                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+//                   className="
+//                     relative flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center
+//                     rounded-full bg-[#00416A]/10 text-[#00416A]
+//                     transition-all duration-300 hover:bg-[#00416A]/15
+//                     shrink-0
+//                   "
+//                 >
+//                   {mobileMenuOpen ? (
+//                     <X className="w-4 h-4 sm:w-5 sm:h-5" />
+//                   ) : (
+//                     <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
+//                   )}
+//                 </button>
+
+//                 {/* Mobile Dropdown Navigation Menu */}
+//                 {mobileMenuOpen && (
+//                   <div className="absolute top-full right-0 mt-2 w-52 bg-white/95 backdrop-blur-md border border-gray-200/80 rounded-2xl p-2 shadow-xl animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+//                     <div className="flex flex-col space-y-0.5">
+//                       {navLinks.map((link) => {
+//                         const isActive = checkIsActive(link);
+
+//                         return (
+//                           <Link
+//                             key={link.path}
+//                             to={link.path}
+//                             onClick={() => setMobileMenuOpen(false)}
+//                             className={`
+//                               px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors
+//                               ${
+//                                 isActive
+//                                   ? "bg-[#00416A] text-white"
+//                                   : "text-slate-700 hover:bg-gray-100"
+//                               }
+//                             `}
+//                           >
+//                             {link.label}
+//                           </Link>
+//                         );
+//                       })}
+//                     </div>
+//                   </div>
+//                 )}
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </nav>
+//   );
+// }
 
 
 
