@@ -22,6 +22,11 @@ import BlogsPage from "@/pages/BlogsPage";
 import TestimonialsPage from "@/pages/TestimonialsPage";
 import DecorFeaturedProductsPage from "@/components/modules/DecorPage/DecorFeaturedProductsPage";
 import ClientsPage from "@/pages/ClientsPage";
+import ShippingPage from "@/pages/ShippingPage";
+import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
+import ReturnRefundPage from "@/pages/ReturnRefundPage";
+import TermsPage from "@/pages/TermsPage";
+import FaqPage from "@/pages/FaqPage";
 
 
 
@@ -102,6 +107,26 @@ export const router = createBrowserRouter([
             {
                 path: "clients",
                 Component: ClientsPage
+            },
+            {
+                path: "shipping",
+                Component: ShippingPage
+            },
+            {
+                path: "privacy-policy",
+                Component: PrivacyPolicyPage
+            },
+            {
+                path: "return-refund",
+                Component: ReturnRefundPage
+            },
+            {
+                path: "terms",
+                Component: TermsPage
+            },
+            {
+                path: "faq",
+                Component: FaqPage
             },
             // {
             //     path: "faq",
