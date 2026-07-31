@@ -1,6 +1,4 @@
 
-
-// src/pages/FeaturedProductsPage.tsx
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useGetProductsQuery } from "@/redux/services/product/product.api";

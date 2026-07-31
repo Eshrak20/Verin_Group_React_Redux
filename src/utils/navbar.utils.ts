@@ -5,7 +5,7 @@ import type { NavLink } from "@/types/navbar.type";
 export const navLinks: NavLink[] = [
   { label: "Home", path: "/" },
   { label: "Decor", path: "/decor" },
-  { label: "Clothing", path: "/clothing" },
+  { label: "Clothing", path: "/clothings" },
   { label: "Electronics", path: "/electronics" },
 ];
 
@@ -21,7 +21,7 @@ export const checkIsActive = (
   if (currentCompanyParam) {
     if (currentCompanyParam === "verin-decor" && link.path === "/decor") return true;
     if (currentCompanyParam === "verin-electronics" && link.path === "/electronics") return true;
-    if (currentCompanyParam === "verin-clothing" && link.path === "/clothing") return true;
+    if (currentCompanyParam === "verin-clothing" && link.path === "/clothings") return true;
     if (currentCompanyParam === "verin-group" && link.path === "/") return true;
   }
 

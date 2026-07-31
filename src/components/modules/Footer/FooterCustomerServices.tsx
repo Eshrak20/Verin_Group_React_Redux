@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { CustomerServiceLinkItem } from "./CustomerServiceLink";
+import { CustomerServiceLinkItem } from "./CustomerServiceLinkItem";
 import type { FooterCustomerServicesProps } from "@/types/footer.type";
 
 

@@ -6,7 +6,6 @@ import GlobalErrorPage from "@/components/layout/GlobalErrorPage";
 import DecorPage from "@/pages/DecorPage";
 import LogisticsPage from "@/pages/LogisticsPage";
 import ProductDetailsPage from "@/pages/ProductDetailsPage";
-import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import Login from "@/pages/Login";
 import Signup from "@/pages/SignUp";
 import ContactUs from "@/pages/ContactUs";
@@ -45,7 +44,7 @@ export const router = createBrowserRouter([
                 Component: DecorPage
             },
             {
-                path: "clothing",
+                path: "clothings",
                 Component: ClothingPage
             },
             {
@@ -62,7 +61,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: "privacy-policy",
-                Component: PrivacyPolicy
+                Component: PrivacyPolicyPage
             },
             {
                 path: "contact",
