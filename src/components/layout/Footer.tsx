@@ -9,24 +9,25 @@ import { FooterBrand } from "../modules/Footer/FooterBrand";
 import { FooterInformation } from "../modules/Footer/FooterInformation";
 import { FooterCustomerServices } from "../modules/Footer/FooterCustomerServices";
 import { FooterPayments } from "../modules/Footer/FooterPayments";
-import { customerServiceLinks, getCompanyKey, getFooterBackground, parseFooterData } from "@/utils/footer.utils";
-
-
+import {
+  customerServiceLinks,
+  getCompanyKey,
+  getFooterBackground,
+  parseFooterData,
+} from "@/utils/footer.utils";
 
 export default function Footer() {
   const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
 
-  // 1. Fetch Queries
+  // 🎯 সরাসরি API কল (কারণ CommonLayout একে আটকে রাখছে)
   const { data: footerSettingsData } = useGetFooterSettingsQuery();
   const companyFromQuery = searchParams.get("company");
 
-  // 2. Computed Values
   const companyKey = getCompanyKey(pathname, companyFromQuery);
   const { data: footerPagesData } = useGetFooterPagesByCompanyQuery(companyKey);
   const footerBg = getFooterBackground(companyKey);
 
-  // 3. Extracted Data from API
   const {
     logoUrl,
     companyName,
@@ -92,6 +93,103 @@ export default function Footer() {
 
 
 
+// import { useLocation, useSearchParams } from "react-router-dom";
+// import { motion } from "framer-motion";
+
+// import {
+//   useGetFooterPagesByCompanyQuery,
+//   useGetFooterSettingsQuery,
+// } from "@/redux/services/footer/footer.api";
+// import { FooterBrand } from "../modules/Footer/FooterBrand";
+// import { FooterInformation } from "../modules/Footer/FooterInformation";
+// import { FooterCustomerServices } from "../modules/Footer/FooterCustomerServices";
+// import { FooterPayments } from "../modules/Footer/FooterPayments";
+// import {
+//   customerServiceLinks,
+//   getCompanyKey,
+//   getFooterBackground,
+//   parseFooterData,
+// } from "@/utils/footer.utils";
+
+// export default function Footer() {
+//   const { pathname } = useLocation();
+//   const [searchParams] = useSearchParams();
+
+//   // 1. Fetch Queries
+//   const { data: footerSettingsData } = useGetFooterSettingsQuery();
+//   const companyFromQuery = searchParams.get("company");
+
+//   // 2. Dynamic Computed Values based on current route/query
+//   const companyKey = getCompanyKey(pathname, companyFromQuery);
+//   const { data: footerPagesData } = useGetFooterPagesByCompanyQuery(companyKey);
+//   const footerBg = getFooterBackground(companyKey);
+
+//   // 3. Extracted Data from API
+//   const {
+//     logoUrl,
+//     companyName,
+//     description,
+//     copyrightText,
+//     phone,
+//     email,
+//     address,
+//     socialLinks,
+//     footerLinks,
+//   } = parseFooterData(footerSettingsData, companyKey);
+
+//   return (
+//     <footer
+//       className={`${footerBg} ${
+//         pathname === "/" ? "home-black-text" : "text-white"
+//       } overflow-hidden`}
+//     >
+//       <div className="py-12 max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-0">
+//         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+//           <FooterBrand
+//             logoUrl={logoUrl}
+//             companyName={companyName}
+//             description={description}
+//             email={email}
+//             phone={phone}
+//             address={address}
+//             socialLinks={socialLinks}
+//           />
+
+//           <FooterInformation links={footerLinks} />
+
+//           {/* 🎯 dynamic companyKey পাস হচ্ছে যা দিয়ে সঠিকভাবে ফিল্টারড Customer Service Links তৈরি হবে */}
+//           <FooterCustomerServices
+//             customerServiceLinks={customerServiceLinks}
+//             footerPagesData={footerPagesData}
+//             companyKey={companyKey}
+//           />
+
+//           <FooterPayments />
+//         </div>
+//       </div>
+
+//       <motion.div
+//         initial={{ opacity: 0 }}
+//         whileInView={{ opacity: 1 }}
+//         viewport={{ once: false }}
+//         transition={{ duration: 0.5, delay: 0.4 }}
+//         className="border-t border-gray-700/50"
+//       >
+//         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+//           <p className="text-center text-sm text-gray-500">
+//             {copyrightText}
+//           </p>
+//         </div>
+//       </motion.div>
+//     </footer>
+//   );
+// }
+
+
+
+
+
+
 
 
 
@@ -107,65 +205,42 @@ export default function Footer() {
 // import { FooterInformation } from "../modules/Footer/FooterInformation";
 // import { FooterCustomerServices } from "../modules/Footer/FooterCustomerServices";
 // import { FooterPayments } from "../modules/Footer/FooterPayments";
-// import type { CustomerServiceLink } from "@/types/footer.type";
+// import { customerServiceLinks, getCompanyKey, getFooterBackground, parseFooterData } from "@/utils/footer.utils";
 
 
-
-// const customerServiceLinks: CustomerServiceLink[] = [
-//   { label: "Shipping", path: "/shipping", pageType: "shipping" },
-//   { label: "Return & Refund", path: "/return-refund", pageType: "return-refund" },
-//   { label: "Privacy Policy", path: "/privacy-policy", pageType: "privacy-policy" },
-//   { label: "Terms & Conditions", path: "/terms", pageType: "terms-conditions" },
-//   { label: "Orders FAQs", path: "/faq", pageType: "orders-faqs" },
-// ];
 
 // export default function Footer() {
 //   const { pathname } = useLocation();
 //   const [searchParams] = useSearchParams();
-//   const { data } = useGetFooterSettingsQuery();
 
+//   // 1. Fetch Queries
+//   const { data: footerSettingsData } = useGetFooterSettingsQuery();
 //   const companyFromQuery = searchParams.get("company");
 
-//   const companyKey =
-//     companyFromQuery ||
-//     (pathname.startsWith("/decor") || pathname.startsWith("/products")
-//       ? "verin-decor"
-//       : pathname.startsWith("/electronics")
-//       ? "verin-electronics"
-//       : "verin-group");
-
+//   // 2. Computed Values
+//   const companyKey = getCompanyKey(pathname, companyFromQuery);
 //   const { data: footerPagesData } = useGetFooterPagesByCompanyQuery(companyKey);
+//   const footerBg = getFooterBackground(companyKey);
 
-//   const footerBg =
-//     companyKey === "verin-electronics" ? "bg-[#FFFFFF]" : "bg-[#FFFFFF]";
-
-//   const footer = data?.success
-//     ? data.data.find((f) => f.company_key === companyKey)
-//     : undefined;
-
-//   const logoUrl = footer?.image_url
-//     ? footer.image_url
-//     : footer?.logo
-//     ? `https://v.veringroup.com/storage/${footer.logo}`
-//     : null;
-
-//   const companyName = footer?.company_name || "YourBrand";
-//   const description = footer?.description || "";
-//   const copyrightText = footer?.copyright_text || "© 2026 All rights reserved.";
-//   const phone = footer?.contact_info?.phone || "";
-//   const email = footer?.contact_info?.email || "";
-//   const address = footer?.contact_info?.address || "";
-
-//   const socialLinks =
-//     footer?.social_links?.filter((s) => s.is_active === "1") || [];
-
-//   const footerLinks =
-//     footer?.links
-//       ?.slice()
-//       .sort((a, b) => Number(a.sort_order) - Number(b.sort_order)) || [];
+//   // 3. Extracted Data from API
+//   const {
+//     logoUrl,
+//     companyName,
+//     description,
+//     copyrightText,
+//     phone,
+//     email,
+//     address,
+//     socialLinks,
+//     footerLinks,
+//   } = parseFooterData(footerSettingsData, companyKey);
 
 //   return (
-//     <footer className={`${footerBg} ${pathname === "/" ? "home-black-text" : "text-white"} overflow-hidden`}>
+//     <footer
+//       className={`${footerBg} ${
+//         pathname === "/" ? "home-black-text" : "text-white"
+//       } overflow-hidden`}
+//     >
 //       <div className="py-12 max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-0">
 //         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 //           <FooterBrand
@@ -206,7 +281,6 @@ export default function Footer() {
 //     </footer>
 //   );
 // }
-
 
 
 

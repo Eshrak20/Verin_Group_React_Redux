@@ -1,8 +1,20 @@
-
 import { useGetBlogQuery } from "@/redux/services/homepage/homePage.api";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+
+// 🎯 ক্যাটাগরি আইডি থেকে ইংরেজি নামের ম্যাপ
+const BLOG_CATEGORIES: Record<number, string> = {
+  1: "Tech",
+  2: "Business",
+  3: "Lifestyle",
+  4: "Education",
+};
+
+interface Category {
+  id: number;
+  name: string;
+}
 
 interface Blog {
   id: number;
@@ -16,6 +28,7 @@ interface Blog {
   excerpt: string | null;
   featured_image: string | null;
   category_id: number | null;
+  category?: Category | null;
   author_id: number | null;
   status: string;
   created_at: string;
@@ -42,6 +55,15 @@ export default function BlogsPage() {
       month: "long",
       day: "numeric",
     });
+  };
+
+  // 🎯 Dynamic Category Name Helper (সবসময় ইংরেজিতে রিটার্ন করবে)
+  const getCategoryName = (blog: Blog): string => {
+    if (blog.category?.name) return blog.category.name;
+    if (blog.category_id && BLOG_CATEGORIES[blog.category_id]) {
+      return BLOG_CATEGORIES[blog.category_id];
+    }
+    return "General";
   };
 
   // Loading State UI Loader
@@ -194,8 +216,8 @@ export default function BlogsPage() {
                   <div className="p-4 flex flex-col gap-2 flex-1">
                     {/* Category + Date */}
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 home-black-text transition-transform duration-300 group-hover:scale-105">
-                        {isBangla ? "টিউটোরিয়াল" : "Tutorial"}
+                      <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 home-black-text transition-transform duration-300 group-hover:scale-105 capitalize">
+                        {getCategoryName(blog)}
                       </span>
                       <span className="text-xs text-gray-400 dark:text-gray-500">
                         {date}
@@ -226,7 +248,6 @@ export default function BlogsPage() {
     </div>
   );
 }
-
 
 
 

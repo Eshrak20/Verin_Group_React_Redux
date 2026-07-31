@@ -35,6 +35,7 @@ export const footerApi = baseApi.injectEndpoints({
     getFooterSettings: builder.query<FooterResponse, void>({
       query: () => "/footer",
       providesTags: ["Footer"],
+      keepUnusedDataFor: 86400,
     }),
 
     // Dynamic Footer Pages API by Company Key (verin-group | verin-decor | verin-electronics)
@@ -43,6 +44,7 @@ export const footerApi = baseApi.injectEndpoints({
       providesTags: (_result, _error, companyKey) => [
         { type: "FooterPages", id: companyKey },
       ],
+      keepUnusedDataFor: 86400,
     }),
   }),
 });
