@@ -12,8 +12,8 @@ const ClothingPage = lazy(() => import("@/pages/ClothingPage"));
 const LogisticsPage = lazy(() => import("@/pages/LogisticsPage"));
 const ElectronicsPage = lazy(() => import("@/pages/ElectronicsPage"));
 const ProductDetailsPage = lazy(() => import("@/pages/ProductDetailsPage"));
-const Login = lazy(() => import("@/pages/Login"));
-const Signup = lazy(() => import("@/pages/SignUp"));
+// const Login = lazy(() => import("@/pages/Login"));
+// const Signup = lazy(() => import("@/pages/SignUp"));
 const ContactUs = lazy(() => import("@/pages/ContactUs"));
 const SearchPage = lazy(() => import("@/pages/SearchPage"));
 const FurniturePage = lazy(() => import("@/pages/FurniturePage"));
@@ -134,14 +134,14 @@ export const router = createBrowserRouter([
             }
         ]
     },
-    {
-        path: "/login",
-        element: <Suspense fallback={<PageLoader />}><Login /></Suspense>
-    },
-    {
-        path: "/signup",
-        element: <Suspense fallback={<PageLoader />}><Signup /></Suspense>
-    },
+    // {
+    //     path: "/login",
+    //     element: <Suspense fallback={<PageLoader />}><Login /></Suspense>
+    // },
+    // {
+    //     path: "/signup",
+    //     element: <Suspense fallback={<PageLoader />}><Signup /></Suspense>
+    // },
     {
         path: "*",
         element: <GlobalErrorPage />,

@@ -14,6 +14,7 @@ export default function CommonLayout({ children }: IProps) {
   const { pathname } = useLocation();
   const [showFooter, setShowFooter] = useState(false);
 
+  // ১. ডাইনামিক টাইটেল সেট করার জন্য
   useEffect(() => {
     if (pathname.startsWith("/decor")) {
       document.title = "Verin Group - Decor";
@@ -28,10 +29,12 @@ export default function CommonLayout({ children }: IProps) {
     }
   }, [pathname]);
 
-  // 🎯 আসল ট্রিক: ইউজার অন্তত ৫০px স্ক্রোল করলে তবেই ফুটার লোড হবে
+  // ২. ফুটার লেজি লোডিং (পেজ পরিবর্তনের সময় বারবার টাইমার রিসেট হওয়া রোধ করা হয়েছে)
   useEffect(() => {
+    // যদি অলেইডি ফুটার দেখানোর স্টেট ট্রু হয়ে থাকে, তবে আর লিসেনার বা টাইমার দরকার নেই
+    if (showFooter) return;
+
     const handleScroll = () => {
-      // ব্রাউজারের অটো-ট্রিগার আটকানোর জন্য window.scrollY > 50 চেক
       if (window.scrollY > 50) {
         setShowFooter(true);
         window.removeEventListener("scroll", handleScroll);
@@ -40,16 +43,16 @@ export default function CommonLayout({ children }: IProps) {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 
-    // ইউজার একদমই স্ক্রোল না করলে ৮ সেকেন্ড পর লোড হবে
     const timer = setTimeout(() => {
       setShowFooter(true);
-    }, 8000);
+      window.removeEventListener("scroll", handleScroll);
+    }, 5000); // সময় ৮ সেকেন্ড থেকে কমিয়ে ৫ সেকেন্ড করা হলো যাতে দ্রুত ইন্টারঅ্যাক্টিভ হয়
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       clearTimeout(timer);
     };
-  }, [pathname]);
+  }, [showFooter]); // ডিপেন্ডেন্সিতে pathname বাদ দিয়ে showFooter দেওয়া হয়েছে
 
   return (
     <div className="relative min-h-screen flex flex-col bg-home">
@@ -61,7 +64,6 @@ export default function CommonLayout({ children }: IProps) {
         {children}
       </div>
 
-      {/* 🎯 showFooter true না হলে DOM-এ ফুটার আসবেই না */}
       {showFooter && (
         <Suspense fallback={<div className="h-20 bg-transparent" />}>
           <Footer />
@@ -70,6 +72,87 @@ export default function CommonLayout({ children }: IProps) {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+// import type { ReactNode } from "react";
+// import { useEffect, useState, lazy, Suspense } from "react";
+// import { useLocation } from "react-router-dom";
+// import Navbar from "./Navbar";
+
+// // 🎯 Footer Lazy Import
+// const Footer = lazy(() => import("./Footer"));
+
+// interface IProps {
+//   children: ReactNode;
+// }
+
+// export default function CommonLayout({ children }: IProps) {
+//   const { pathname } = useLocation();
+//   const [showFooter, setShowFooter] = useState(false);
+
+//   useEffect(() => {
+//     if (pathname.startsWith("/decor")) {
+//       document.title = "Verin Group - Decor";
+//     } else if (pathname.startsWith("/electronics")) {
+//       document.title = "Verin Group - Electronics";
+//     } else if (pathname.startsWith("/clothing")) {
+//       document.title = "Verin Group - Clothing";
+//     } else if (pathname.startsWith("/blogs")) {
+//       document.title = "Verin Group - Blogs";
+//     } else {
+//       document.title = "Verin Group";
+//     }
+//   }, [pathname]);
+
+//   // 🎯 আসল ট্রিক: ইউজার অন্তত ৫০px স্ক্রোল করলে তবেই ফুটার লোড হবে
+//   useEffect(() => {
+//     const handleScroll = () => {
+//       // ব্রাউজারের অটো-ট্রিগার আটকানোর জন্য window.scrollY > 50 চেক
+//       if (window.scrollY > 50) {
+//         setShowFooter(true);
+//         window.removeEventListener("scroll", handleScroll);
+//       }
+//     };
+
+//     window.addEventListener("scroll", handleScroll, { passive: true });
+
+//     // ইউজার একদমই স্ক্রোল না করলে ৮ সেকেন্ড পর লোড হবে
+//     const timer = setTimeout(() => {
+//       setShowFooter(true);
+//     }, 8000);
+
+//     return () => {
+//       window.removeEventListener("scroll", handleScroll);
+//       clearTimeout(timer);
+//     };
+//   }, [pathname]);
+
+//   return (
+//     <div className="relative min-h-screen flex flex-col bg-home">
+//       <div>
+//         <Navbar />
+//       </div>
+
+//       <div className="grow pt-22 max-w-6xl mx-auto w-full min-h-[calc(100vh-80px)]">
+//         {children}
+//       </div>
+
+//       {/* 🎯 showFooter true না হলে DOM-এ ফুটার আসবেই না */}
+//       {showFooter && (
+//         <Suspense fallback={<div className="h-20 bg-transparent" />}>
+//           <Footer />
+//         </Suspense>
+//       )}
+//     </div>
+//   );
+// }
 
 
 
