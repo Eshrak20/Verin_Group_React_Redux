@@ -1,9 +1,9 @@
 import Banner from "@/components/modules/HomePage/Banner";
-import DecorFeaturedProducts from "@/components/modules/HomePage/DecorFeaturedProducts";
-import ElectronicsFeaturedProducts from "@/components/modules/HomePage/ElectronicsFeaturedProducts";
-import OurBlogs from "@/components/modules/HomePage/OurBlogs";
-import ShopByCategory from "@/components/modules/HomePage/ShopByCategory";
-import Clients from "@/components/modules/HomePage/Clients";
+import DecorFeaturedProducts from "@/components/modules/HomePage/DecorFeaturedProducts/DecorFeaturedProducts";
+import ElectronicsFeaturedProducts from "@/components/modules/HomePage/ElectronicsFeaturedProducts/ElectronicsFeaturedProducts";
+import OurBlogs from "@/components/modules/HomePage/Blogs/OurBlogs";
+import ShopByCategory from "@/components/modules/HomePage/ShopByCategory/ShopByCategory";
+import Clients from "@/components/modules/HomePage/OurClients/Clients";
 
 
 export default function Homepage() {

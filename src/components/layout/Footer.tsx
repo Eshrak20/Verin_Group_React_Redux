@@ -20,7 +20,7 @@ export default function Footer() {
   const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
 
-  // 🎯 সরাসরি API কল (কারণ CommonLayout একে আটকে রাখছে)
+  
   const { data: footerSettingsData } = useGetFooterSettingsQuery();
   const companyFromQuery = searchParams.get("company");
 

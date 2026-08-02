@@ -15,12 +15,12 @@ export function CustomerServiceLinkItem({
   footerPagesData,
   companyKey,
 }: CustomerServiceLinkItemProps) {
-  // ১. ডাটাবেজের পেজ খুঁজে বের করা এবং পাবলিশড কিনা চেক
+  
   const matchedPage = footerPagesData?.data?.find(
     (p) => p.page_type === link.pageType && Number(p.is_published) === 1
   );
 
-  // 🎯 ২. Strict Validation: ব্যাকএন্ড ভুল করে অন্য কোম্পানির ডাটা ফেরত পাঠাচ্ছে কি না
+  
   const isValidPageForCompany = () => {
     if (!matchedPage) return false;
 
@@ -28,7 +28,7 @@ export function CustomerServiceLinkItem({
     const titleText = (matchedPage.title || "").toLowerCase();
     const textToCheck = `${contentText} ${titleText}`;
 
-    // ব্র্যান্ড ফিল্টারিং নিয়মসমূহ
+  
     const allBrands = [
       { key: "verin-group", keywords: ["verin group"] },
       { key: "verin-decor", keywords: ["verin decor"] },
@@ -36,7 +36,7 @@ export function CustomerServiceLinkItem({
       { key: "verin-electronics", keywords: ["verin electronics"] },
     ];
 
-    // বর্তমান চাওয়া কোম্পানি ছাড়া অন্য কোনো স্পষ্ট ব্র্যান্ডের নাম থাকলে তা রিজেক্ট করা
+   
     const hasOtherBrandName = allBrands.some(
       (brand) =>
         brand.key !== companyKey &&
@@ -56,7 +56,7 @@ export function CustomerServiceLinkItem({
     <li>
       <Link
         to={`${link.path}?company=${companyKey}`}
-        // 🎯 state পাস করা হচ্ছে: ভুল ডাটা থাকলে null এবং notFound: true যাবে
+        
         state={{
           pageData: finalPageData,
           notFound: !hasPageData,

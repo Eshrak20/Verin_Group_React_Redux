@@ -1,7 +1,7 @@
 import { useGetFooterPagesByCompanyQuery } from "@/redux/services/footer/footer.api";
 import { useSearchParams } from "react-router-dom";
 
-// HTML Entity ডিকোড করার ফাংশন
+
 const decodeHtml = (html: string) => {
   const txt = document.createElement("textarea");
   txt.innerHTML = html;

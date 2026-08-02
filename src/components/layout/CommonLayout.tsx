@@ -3,7 +3,7 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 
-// 🎯 Footer Lazy Import
+
 const Footer = lazy(() => import("./Footer"));
 
 interface IProps {
@@ -29,9 +29,8 @@ export default function CommonLayout({ children }: IProps) {
     }
   }, [pathname]);
 
-  // ২. ফুটার লেজি লোডিং (পেজ পরিবর্তনের সময় বারবার টাইমার রিসেট হওয়া রোধ করা হয়েছে)
+  
   useEffect(() => {
-    // যদি অলেইডি ফুটার দেখানোর স্টেট ট্রু হয়ে থাকে, তবে আর লিসেনার বা টাইমার দরকার নেই
     if (showFooter) return;
 
     const handleScroll = () => {
@@ -46,13 +45,13 @@ export default function CommonLayout({ children }: IProps) {
     const timer = setTimeout(() => {
       setShowFooter(true);
       window.removeEventListener("scroll", handleScroll);
-    }, 5000); // সময় ৮ সেকেন্ড থেকে কমিয়ে ৫ সেকেন্ড করা হলো যাতে দ্রুত ইন্টারঅ্যাক্টিভ হয়
+    }, 85000); 
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       clearTimeout(timer);
     };
-  }, [showFooter]); // ডিপেন্ডেন্সিতে pathname বাদ দিয়ে showFooter দেওয়া হয়েছে
+  }, [showFooter]); 
 
   return (
     <div className="relative min-h-screen flex flex-col bg-home">

@@ -10,7 +10,7 @@ import {
 } from "@/redux/services/homepage/homePage.api";
 import { useActiveCategory } from "@/utils/ActiveCategoryContext";
 
-import ProductSearch from "@/components/modules/Product/ProductSearch";
+import ProductSearch from "@/components/modules/Product/ProductSearch/ProductSearch";
 
 import type { PillStyle } from "@/types/navbar.type";
 import { checkIsActive, getCompanyKey, getLogoPath, navLinks } from "@/utils/navbar.utils";
@@ -64,12 +64,12 @@ export default function Navbar() {
 
   const companyName = navbar?.company_name || "Verin Group";
 
-  // ১. পাথ পরিবর্তন হলে মোবাইল মেনু বন্ধ করা
+
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // ২. বাইরে ক্লিক করলে মোবাইল মেনু বন্ধ করা (অপ্টিমাইজড উইথ ডিপেন্ডেন্সি চেক)
+  
   useEffect(() => {
     function handleClickOutside(event: MouseEvent | TouchEvent) {
       if (
@@ -91,7 +91,7 @@ export default function Navbar() {
     };
   }, [mobileMenuOpen]);
 
-  // ৩. স্ক্রোল করলে ড্রপডাউন বা মেনু বন্ধ করা
+  
   useEffect(() => {
     const handleScroll = () => {
       if (dropdownOpen) setDropdownOpen(false);
@@ -101,7 +101,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [dropdownOpen, mobileMenuOpen]);
 
-  // ৪. নেভ পিল (Pill) পজিশন আপডেট করা
+  
   useEffect(() => {
     const activeIndex = navLinks.findIndex((link) => isLinkActive(link));
 
@@ -115,7 +115,7 @@ export default function Navbar() {
     activeCategory,
     currentCategoryId,
     currentCompanyParam,
-    categories.length, // পুরো categories অবজেক্টের বদলে শুধুমাত্র length দেওয়া হলো যাতে অপ্রয়োজনীয় রি-রেন্ডার না হয়
+    categories.length, 
   ]);
 
   const updatePill = (index: number) => {
