@@ -1,9 +1,9 @@
-import { useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { useGetProductsQuery } from "@/redux/services/product/product.api";
 import type { Product } from "@/types/product.type";
-import { motion } from "framer-motion"; 
+import { motion } from "framer-motion";
+import { useMemo } from "react";
 import { useInView } from "react-intersection-observer"; // 🎯 Lazy Fetching
+import { Link, useNavigate } from "react-router-dom";
 
 function getDiscount(price: string | number, salePrice: string | number): number {
   const p = typeof price === "number" ? price : parseFloat(price);

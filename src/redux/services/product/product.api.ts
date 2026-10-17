@@ -8,7 +8,7 @@ interface GetProductsParams {
   per_page?: number;
   category_id?: number;
   sub_category_id?: number;
-  is_featured?: 1 | 0;
+  is_featured?: boolean;
   search?: string;
 }
 
