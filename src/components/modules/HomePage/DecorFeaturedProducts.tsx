@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // src/components/DecorFeaturedProducts.tsx
-import { useRef, useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer"; 
 import { useGetProductsQuery } from "@/redux/services/product/product.api";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import { Link, useNavigate } from "react-router-dom";
 
 const VISIBLE = 5;
 const GAP = 12;
@@ -33,6 +33,8 @@ export default function DecorFeaturedProducts() {
   );
 
   const products = data?.data ?? [];
+
+  console.log(products);
 
   const getCardWidth = () => {
     const el = scrollRef.current;
