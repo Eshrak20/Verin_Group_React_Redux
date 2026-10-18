@@ -1,69 +1,48 @@
-// src/redux/types/product.types.ts
-
-export interface ProductImage {
-  id?: number;
-  product_variant_id?: string;
-  image?: string;
-}
 
 export interface ProductVariant {
   id?: number;
-  product_id?: string;
-  sku: string;
+  product_id?: number;
   price: string;
-  sale_price: string | null;
+  sale_price?: string;
+  sku: string;
   thumbnail?: string | null;
-  status?: string | boolean;
-  images: ProductImage[];
-  videos?: unknown[];
-}
-
-export interface ProductCategory {
-  id?: number;
-  name: string;
-  slug?: string;
-  icon?: string | null;
-  image?: string | null;
-  image_url?: string | null;
-}
-
-export interface ProductSubCategory {
-  id?: number;
-  category_id?: string | number;
-  name: string;
-  slug?: string;
-  icon?: string | null;
-  image?: string | null;
-  image_url?: string | null;
+  status?: boolean | string | number;
+  images: string[];
 }
 
 export interface Product {
   id: number;
   name: string;
   slug: string;
-  short_description: string;
+  short_description?: string | null;
   description?: string | null;
   thumbnail?: string | null;
 
   is_featured: boolean | string | number;
   status: boolean | string | number;
 
-  category: string | ProductCategory;
-  sub_category: string | ProductSubCategory;
-  brand: string | null | Record<string, unknown>;
+  category: string;
+  sub_category: string;
+  brand: string ;
 
   category_id?: string | number;
   sub_category_id?: string | number;
   brand_id?: string | number | null;
 
-  // This endpoint returns a single variant object.
+  // Product listing API returns a single variant object.
   variant?: ProductVariant | null;
 
-  // Retained for endpoints that return multiple variants.
+  // Other endpoints may return multiple variants.
   variants?: ProductVariant[];
 
-  created_at?: string;
-  updated_at?: string;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface ProductFilter {
+  id: number;
+  name: string;
+  options: string[];
 }
 
 export interface ProductMeta {
@@ -76,10 +55,6 @@ export interface ProductMeta {
 export interface ProductPriceRange {
   min: number;
   max: number;
-}
-
-export interface ProductFilter {
-  [key: string]: unknown;
 }
 
 export interface ProductsData {

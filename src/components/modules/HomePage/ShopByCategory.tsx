@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // src/components/ShopByCategory.tsx
-import { useRef, useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { useGetCategoriesQuery } from "@/redux/services/homepage/homePage.api";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 const CARD_WIDTH = 276;
 const GAP = 16;
@@ -33,16 +33,16 @@ export default function ShopByCategory() {
   const categories =
     data?.status && data.data.length > 0
       ? data.data.map((cat, i) => {
-          const cleanSlug = cat.slug.replace("verin_", "");
+        const cleanSlug = cat.slug.replace("verin_", "");
 
-          return {
-            id: cat.id,
-            name: cat.name,
-            image: cat.image_url,
-            path: `/${cleanSlug}`,
-            bg: fallbackBgs[i % fallbackBgs.length],
-          };
-        })
+        return {
+          id: cat.id,
+          name: cat.name,
+          image: cat.image_url,
+          path: `/${cleanSlug}`,
+          bg: fallbackBgs[i % fallbackBgs.length],
+        };
+      })
       : [];
 
   const checkScroll = () => {
@@ -89,7 +89,7 @@ export default function ShopByCategory() {
   return (
     <section className="py-6 sm:py-8 lg:py-10 home-black-text">
       {/* Header with Scroll Animation */}
-      <motion.div 
+      <motion.div
         className="text-center mb-6 sm:mb-8"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -99,7 +99,7 @@ export default function ShopByCategory() {
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold home-black-text">
           Shop By Category
         </h2>
-        <motion.p 
+        <motion.p
           className="text-xs sm:text-sm home-black-text mt-1"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

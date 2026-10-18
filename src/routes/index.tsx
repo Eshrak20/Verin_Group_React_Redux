@@ -1,16 +1,17 @@
 /* eslint-disable react-refresh/only-export-components */
 // src/routes/index.tsx
+import GlobalErrorPage from "@/components/layout/GlobalErrorPage";
+import Homepage from "@/pages/Homepage"; // হোমপেজ সরাসরি থাকবে (Fast LCP)
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
 import App from "../App";
-import Homepage from "@/pages/Homepage"; // হোমপেজ সরাসরি থাকবে (Fast LCP)
-import GlobalErrorPage from "@/components/layout/GlobalErrorPage";
 
 // 🎯 বাকি পেজগুলো Lazy Loading করা হলো
 const DecorPage = lazy(() => import("@/pages/DecorPage"));
 const ClothingPage = lazy(() => import("@/pages/ClothingPage"));
 const LogisticsPage = lazy(() => import("@/pages/LogisticsPage"));
-const ElectronicsPage = lazy(() => import("@/pages/ElectronicsPage"));
+const ElectronicsPage = lazy(() => import("@/pages/electronics/ElectronicsPage"));
+const ElecHome = lazy(() => import("@/pages/electronics/home/ElecHome"));
 const ProductDetailsPage = lazy(() => import("@/pages/ProductDetailsPage"));
 const Login = lazy(() => import("@/pages/Login"));
 const Signup = lazy(() => import("@/pages/SignUp"));
@@ -62,7 +63,14 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/electronics",
-                element: <Suspense fallback={<PageLoader />}><ElectronicsPage /></Suspense>
+                element:
+                 <Suspense fallback={<PageLoader />}><ElectronicsPage /></Suspense>,
+                 children:[
+                    {
+                    index: true,
+                    Component: ElecHome
+                    }
+                 ]
             },
             {
                 path: "/products/:slug",

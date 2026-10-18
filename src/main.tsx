@@ -13,11 +13,11 @@ import { ActiveCategoryProvider } from './utils/ActiveCategoryContext'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>
-    <ActiveCategoryProvider>
-      <Provider store={store}>
-        <RouterProvider router={router} />
-      </Provider>
-    </ActiveCategoryProvider>
+      <ActiveCategoryProvider>
+        <Provider store={store}>
+          <RouterProvider router={router} />
+        </Provider>
+      </ActiveCategoryProvider>
     </HelmetProvider>
   </StrictMode>,
 )

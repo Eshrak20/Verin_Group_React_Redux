@@ -5,8 +5,8 @@ import type { NavLink } from "@/types/navbar.type";
 export const navLinks: NavLink[] = [
   { label: "Home", path: "/" },
   { label: "Decor", path: "/decor" },
-  { label: "Clothing", path: "/clothings" },
   { label: "Electronics", path: "/electronics" },
+  { label: "Clothing", path: "/clothings" }
 ];
 
 export const checkIsActive = (

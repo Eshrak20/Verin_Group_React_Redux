@@ -5,12 +5,15 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer"; // 🎯 Lazy Fetching
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const VISIBLE = 5;
 const GAP = 12;
 
 export default function ElectronicsFeaturedProducts() {
+  const location = useLocation();
+  const isElectronicPage = location.pathname.startsWith("/electronics");
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -102,7 +105,7 @@ export default function ElectronicsFeaturedProducts() {
       {!inView || isLoading ? (
         <div className="py-2">
           <h2 className="text-center text-2xl sm:text-3xl lg:text-4xl font-bold home-black-text mb-4 sm:mb-6">
-            Electronics Featured Products
+            {isElectronicPage ? "Customer Favorites" : "Electronics Featured Products"}
           </h2>
           <div className="flex gap-3 overflow-hidden">
             {Array.from({ length: VISIBLE }).map((_, i) => (
@@ -123,7 +126,7 @@ export default function ElectronicsFeaturedProducts() {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="text-center text-2xl sm:text-3xl lg:text-4xl font-bold home-black-text mb-4 sm:mb-6"
           >
-            Electronics Featured Products
+            {isElectronicPage ? "Customer Favorites" : "Electronics Featured Products"}
           </motion.h2>
 
           <div className="relative">
@@ -176,7 +179,7 @@ export default function ElectronicsFeaturedProducts() {
 
                   const image =
                     variant?.images?.[0] ||
-                    variant?.images?.[0]?.image ||
+                    variant?.images?.[1] ||
                     product.thumbnail ||
                     "https://placehold.co/170x170/e2e8f0/94a3b8?text=No+Image";
 

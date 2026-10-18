@@ -2,11 +2,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/components/modules/Product/ProductSearch.tsx
 
-import { useRef, useEffect, useState, useMemo } from "react";
-import { Search } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
-import { useGetProductsQuery } from "@/redux/services/product/product.api";
 import { useGetCategoriesQuery } from "@/redux/services/homepage/homePage.api";
+import { useGetProductsQuery } from "@/redux/services/product/product.api";
+import { Search } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 interface ProductSearchProps {
   searchOpen: boolean;
@@ -62,11 +62,11 @@ export default function ProductSearch({ searchOpen, setSearchOpen }: ProductSear
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [setSearchOpen]);
 
-  const searchResults = (data?.data || []).slice(0, 10);
+  const searchResults = (data?.data.products || []).slice(0, 10);
   const hasResults = searchResults.length > 0;
 
   // 🎯 সার্চে পাওয়া প্রথম প্রোডাক্ট বা তার category থেকে Category ID বের করা
-  const searchResultCategoryId = searchResults?.[0]?.category_id || searchResults?.[0]?.category?.id;
+  const searchResultCategoryId = searchResults?.[0]?.id || searchResults?.[0]?.id;
   const targetCategoryId = currentCategoryId ?? searchResultCategoryId;
 
   const handleIconClick = () => {

@@ -1,11 +1,6 @@
 import { baseApi } from "@/redux/baseApi";
 import type { FooterResponse } from "@/types/footer.type";
 
-
-
-
-
-
 export const footerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getFooterSettings: builder.query<FooterResponse, void>({
@@ -14,9 +9,5 @@ export const footerApi = baseApi.injectEndpoints({
     }),
   }),
 });
-
-
-
-
 
 export const { useGetFooterSettingsQuery } = footerApi;

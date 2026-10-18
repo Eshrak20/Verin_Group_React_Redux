@@ -1,15 +1,15 @@
 
-import { useMemo } from "react";
-import { Link } from "react-router-dom";
 import { useGetProductsQuery } from "@/redux/services/product/product.api";
 import type { Product } from "@/types/product.type";
+import { useMemo } from "react";
+import { Link } from "react-router-dom";
 
 export default function DecorFeaturedProductsPage() {
   const { data, isLoading } = useGetProductsQuery({ per_page: 100 });
 
   // 🎯 শুধুমাত্র Decor ক্যাটাগরির ALL Featured Products ফিল্টারিং
   const featuredProducts = useMemo(() => {
-    const allProducts = Array.isArray(data) ? data : data?.data ?? [];
+    const allProducts = Array.isArray(data) ? data : data?.data.products ?? [];
 
     return allProducts.filter((p) => {
       const isDecor = p.category?.name?.toLowerCase().includes("decor");
@@ -60,7 +60,7 @@ export default function DecorFeaturedProductsPage() {
               : 0;
 
             const image =
-              variant?.images?.[0]?.image_url ||
+              variant?.images?.[0] ||
               product.thumbnail ||
               "/placeholder.jpg";
 
@@ -91,7 +91,7 @@ export default function DecorFeaturedProductsPage() {
                 <div className="mt-4 px-1 flex-1 flex flex-col justify-between">
                   <div>
                     <p className="text-[10px] text-stone-400 font-medium uppercase tracking-widest mb-1 truncate">
-                      {variant?.sku} {product.sub_category?.name && `• ${product.sub_category.name}`}
+                      {variant?.sku} {product.sub_category && `• ${product.sub_category}`}
                     </p>
                     <h3 className="text-lg font-serif text-stone-900 leading-snug line-clamp-2">
                       {product.name}

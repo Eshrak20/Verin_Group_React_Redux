@@ -36,9 +36,6 @@ export default function DecorFeaturedProducts() {
     ? data.data.products
     : [];
 
-
-  console.log(products);
-
   const getCardWidth = () => {
     const el = scrollRef.current;
     if (!el) return 170;
@@ -178,7 +175,7 @@ export default function DecorFeaturedProducts() {
                   const oldPrice = Number(variant?.price ?? 0);
                   const image =
                     variant?.images?.[0] ||
-                    variant?.images?.[0]?.image ||
+                    variant?.images?.[1] ||
                     product.thumbnail ||
                     "https://placehold.co/170x170/e2e8f0/94a3b8?text=No+Image";
 

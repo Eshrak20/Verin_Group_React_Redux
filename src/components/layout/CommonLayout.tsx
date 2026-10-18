@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useEffect, useState, lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 

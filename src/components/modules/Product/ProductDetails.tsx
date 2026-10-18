@@ -18,7 +18,7 @@ export default function ProductDetails() {
   const navigate = useNavigate();
 
   const { data: response, isLoading } = useGetProductsQuery({
-    per_page: 100,
+    category_id: 1
   });
 
   const products: Product[] = response?.data?.products ?? [];
@@ -55,7 +55,7 @@ export default function ProductDetails() {
   useEffect(() => {
     if (product) {
       const currentCategory =
-        product.category?.name || product.sub_category?.name || "Decor";
+        product.category || product.sub_category || "Decor";
       setActiveCategory(currentCategory);
     }
 
@@ -102,7 +102,7 @@ export default function ProductDetails() {
     );
   }
 
-  const currentVariant = selectedVariant || product.variants?.[0];
+  const currentVariant = selectedVariant || product.variant;
 
   const price = Number(currentVariant?.price ?? 0);
   const salePrice = Number(currentVariant?.sale_price ?? 0);
@@ -113,11 +113,11 @@ export default function ProductDetails() {
 
   const productImages: string[] =
     currentVariant?.images && currentVariant.images.length > 0
-      ? currentVariant.images.map((img) => img.image_url)
+      ? currentVariant.images.map((img) => img)
       : [
-          product.thumbnail ||
-            "https://placehold.co/600x400/e2e8f0/94a3b8?text=No+Image",
-        ];
+        product.thumbnail ||
+        "https://placehold.co/600x400/e2e8f0/94a3b8?text=No+Image",
+      ];
 
   const whatsappNumber = "8801805734585";
   const productUrl = window.location.href;
@@ -184,11 +184,10 @@ Please provide more details.`;
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`shrink-0 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 transition-all p-1 hover:cursor-pointer ${
-                    selectedImage === index
+                  className={`shrink-0 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 transition-all p-1 hover:cursor-pointer ${selectedImage === index
                       ? "border-white bg-white/10 opacity-100 scale-105"
                       : "border-transparent opacity-40 hover:opacity-100 bg-white/5"
-                  }`}
+                    }`}
                 >
                   <img
                     src={img}
@@ -258,11 +257,10 @@ Please provide more details.`;
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border-2 transition-all p-1 ${
-                    selectedImage === index
+                  className={`shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border-2 transition-all p-1 ${selectedImage === index
                       ? "border-neutral-900"
                       : "border-transparent opacity-60 hover:opacity-100 bg-white"
-                  }`}
+                    }`}
                 >
                   <img
                     src={img}
@@ -285,7 +283,7 @@ Please provide more details.`;
         >
           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
             <span className="text-[10px] font-bold text-neutral-900/50 uppercase tracking-widest">
-              {product.sub_category?.name || product.category?.name || "DECOR"}
+              {product.sub_category || product.category || "DECOR"}
             </span>
             <span className="text-neutral-900/30">•</span>
             <span className="text-[10px] font-mono text-neutral-900/50">
@@ -356,11 +354,10 @@ Please provide more details.`;
                       setSelectedVariant(v);
                       setSelectedImage(0);
                     }}
-                    className={`px-3 py-1.5 text-[11px] font-medium rounded-md border transition-all ${
-                      currentVariant?.id === v.id
+                    className={`px-3 py-1.5 text-[11px] font-medium rounded-md border transition-all ${currentVariant?.id === v.id
                         ? "border-black bg-black text-white"
                         : "border-gray-200 bg-white text-gray-600 hover:border-gray-400"
-                    }`}
+                      }`}
                   >
                     Option {idx + 1} ({v.sku})
                   </button>
