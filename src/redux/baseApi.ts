@@ -9,7 +9,7 @@ export const baseApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Banner", "Categories", "Footer", "Product", "ClientReviews", "Client", "Blog", "FooterPages", "Elec-SubCategory"],
+  tagTypes: ["Banner", "Categories", "Footer", "Product", "ClientReviews", "Client", "Blog", "FooterPages", "Elec-SubCategory", "Elec-Product-Details"],
   
   endpoints: () => ({}),
 });

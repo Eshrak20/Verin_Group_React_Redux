@@ -1,6 +1,7 @@
 import type { Product } from "@/types/product.type";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo, useRef } from "react";
+import { Link } from "react-router";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -109,7 +110,7 @@ export default function ElecNewArrival({
 
             return (
               <SwiperSlide key={product.id} className="h-auto">
-                <article className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-lg">
+                <Link to={`/electronics/${product.slug}`} className="flex h-full flex-col overflow-hidden rounded-lg border cursor-pointer border-gray-100 bg-white shadow-sm transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-lg">
                   {/* Full Container Image Section */}
                   <div className="relative h-52 sm:h-60 w-full overflow-hidden bg-[#f4f5f7]">
                     {hasDiscount && (
@@ -159,7 +160,7 @@ export default function ElecNewArrival({
                       )}
                     </div>
                   </div>
-                </article>
+                </Link>
               </SwiperSlide>
             );
           })}

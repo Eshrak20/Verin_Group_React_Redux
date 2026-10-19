@@ -23,7 +23,7 @@ export interface Product {
 
   category: string;
   sub_category: string;
-  brand: string ;
+  brand: string;
 
   category_id?: string | number;
   sub_category_id?: string | number;
@@ -31,9 +31,6 @@ export interface Product {
 
   // Product listing API returns a single variant object.
   variant?: ProductVariant | null;
-
-  // Other endpoints may return multiple variants.
-  variants?: ProductVariant[];
 
   created_at?: string | null;
   updated_at?: string | null;
@@ -74,4 +71,85 @@ export interface GetProductsParams {
   category_id?: number | string;
   is_featured?: boolean | number | string;
   [key: string]: unknown;
+}
+
+
+
+
+// Product details types
+
+export interface ProductDetailsResponse {
+  success: boolean;
+  message: string;
+  data: ProductDetails;
+}
+
+export interface ProductDetails {
+  id: number;
+  name: string;
+  slug: string;
+  short_description: string | null;
+  description: string | null;
+  is_featured: boolean | string | number;
+  status: boolean | string | number;
+
+  category: ProductDetailsCategory;
+  sub_category: ProductDetailsSubCategory;
+  brand: ProductDetailsBrand;
+
+  variants: ProductDetailsVariant[];
+  attributes: ProductDetailsAttribute[];
+}
+
+export interface ProductDetailsCategory {
+  name: string;
+  slug: string;
+}
+
+export interface ProductDetailsSubCategory {
+  name: string;
+  slug: string;
+}
+
+export interface ProductDetailsBrand {
+  name: string;
+  slug: string;
+}
+
+export interface ProductDetailsVariant {
+  sku: string;
+  price: string | number;
+  sale_price: string | number | null;
+  stock: number | null;
+  status: boolean | string | number;
+
+  images: string[];
+  videos: ProductDetailsVideo[];
+  attributes: ProductVariantAttribute[];
+}
+
+export interface ProductDetailsVideo {
+  id?: number;
+  video?: string;
+  video_url?: string;
+  url?: string;
+}
+
+export interface ProductVariantAttribute {
+  id: number;
+  name: string;
+  value_id: number;
+  value: string;
+}
+
+export interface ProductDetailsAttribute {
+  id: number;
+  name: string;
+  type: string;
+  values: ProductAttributeValue[];
+}
+
+export interface ProductAttributeValue {
+  id: number;
+  value: string;
 }

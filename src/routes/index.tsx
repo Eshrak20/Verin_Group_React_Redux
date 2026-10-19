@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 // src/routes/index.tsx
 import GlobalErrorPage from "@/components/layout/GlobalErrorPage";
+import ElecProductDetails from "@/pages/electronics/details/ElecProductDetails";
 import Homepage from "@/pages/Homepage"; // হোমপেজ সরাসরি থাকবে (Fast LCP)
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
@@ -34,9 +35,9 @@ const FaqPage = lazy(() => import("@/pages/FaqPage"));
 
 // হালকা লোডিং ফলব্যাক
 const PageLoader = () => (
-  <div className="h-screen flex items-center justify-center">
-    <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
-  </div>
+    <div className="h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
+    </div>
 );
 
 export const router = createBrowserRouter([
@@ -64,13 +65,17 @@ export const router = createBrowserRouter([
             {
                 path: "/electronics",
                 element:
-                 <Suspense fallback={<PageLoader />}><ElectronicsPage /></Suspense>,
-                 children:[
+                    <Suspense fallback={<PageLoader />}><ElectronicsPage /></Suspense>,
+                children: [
                     {
-                    index: true,
-                    Component: ElecHome
+                        index: true,
+                        Component: ElecHome
                     }
-                 ]
+                ]
+            },
+            {
+                path: "/electronics/:slug",
+                element: <Suspense fallback={<PageLoader />}><ElecProductDetails /></Suspense>,
             },
             {
                 path: "/products/:slug",
