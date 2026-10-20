@@ -8,17 +8,16 @@ import ElecSliderBanner from "./ElecSliderBanner";
 export default function ElectronicsPage() {
   const {
     data: bannerData,
-    isLoading: bannerLoading,
     isError: bannerError,
   } = useGetBannerQuery("electronics");
 
-  const { data: productData, isLoading: productLoading } = useGetProductsQuery({
+  const { data: productData } = useGetProductsQuery({
     category_id: 2,
   });
 
-  if (bannerLoading || productLoading) {
-    return <div className="px-4 py-8">Loading electronics...</div>;
-  }
+  // if (bannerLoading || productLoading) {
+  //   return <div className="px-4 py-8">Loading electronics...</div>;
+  // }
 
   if (bannerError) {
     return (
@@ -28,9 +27,9 @@ export default function ElectronicsPage() {
     );
   }
 
- const products = Array.isArray(productData?.data?.products)
-  ? productData.data.products
-  : [];
+  const products = Array.isArray(productData?.data?.products)
+    ? productData.data.products
+    : [];
 
   return (
     <div className="min-h-screen w-full">

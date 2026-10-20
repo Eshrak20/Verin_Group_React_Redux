@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 export default function DecorFeaturedProductsPage() {
-  const { data, isLoading } = useGetProductsQuery({ per_page: 100 });
+  const { data, isLoading } = useGetProductsQuery({ category_id: 1 });
 
   // 🎯 শুধুমাত্র Decor ক্যাটাগরির ALL Featured Products ফিল্টারিং
   const featuredProducts = useMemo(() => {
@@ -51,7 +51,7 @@ export default function DecorFeaturedProductsPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {featuredProducts.map((product: Product) => {
-            const variant = product.variants?.[0];
+            const variant = product.variant;
             const price = Number(variant?.price ?? 0);
             const salePrice = Number(variant?.sale_price ?? 0);
             const hasDiscount = salePrice > 0 && salePrice < price;

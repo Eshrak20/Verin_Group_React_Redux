@@ -166,7 +166,7 @@ export default function DecorFeaturedProducts() {
                 </div>
               ) : (
                 products.map((product, index) => {
-                  const variant = product.variant ?? product.variants?.[0];
+                  const variant = product.variant ?? product.variant;
 
                   const price = Number(
                     variant?.sale_price ?? variant?.price ?? 0,

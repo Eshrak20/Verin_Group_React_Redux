@@ -1,11 +1,14 @@
 /* eslint-disable react-refresh/only-export-components */
 // src/routes/index.tsx
+import AuthLayout from "@/components/layout/AuthLayout";
 import GlobalErrorPage from "@/components/layout/GlobalErrorPage";
+import VerifyOtp from "@/pages/authentication/VerifyOtp";
 import ElecProductDetails from "@/pages/electronics/details/ElecProductDetails";
 import Homepage from "@/pages/Homepage"; // হোমপেজ সরাসরি থাকবে (Fast LCP)
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
 import App from "../App";
+import PublicOnlyRoute from "./PublicOnlyRoute";
 
 // 🎯 বাকি পেজগুলো Lazy Loading করা হলো
 const DecorPage = lazy(() => import("@/pages/DecorPage"));
@@ -14,8 +17,8 @@ const LogisticsPage = lazy(() => import("@/pages/LogisticsPage"));
 const ElectronicsPage = lazy(() => import("@/pages/electronics/ElectronicsPage"));
 const ElecHome = lazy(() => import("@/pages/electronics/home/ElecHome"));
 const ProductDetailsPage = lazy(() => import("@/pages/ProductDetailsPage"));
-const Login = lazy(() => import("@/pages/Login"));
-const Signup = lazy(() => import("@/pages/SignUp"));
+const Login = lazy(() => import("@/pages/authentication/Login"));
+const Register = lazy(() => import("@/pages/authentication/Register"));
 const ContactUs = lazy(() => import("@/pages/ContactUs"));
 const SearchPage = lazy(() => import("@/pages/SearchPage"));
 const FurniturePage = lazy(() => import("@/pages/FurniturePage"));
@@ -65,7 +68,9 @@ export const router = createBrowserRouter([
             {
                 path: "/electronics",
                 element:
-                    <Suspense fallback={<PageLoader />}><ElectronicsPage /></Suspense>,
+                    <Suspense fallback={<PageLoader />}>
+                        <ElectronicsPage />,
+                    </Suspense>,
                 children: [
                     {
                         index: true,
@@ -148,13 +153,55 @@ export const router = createBrowserRouter([
         ]
     },
     {
-        path: "/login",
-        element: <Suspense fallback={<PageLoader />}><Login /></Suspense>
+        Component: PublicOnlyRoute,
+        children: [
+            {
+                Component: AuthLayout,
+                children: [
+                    {
+                        path: "login",
+                        Component: Login,
+                    },
+                    // {
+                    //     path: "forgot-password",
+                    //     Component: ForgotPassword,
+                    // },
+                    // {
+                    //     path: "reset-password",
+                    //     Component: ResetPassword,
+                    // },
+                    {
+                        path: "register",
+                        Component: Register,
+                    },
+                    {
+                        path: "register/verify-otp",
+                        Component: VerifyOtp,
+                    },
+                ],
+            },
+        ],
     },
-    {
-        path: "/signup",
-        element: <Suspense fallback={<PageLoader />}><Signup /></Suspense>
-    },
+
+
+    // {
+    //     Component: ProtectedRoute,
+    //     children: [
+    //         {
+    //             Component: DashboardLayout,
+    //             children: [
+    //                 {
+    //                     path: "dashboard",
+    //                     Component: DashboardHome,
+    //                 },
+    //                 {
+    //                     path: "dashboard/my-profile",
+    //                     Component: MyProfile,
+    //                 },
+    //             ],
+    //         },
+    //     ],
+    // },
     {
         path: "*",
         element: <GlobalErrorPage />,

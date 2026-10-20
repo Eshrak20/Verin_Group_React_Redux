@@ -1,5 +1,5 @@
 import type { Product } from "@/types/product.type";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo, useRef } from "react";
 import { Link } from "react-router";
 import type { Swiper as SwiperType } from "swiper";
@@ -39,14 +39,6 @@ export default function ElecNewArrival({
         <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
           New Arrival
         </h2>
-
-        <button
-          type="button"
-          aria-label="View all new arrivals"
-          className="flex size-10 shrink-0 items-center justify-center rounded-full bg-elec text-white transition-colors hover:bg-elec/90 cursor-pointer"
-        >
-          <ArrowRight className="size-5" />
-        </button>
       </div>
 
       <div className="group relative">

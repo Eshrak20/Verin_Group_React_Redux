@@ -24,6 +24,8 @@ export default function ProductSearch({ searchOpen, setSearchOpen }: ProductSear
   // 1. ক্যাটাগরি ডাটা ফেচ করা
   const { data: categoriesData } = useGetCategoriesQuery();
   const categories = categoriesData?.data || [];
+  console.log(categories);
+  
 
   // 2. ইউআরএল থেকে ডায়নামিকালি Category ID বের করা
   const currentCategoryId = useMemo<number | undefined>(() => {
@@ -131,8 +133,8 @@ export default function ProductSearch({ searchOpen, setSearchOpen }: ProductSear
             <>
               <div className="max-h-80 overflow-y-auto p-2 space-y-1">
                 {searchResults.map((product: any) => {
-                  const firstVariant = product.variants?.[0];
-                  const firstImage = firstVariant?.images?.[0]?.image_url;
+                  const firstVariant = product.variant;
+                  const firstImage = firstVariant?.images?.[0];
                   
                   const imageUrl = product.thumbnail || firstImage || "https://via.placeholder.com/150";
                   const price = firstVariant?.price || product.price || 0;
@@ -141,7 +143,7 @@ export default function ProductSearch({ searchOpen, setSearchOpen }: ProductSear
                   return (
                     <Link
                       key={product.id}
-                      to={`/products/${product.slug}`}
+                      to={currentCategoryId === 2 ? `/electronics/${product.slug}` : `/products/${product.slug}`}
                       onClick={() => {
                         setIsOpen(false);
                         setSearchOpen(false);

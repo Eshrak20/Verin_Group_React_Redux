@@ -169,7 +169,7 @@ export default function ElectronicsFeaturedProducts() {
                 </div>
               ) : (
                 products.map((product, index) => {
-                  const variant = product.variant ?? product.variants?.[0];
+                  const variant = product.variant ?? product.variant;
 
                   const price = Number(
                     variant?.sale_price ?? variant?.price ?? 0,
@@ -194,7 +194,7 @@ export default function ElectronicsFeaturedProducts() {
                         delay: index * 0.08,
                         ease: "easeOut",
                       }}
-                      onClick={() => navigate(`/products/${product.slug}`)}
+                      onClick={() => navigate(`/electronics/${product.slug}`)}
                       className="shrink-0 flex flex-col hover:cursor-pointer group w-[calc((100%-12px)/2)] sm:w-[calc((100%-24px)/3)] lg:w-[calc((100%-48px)/5)]"
                     >
                       {/* Image Box */}

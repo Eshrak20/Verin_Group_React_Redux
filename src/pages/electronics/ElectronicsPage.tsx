@@ -5,7 +5,7 @@ import { Outlet } from "react-router";
 import ElecSubCatNavbar from "./ElecSubCatNavbar";
 
 export default function ElectronicsPage() {
-  const { data: subCategoryData, isLoading: subCategoryLoading, isError } =
+  const { data: subCategoryData, isError } =
     useGetElecSubCategoryQuery();
 
   const [, setSelectedSubCategory] =
@@ -19,9 +19,9 @@ export default function ElectronicsPage() {
       subCategory.status === 1,
   );
 
-  if (subCategoryLoading) {
-    return <div className="px-4 py-8">Loading electronics...</div>;
-  }
+  // if (subCategoryLoading) {
+  //   return <div className="px-4 py-8">Loading electronics...</div>;
+  // }
 
   if (isError) {
     return (
