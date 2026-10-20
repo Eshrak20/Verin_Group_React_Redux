@@ -38,6 +38,8 @@ export const Login = () => {
         try {
             const response = await loginUser(data).unwrap();
 
+            console.log("Login response:", response);
+
             setAuthCookies(response.data.token, "Bearer");
 
             dispatch(
@@ -49,8 +51,11 @@ export const Login = () => {
             );
 
             toast.success(response.message || "Welcome back!");
-            navigate("/", { replace: true });
-        } catch {
+
+            console.log("Navigating to dashboard...");
+            navigate("/dashboard", { replace: true });
+        } catch (error) {
+            console.error("Login error:", error);
             toast.error("Login failed. Please check your email and password.");
         }
     };

@@ -16,7 +16,6 @@ export interface NavLogoProps {
 
 export interface DesktopNavProps {
   navLinks: NavLink[];
-  searchOpen: boolean;
   pillStyle: PillStyle;
   navRef: React.RefObject<HTMLDivElement | null>;
   linkRefs: React.MutableRefObject<(HTMLAnchorElement | null)[]>;

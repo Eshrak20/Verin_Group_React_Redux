@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export function NavLogo({ logoPath, logoUrl, companyName }: NavLogoProps) {
   return (
-    <div className="relative min-w-0 shrink-0 z-10 max-w-[50%] sm:max-w-none">
+    <div className="relative min-w-0 shrink-0 z-10 w-[208.02px] sm:max-w-none">
       <Link to={logoPath} className="flex items-center gap-1.5 sm:gap-3">
         {logoUrl ? (
           <img

@@ -1,4 +1,5 @@
 // import { useGetMyProfileQuery } from "@/redux/api";
+import { useGetMyProfileQuery } from "@/redux/auth.api";
 import type { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router";
@@ -10,13 +11,13 @@ const ProtectedRoute = () => {
     (state: RootState) => state.auth,
   );
 
-//   const {
-//     isLoading,
-//     isFetching,
-//     isError,
-//   } = useGetMyProfileQuery(undefined, {
-//     skip: !token || !isAuthenticated,
-//   });
+  const {
+    isLoading,
+    isFetching,
+    isError,
+  } = useGetMyProfileQuery(undefined, {
+    skip: !token || !isAuthenticated,
+  });
 
   const currentPath = `${location.pathname}${location.search}`;
 
@@ -32,24 +33,24 @@ const ProtectedRoute = () => {
   }
 
   // Wait for the session check.
-//   if (isLoading || isFetching) {
-//     return (
-//       <div className="flex min-h-screen items-center justify-center">
-//         <p>Checking session...</p>
-//       </div>
-//     );
-//   }
+  if (isLoading || isFetching) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p>Checking session...</p>
+      </div>
+    );
+  }
 
-//   // Redirect if the token is invalid or expired.
-//   if (isError) {
-//     return (
-//       <Navigate
-//         to="/login"
-//         replace
-//         state={{ from: currentPath }}
-//       />
-//     );
-//   }
+  // Redirect if the token is invalid or expired.
+  if (isError) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{ from: currentPath }}
+      />
+    );
+  }
 
   return <Outlet />;
 };

@@ -1,4 +1,3 @@
-
 import { getAuthToken, getAuthTokenType } from "@/lib/authCookie";
 import type { VerifyOtpUser } from "@/types/auth.type";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
@@ -22,7 +21,6 @@ const initialState: AuthState = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-
   reducers: {
     setCredentials: (
       state,
@@ -38,6 +36,10 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
     },
 
+    setUser: (state, action: PayloadAction<VerifyOtpUser>) => {
+      state.user = action.payload;
+    },
+
     logout: (state) => {
       state.user = null;
       state.token = null;
@@ -47,5 +49,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, setUser, logout } = authSlice.actions;
 export default authSlice.reducer;

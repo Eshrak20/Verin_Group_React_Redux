@@ -8,6 +8,7 @@ import Homepage from "@/pages/Homepage"; // হোমপেজ সরাসর�
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
 import App from "../App";
+import ProtectedRoute from "./ProtectedRoute";
 import PublicOnlyRoute from "./PublicOnlyRoute";
 
 // 🎯 বাকি পেজগুলো Lazy Loading করা হলো
@@ -82,6 +83,10 @@ export const router = createBrowserRouter([
                 path: "/electronics/:slug",
                 element: <Suspense fallback={<PageLoader />}><ElecProductDetails /></Suspense>,
             },
+            // {
+            //     path: "/wishlist",
+            //     element: <ProtectedRoute><MyWishlist /></ProtectedRoute>,
+            // },
             {
                 path: "/products/:slug",
                 element: <Suspense fallback={<PageLoader />}><ProductDetailsPage /></Suspense>,
@@ -184,24 +189,24 @@ export const router = createBrowserRouter([
     },
 
 
-    // {
-    //     Component: ProtectedRoute,
-    //     children: [
-    //         {
-    //             Component: DashboardLayout,
-    //             children: [
-    //                 {
-    //                     path: "dashboard",
-    //                     Component: DashboardHome,
-    //                 },
-    //                 {
-    //                     path: "dashboard/my-profile",
-    //                     Component: MyProfile,
-    //                 },
-    //             ],
-    //         },
-    //     ],
-    // },
+    {
+        Component: ProtectedRoute,
+        children: [
+            // {
+            //     Component: DashboardLayout,
+            //     children: [
+            //         {
+            //             path: "dashboard",
+            //             Component: DashboardHome,
+            //         },
+            //         {
+            //             path: "dashboard/my-profile",
+            //             Component: MyProfile,
+            //         },
+            //     ],
+            // },
+        ],
+    },
     {
         path: "*",
         element: <GlobalErrorPage />,
