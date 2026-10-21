@@ -119,14 +119,14 @@ export default function ProductCatalog() {
     if (sortBy === "Price Low to High") {
       result.sort(
         (a, b) =>
-          Number(a.variants?.[0]?.price ?? 0) -
-          Number(b.variants?.[0]?.price ?? 0)
+          Number(a.variant?.price ?? 0) -
+          Number(b.variant?.price ?? 0)
       );
     } else if (sortBy === "Price High to Low") {
       result.sort(
         (a, b) =>
-          Number(b.variants?.[0]?.price ?? 0) -
-          Number(a.variants?.[0]?.price ?? 0)
+          Number(b.variant?.price ?? 0) -
+          Number(a.variant?.price ?? 0)
       );
     } else if (sortBy === "Newest First" && selectedCategory !== "All") {
       result.sort((a, b) => b.id - a.id);

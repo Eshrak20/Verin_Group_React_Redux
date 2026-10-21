@@ -30,7 +30,7 @@ export interface Product {
   brand_id?: string | number | null;
 
   // Product listing API returns a single variant object.
-  variant?: ProductVariant | null;
+  variant: ProductVariant | null;
 
   created_at?: string | null;
   updated_at?: string | null;
@@ -93,12 +93,13 @@ export interface ProductDetails {
   is_featured: boolean | string | number;
   status: boolean | string | number;
 
-  category: ProductDetailsCategory;
-  sub_category: ProductDetailsSubCategory;
-  brand: ProductDetailsBrand;
+  category: ProductDetailsCategory | null;
+  sub_category: ProductDetailsSubCategory | null;
+  brand: ProductDetailsBrand | null;
 
   variants: ProductDetailsVariant[];
   attributes: ProductDetailsAttribute[];
+  delivery_charge: ProductDeliveryCharge | null;
 }
 
 export interface ProductDetailsCategory {
@@ -152,4 +153,12 @@ export interface ProductDetailsAttribute {
 export interface ProductAttributeValue {
   id: number;
   value: string;
+}
+
+export interface ProductDeliveryCharge {
+  id: number;
+  name: string;
+  inside_dhaka_charge: number;
+  outside_dhaka_charge: number;
+  description: string | null;
 }

@@ -5,8 +5,8 @@ import { MessageCircle, PackageCheck, Tag, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-import { useGetProductsQuery } from "@/redux/services/product/product.api";
-import type { Product, ProductVariant } from "@/types/product.type";
+import { useGetProductBySlugQuery } from "@/redux/services/product/product.api";
+import type { ProductDetailsVariant } from "@/types/product.type";
 import { useActiveCategory } from "@/utils/ActiveCategoryContext";
 
 // 🎯 আলাদা তৈরি করা AlsoLike কম্পোনেন্ট ইমপোর্ট
@@ -17,15 +17,16 @@ export default function ProductDetails() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { data: response, isLoading } = useGetProductsQuery({
-    category_id: 1
+  const { data: response, isLoading } = useGetProductBySlugQuery(slug!, {
+    skip: !slug,
   });
+  console.log(response);
 
-  const products: Product[] = response?.data?.products ?? [];
-  const product = products.find((item) => item.slug === slug);
+
+  const product = response?.data;
   const { setActiveCategory } = useActiveCategory();
 
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
+  const [selectedVariant, setSelectedVariant] = useState<ProductDetailsVariant | null>(
     null,
   );
   const [selectedImage, setSelectedImage] = useState<number>(0);
@@ -45,9 +46,12 @@ export default function ProductDetails() {
     }
   };
 
+  console.log(product);
+
+
   useEffect(() => {
     if (product?.variants && product.variants.length > 0) {
-      setSelectedVariant(product.variants[0]);
+      setSelectedVariant(product.variants?.[0]);
       setSelectedImage(0);
     }
   }, [product]);
@@ -55,7 +59,9 @@ export default function ProductDetails() {
   useEffect(() => {
     if (product) {
       const currentCategory =
-        product.category || product.sub_category || "Decor";
+        product.sub_category?.name ||
+        product.category?.name ||
+        "Decor";
       setActiveCategory(currentCategory);
     }
 
@@ -102,26 +108,30 @@ export default function ProductDetails() {
     );
   }
 
-  const currentVariant = selectedVariant || product.variant;
+  const currentVariant = selectedVariant || product.variants?.[0];
 
   const price = Number(currentVariant?.price ?? 0);
   const salePrice = Number(currentVariant?.sale_price ?? 0);
-  const hasDiscount = salePrice > 0 && salePrice < price;
+
+  const hasDiscount =
+    salePrice > 0 && price > 0 && salePrice < price;
+
+  const currentPrice = hasDiscount ? salePrice : price;
+
   const discountPercent = hasDiscount
     ? Math.round(((price - salePrice) / price) * 100)
     : 0;
 
   const productImages: string[] =
     currentVariant?.images && currentVariant.images.length > 0
-      ? currentVariant.images.map((img) => img)
-      : [
-        product.thumbnail ||
-        "https://placehold.co/600x400/e2e8f0/94a3b8?text=No+Image",
-      ];
+      ? currentVariant.images
+      : ["https://placehold.co/600x400/e2e8f0/94a3b8?text=No+Image"];
+
+  const stock = Number(currentVariant?.stock ?? 0);
+  const isInStock = stock > 0;
 
   const whatsappNumber = "8801805734585";
   const productUrl = window.location.href;
-  const currentPrice = hasDiscount ? salePrice : price;
 
   const rawText = `Hello, I am interested in this product.
 
@@ -185,8 +195,8 @@ Please provide more details.`;
                   key={index}
                   onClick={() => setSelectedImage(index)}
                   className={`shrink-0 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 transition-all p-1 hover:cursor-pointer ${selectedImage === index
-                      ? "border-white bg-white/10 opacity-100 scale-105"
-                      : "border-transparent opacity-40 hover:opacity-100 bg-white/5"
+                    ? "border-white bg-white/10 opacity-100 scale-105"
+                    : "border-transparent opacity-40 hover:opacity-100 bg-white/5"
                     }`}
                 >
                   <img
@@ -235,8 +245,8 @@ Please provide more details.`;
             </div>
 
             <div className="absolute top-4 left-4 sm:top-8 sm:left-8 flex flex-col gap-1.5 sm:gap-2">
-              {product.is_featured === "1" && (
-                <span className="bg-[#FF5A00] text-white text-[9px] sm:text-[10px] font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded tracking-wider shadow-sm uppercase">
+              {Boolean(product.is_featured) && (
+                <span className="rounded bg-[#FF5A00] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
                   HOT SELL
                 </span>
               )}
@@ -258,8 +268,8 @@ Please provide more details.`;
                   key={index}
                   onClick={() => setSelectedImage(index)}
                   className={`shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border-2 transition-all p-1 ${selectedImage === index
-                      ? "border-neutral-900"
-                      : "border-transparent opacity-60 hover:opacity-100 bg-white"
+                    ? "border-neutral-900"
+                    : "border-transparent opacity-60 hover:opacity-100 bg-white"
                     }`}
                 >
                   <img
@@ -283,7 +293,9 @@ Please provide more details.`;
         >
           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
             <span className="text-[10px] font-bold text-neutral-900/50 uppercase tracking-widest">
-              {product.sub_category || product.category || "DECOR"}
+              {product.sub_category?.name ||
+                product.category?.name ||
+                "DECOR"}
             </span>
             <span className="text-neutral-900/30">•</span>
             <span className="text-[10px] font-mono text-neutral-900/50">
@@ -331,9 +343,16 @@ Please provide more details.`;
 
           <div className="flex items-center gap-4 sm:gap-6 mb-8 sm:mb-10 pb-8 sm:pb-10 border-b border-neutral-100">
             <div className="flex items-center gap-2">
-              <PackageCheck className="text-green-600 w-5 h-5 sm:w-6 sm:h-6 stroke-2" />
-              <span className="text-sm sm:text-base font-medium text-green-700">
-                In Stock
+              <PackageCheck
+                className={`h-5 w-5 sm:h-6 sm:w-6 ${isInStock ? "text-green-600" : "text-red-600"
+                  }`}
+              />
+
+              <span
+                className={`text-sm font-medium sm:text-base ${isInStock ? "text-green-700" : "text-red-700"
+                  }`}
+              >
+                {isInStock ? "In Stock" : "Out of Stock"}
               </span>
             </div>
             <div className="flex items-center gap-2 text-neutral-500">
@@ -349,14 +368,14 @@ Please provide more details.`;
               <div className="flex flex-wrap gap-2">
                 {product.variants.map((v, idx) => (
                   <button
-                    key={v.id}
+                    key={v.sku}
                     onClick={() => {
                       setSelectedVariant(v);
                       setSelectedImage(0);
                     }}
-                    className={`px-3 py-1.5 text-[11px] font-medium rounded-md border transition-all ${currentVariant?.id === v.id
-                        ? "border-black bg-black text-white"
-                        : "border-gray-200 bg-white text-gray-600 hover:border-gray-400"
+                    className={`px-3 py-1.5 text-[11px] font-medium rounded-md border transition-all ${currentVariant?.sku === v.sku
+                      ? "border-black bg-black text-white"
+                      : "border-gray-200 bg-white text-gray-600 hover:border-gray-400"
                       }`}
                   >
                     Option {idx + 1} ({v.sku})
@@ -387,7 +406,7 @@ Please provide more details.`;
 
       {/* 🎯 SEPARATE ALSO LIKE COMPONENT */}
       <AlsoLike
-        subCategoryId={product.sub_category_id}
+        subCategoryName={product.sub_category?.slug}
         currentSlug={product.slug}
       />
     </motion.section>

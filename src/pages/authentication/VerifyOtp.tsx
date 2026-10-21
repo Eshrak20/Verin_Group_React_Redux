@@ -7,6 +7,7 @@ import {
     InputOTPGroup,
     InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { setAuthCookies } from "@/lib/authCookie";
 import { useResendOtpMutation, useVerifyOtpMutation } from "@/redux/auth.api";
 import { useAppDispatch } from "@/redux/hooks";
 import { setCredentials } from "@/redux/slices/auth.slice";
@@ -22,7 +23,7 @@ import { z } from "zod";
 
 type VerifyOtpFormValues = z.infer<typeof verifyOtpSchema>;
 
-const OTP_EXPIRY_SECONDS = 3 * 60;
+const OTP_EXPIRY_SECONDS = 10 * 60;
 
 const getOtpExpiryKey = (email: string) =>
     `verify_otp_expiry:${email.trim().toLowerCase()}`;
@@ -121,6 +122,8 @@ const VerifyOtp = () => {
                 sessionStorage.removeItem(expiryKey);
             }
 
+             setAuthCookies(response.data.token, "Bearer");
+
             dispatch(
                 setCredentials({
                     user: response.data.user,
@@ -179,7 +182,7 @@ const VerifyOtp = () => {
                     <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-primary">
                         Email verification
                     </p>
-                    <h1 className="font-serif text-3xl font-normal text-foreground sm:text-[2rem]">
+                    <h1 className="text-3xl font-normal text-foreground sm:text-[2rem]">
                         Verify your email
                     </h1>
 

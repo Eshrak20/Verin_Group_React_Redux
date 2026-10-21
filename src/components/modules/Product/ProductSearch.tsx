@@ -40,7 +40,6 @@ export default function ProductSearch() {
     { 
       search: searchTerm.trim(), 
       ...(currentCategoryId !== undefined && { category_id: currentCategoryId }), 
-      per_page: 10 
     },
     { skip: searchTerm.trim().length < 1 }
   );

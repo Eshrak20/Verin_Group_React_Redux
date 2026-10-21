@@ -3,6 +3,7 @@
 import AuthLayout from "@/components/layout/AuthLayout";
 import GlobalErrorPage from "@/components/layout/GlobalErrorPage";
 import VerifyOtp from "@/pages/authentication/VerifyOtp";
+import MyWishlist from "@/pages/dashboard/wishlist/MyWishlist";
 import ElecProductDetails from "@/pages/electronics/details/ElecProductDetails";
 import Homepage from "@/pages/Homepage"; // হোমপেজ সরাসরি থাকবে (Fast LCP)
 import { lazy, Suspense } from "react";
@@ -83,10 +84,6 @@ export const router = createBrowserRouter([
                 path: "/electronics/:slug",
                 element: <Suspense fallback={<PageLoader />}><ElecProductDetails /></Suspense>,
             },
-            // {
-            //     path: "/wishlist",
-            //     element: <ProtectedRoute><MyWishlist /></ProtectedRoute>,
-            // },
             {
                 path: "/products/:slug",
                 element: <Suspense fallback={<PageLoader />}><ProductDetailsPage /></Suspense>,
@@ -192,6 +189,10 @@ export const router = createBrowserRouter([
     {
         Component: ProtectedRoute,
         children: [
+  {
+                path: "/dashboard/my-wishlist",
+                element: <MyWishlist />,
+            },
             // {
             //     Component: DashboardLayout,
             //     children: [

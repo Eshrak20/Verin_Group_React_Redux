@@ -5,8 +5,17 @@ import { useGetProductsQuery } from "@/redux/services/product/product.api";
 import type { Product } from "@/types/product.type";
 
 interface AlsoLikeProps {
-  subCategoryId?: string | number;
+  subCategoryName?: string;
   currentSlug: string;
+}
+
+function normalizeCategory(value?: string | null): string {
+  return (value ?? "")
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
 function getDiscount(price: string, salePrice: string): number {
@@ -24,7 +33,7 @@ function getDisplayPrice(price: string, salePrice: string): number {
 
 function getImage(product: Product): string {
   return (
-    product.variants?.[0]?.images?.[0] ||
+    product.variant?.images?.[0] ||
     product.thumbnail ||
     "/placeholder.jpg"
   );
@@ -49,28 +58,42 @@ function getCleanCategoryPath(product?: Product): string {
   return cleanSlug || "products";
 }
 
-export default function AlsoLike({ subCategoryId, currentSlug }: AlsoLikeProps) {
+export default function AlsoLike({ subCategoryName, currentSlug }: AlsoLikeProps) {
   const navigate = useNavigate();
-  const targetSubCategoryId = String(subCategoryId);
+  const targetSubCategorySlug = String(subCategoryName);
+  console.log(targetSubCategorySlug);
 
-  const { data, isLoading } = useGetProductsQuery({
-    sub_category_id: Number(targetSubCategoryId),
-    per_page: 50,
+
+  const { data, isLoading, isError, error } = useGetProductsQuery({
+    category_id: 1
   });
+
+  console.log("Products API:", data?.data.products);
+  console.log("Target subcategory:", subCategoryName);
+  console.log(
+    "Available subcategories:",
+    data?.data.products?.map((product) => product.sub_category),
+  );
+  console.log("Products API error:", isError ? error : null);
+
+  const targetSubCategory = normalizeCategory(subCategoryName);
 
   const relatedProducts =
     data?.data.products
       ?.filter((product) => {
         const isNotCurrent = product.slug !== currentSlug;
-        const hasVariants = (product.variants?.length ?? 0) > 0;
 
         const matchesSubCategory =
-          String(product.sub_category_id) === targetSubCategoryId ||
-          (product.sub_category && String(product.id) === targetSubCategoryId);
+          normalizeCategory(product.sub_category) === targetSubCategory;
 
-        return isNotCurrent && hasVariants && matchesSubCategory;
+        return (
+          isNotCurrent &&
+          Boolean(targetSubCategory) &&
+          matchesSubCategory &&
+          product.variant !== null
+        );
       })
-      .slice(0, 4) || [];
+      .slice(0, 4) ?? [];
 
   // --- 💡 Dynamic Route Resolution ---
   const firstProduct = relatedProducts[0];
@@ -111,7 +134,7 @@ export default function AlsoLike({ subCategoryId, currentSlug }: AlsoLikeProps) 
 
   // --- ✨ MAIN DESIGN RENDER WITH SCROLL ANIMATION ---
   return (
-    <motion.section 
+    <motion.section
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
@@ -174,9 +197,9 @@ export default function AlsoLike({ subCategoryId, currentSlug }: AlsoLikeProps) 
 
                   {/* BADGES */}
                   <div className="absolute top-4 left-4 flex flex-col gap-1.5 z-10">
-                    {product.is_featured === "1" && (
-                      <span className="bg-[#ff6a00] text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-xs w-max">
-                        Hot Sell
+                    {Boolean(product.is_featured) && (
+                      <span className="rounded bg-[#FF5A00] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+                        HOT SELL
                       </span>
                     )}
                     <span className="bg-[#525345] text-white text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-xs w-max">
