@@ -1,9 +1,14 @@
 /* eslint-disable react-refresh/only-export-components */
 // src/routes/index.tsx
 import AuthLayout from "@/components/layout/AuthLayout";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import GlobalErrorPage from "@/components/layout/GlobalErrorPage";
+import { ForgotPassword } from "@/pages/authentication/ForgotPassword";
+import ResetPassword from "@/pages/authentication/ResetPassword";
 import VerifyOtp from "@/pages/authentication/VerifyOtp";
-import MyWishlist from "@/pages/dashboard/wishlist/MyWishlist";
+import DashboardHome from "@/pages/dashboard/DashboardHome";
+import MyProfile from "@/pages/dashboard/MyProfile";
+import MyWishlist from "@/pages/dashboard/MyWishlist";
 import ElecProductDetails from "@/pages/electronics/details/ElecProductDetails";
 import Homepage from "@/pages/Homepage"; // হোমপেজ সরাসরি থাকবে (Fast LCP)
 import { lazy, Suspense } from "react";
@@ -164,20 +169,20 @@ export const router = createBrowserRouter([
                         path: "login",
                         Component: Login,
                     },
-                    // {
-                    //     path: "forgot-password",
-                    //     Component: ForgotPassword,
-                    // },
-                    // {
-                    //     path: "reset-password",
-                    //     Component: ResetPassword,
-                    // },
+                    {
+                        path: "forgot-password",
+                        Component: ForgotPassword,
+                    },
+                    {
+                        path: "reset-password",
+                        Component: ResetPassword,
+                    },
                     {
                         path: "register",
                         Component: Register,
                     },
                     {
-                        path: "register/verify-otp",
+                        path: "register/verify-email",
                         Component: VerifyOtp,
                     },
                 ],
@@ -189,23 +194,23 @@ export const router = createBrowserRouter([
     {
         Component: ProtectedRoute,
         children: [
-  {
-                path: "/dashboard/my-wishlist",
-                element: <MyWishlist />,
+            {
+                Component: DashboardLayout,
+                children: [
+                    {
+                        path: "dashboard",
+                        Component: DashboardHome,
+                    },
+                    {
+                        path: "dashboard/my-profile",
+                        Component: MyProfile,
+                    },
+                    {
+                        path: "/dashboard/my-wishlist",
+                        Component: MyWishlist,
+                    },
+                ],
             },
-            // {
-            //     Component: DashboardLayout,
-            //     children: [
-            //         {
-            //             path: "dashboard",
-            //             Component: DashboardHome,
-            //         },
-            //         {
-            //             path: "dashboard/my-profile",
-            //             Component: MyProfile,
-            //         },
-            //     ],
-            // },
         ],
     },
     {

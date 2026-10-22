@@ -19,7 +19,10 @@ export const productApi = baseApi.injectEndpoints({
         url: "/products",
         method: "POST",
         params,
-        body: params.sub_category_id
+        body: {
+          category_id: params.category_id,
+          is_featured: params.is_featured,
+        },
       }),
       providesTags: ["Product"],
     }),

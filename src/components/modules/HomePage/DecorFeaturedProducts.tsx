@@ -8,7 +8,6 @@ import { useInView } from "react-intersection-observer";
 import { Link, useNavigate } from "react-router-dom";
 
 const VISIBLE = 5;
-const GAP = 12;
 
 export default function DecorFeaturedProducts() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -36,16 +35,17 @@ export default function DecorFeaturedProducts() {
     ? data.data.products
     : [];
 
-  const getCardWidth = () => {
+  const getScrollStep = () => {
     const el = scrollRef.current;
-    if (!el) return 170;
-    let currentVisible = VISIBLE;
-    if (window.innerWidth < 640) {
-      currentVisible = 2; // Mobile
-    } else if (window.innerWidth < 1024) {
-      currentVisible = 3; // Tablet
-    }
-    return (el.clientWidth - GAP * (currentVisible - 1)) / currentVisible;
+    if (!el) return 0;
+
+    const firstCard = el.firstElementChild as HTMLElement | null;
+    if (!firstCard) return 0;
+
+    const styles = window.getComputedStyle(el);
+    const gap = Number.parseFloat(styles.columnGap) || 0;
+
+    return firstCard.getBoundingClientRect().width + gap;
   };
 
   const checkScroll = () => {
@@ -58,25 +58,28 @@ export default function DecorFeaturedProducts() {
   const scroll = (dir: "left" | "right") => {
     const el = scrollRef.current;
     if (!el) return;
-    const cardWidth = getCardWidth();
+
+    const step = getScrollStep();
+
     el.scrollBy({
-      left: dir === "left" ? -(cardWidth + GAP) : cardWidth + GAP,
+      left: dir === "left" ? -step : step,
       behavior: "smooth",
     });
-    setTimeout(checkScroll, 350);
   };
 
   const autoScroll = () => {
     const el = scrollRef.current;
     if (!el) return;
-    const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1;
-    if (atEnd) {
-      el.scrollTo({ left: 0, behavior: "smooth" });
+
+    const step = getScrollStep();
+    const maxScrollLeft = el.scrollWidth - el.clientWidth;
+
+    if (el.scrollLeft >= maxScrollLeft - 2) {
+      // শেষ থেকে হঠাৎ উল্টো দিকে লম্বা smooth scroll নয়
+      el.scrollTo({ left: 0, behavior: "instant" });
     } else {
-      const cardWidth = getCardWidth();
-      el.scrollBy({ left: cardWidth + GAP, behavior: "smooth" });
+      el.scrollBy({ left: step, behavior: "smooth" });
     }
-    setTimeout(checkScroll, 350);
   };
 
   const startAuto = () => {
@@ -131,8 +134,7 @@ export default function DecorFeaturedProducts() {
               <button
                 onClick={() => {
                   stopAuto();
-                  scroll("left");
-                  startAuto();
+                  scroll("right");
                 }}
                 className="
                   absolute left-1 sm:left-2 lg:left-4 top-[40%] -translate-y-1/2 z-10

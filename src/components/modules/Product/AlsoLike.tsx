@@ -64,17 +64,9 @@ export default function AlsoLike({ subCategoryName, currentSlug }: AlsoLikeProps
   console.log(targetSubCategorySlug);
 
 
-  const { data, isLoading, isError, error } = useGetProductsQuery({
+  const { data, isLoading } = useGetProductsQuery({
     category_id: 1
   });
-
-  console.log("Products API:", data?.data.products);
-  console.log("Target subcategory:", subCategoryName);
-  console.log(
-    "Available subcategories:",
-    data?.data.products?.map((product) => product.sub_category),
-  );
-  console.log("Products API error:", isError ? error : null);
 
   const targetSubCategory = normalizeCategory(subCategoryName);
 

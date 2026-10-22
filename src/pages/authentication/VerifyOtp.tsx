@@ -23,7 +23,7 @@ import { z } from "zod";
 
 type VerifyOtpFormValues = z.infer<typeof verifyOtpSchema>;
 
-const OTP_EXPIRY_SECONDS = 10 * 60;
+const OTP_EXPIRY_SECONDS = 30;
 
 const getOtpExpiryKey = (email: string) =>
     `verify_otp_expiry:${email.trim().toLowerCase()}`;

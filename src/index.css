@@ -6,7 +6,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-
 @utility bg-home {
   background-color: #F9F8F6;
 }
@@ -14,7 +13,6 @@
 @utility home-black-text {
   color: #262626;
 }
-
 
 @utility home-red-text {
   color: #BE1A1A;
@@ -31,7 +29,7 @@
     --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
     --color-sidebar-primary: var(--sidebar-primary);
     --color-sidebar-foreground: var(--sidebar-foreground);
-    
+
     --color-sidebar: var(--sidebar);
     --color-chart-5: var(--chart-5);
     --color-chart-4: var(--chart-4);
@@ -136,9 +134,6 @@
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
 }
-
-
-
 
 @layer base {
   * {

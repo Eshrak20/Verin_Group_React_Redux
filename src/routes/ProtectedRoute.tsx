@@ -1,4 +1,3 @@
-// import { useGetMyProfileQuery } from "@/redux/api";
 import { useGetMyProfileQuery } from "@/redux/auth.api";
 import type { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
@@ -11,18 +10,20 @@ const ProtectedRoute = () => {
     (state: RootState) => state.auth,
   );
 
+  const hasToken = Boolean(token && isAuthenticated);
+
   const {
     isLoading,
     isFetching,
     isError,
+    error,
   } = useGetMyProfileQuery(undefined, {
-    skip: !token || !isAuthenticated,
+    skip: !hasToken,
   });
 
   const currentPath = `${location.pathname}${location.search}`;
 
-  // Redirect logged-out users immediately.
-  if (!token || !isAuthenticated) {
+  if (!hasToken) {
     return (
       <Navigate
         to="/login"
@@ -32,7 +33,6 @@ const ProtectedRoute = () => {
     );
   }
 
-  // Wait for the session check.
   if (isLoading || isFetching) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -41,8 +41,9 @@ const ProtectedRoute = () => {
     );
   }
 
-  // Redirect if the token is invalid or expired.
   if (isError) {
+    console.error("Profile verification failed:", error);
+
     return (
       <Navigate
         to="/login"

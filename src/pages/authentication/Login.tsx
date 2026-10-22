@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { setAuthCookies } from "@/lib/authCookie";
+import { getApiErrorMessage } from "@/lib/getApiErrorMessage";
 import { useLoginMutation } from "@/redux/auth.api";
 import { setCredentials } from "@/redux/slices/auth.slice";
 import type { AppDispatch } from "@/redux/store";
@@ -12,7 +13,7 @@ import { ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -21,6 +22,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export const Login = () => {
     const companyName = "Verin Group";
     const dispatch = useDispatch<AppDispatch>();
+    const location = useLocation()
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [loginUser, { isLoading }] = useLoginMutation();
@@ -33,6 +35,13 @@ export const Login = () => {
         resolver: zodResolver(loginSchema),
         defaultValues: { email: "", password: "" },
     });
+
+    const returnTo = (location.state as { from?: string } | null)?.from;
+
+  const redirectTo =
+    returnTo?.startsWith("/") && !returnTo.startsWith("//")
+      ? returnTo
+      : "/dashboard";
 
     const onSubmit = async (data: LoginFormValues) => {
         try {
@@ -53,10 +62,10 @@ export const Login = () => {
             toast.success(response.message || "Welcome back!");
 
             console.log("Navigating to dashboard...");
-            navigate("/dashboard", { replace: true });
+            navigate(redirectTo, { replace: true });
         } catch (error) {
             console.error("Login error:", error);
-            toast.error("Login failed. Please check your email and password.");
+            toast.error(getApiErrorMessage(error));
         }
     };
 
