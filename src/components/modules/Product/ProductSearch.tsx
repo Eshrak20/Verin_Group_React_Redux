@@ -1,9 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// src/components/modules/Product/ProductSearch.tsx
-
-import { useGetCategoriesQuery } from "@/redux/services/homepage/homePage.api";
 import { useGetProductsQuery } from "@/redux/services/product/product.api";
+import type { Product } from "@/types/product.type";
 import { Search } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -13,12 +9,8 @@ export default function ProductSearch() {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  
-  const location = useLocation();
 
-  // 1. ক্যাটাগরি ডাটা ফেচ করা
-  const { data: categoriesData } = useGetCategoriesQuery();
-  const categories = categoriesData?.data || [];
+  const location = useLocation();
 
   // 2. ইউআরএল থেকে ডায়নামিকালি Category ID বের করা
   const currentCategoryId = useMemo<number | undefined>(() => {
@@ -26,22 +18,23 @@ export default function ProductSearch() {
 
     if (path === "/" || path === "") return undefined;
 
-    const matchedCategory = categories.find((cat: any) => {
-      const slugMatch = cat.slug && path.includes(cat.slug.toLowerCase());
-      const nameMatch = cat.name && path.includes(cat.name.toLowerCase());
-      return slugMatch || nameMatch;
-    });
+    if (path.startsWith("/decor")) return 1;
+    if (path.startsWith("/electronics")) return 2;
 
-    return matchedCategory ? Number(matchedCategory.id) : undefined;
-  }, [location.pathname, categories]);
+    return undefined;
+  }, [location.pathname]);
 
   // 3. ব্যাকএন্ডে টাইপ-সেফ কোয়েরি প্যারামস পাঠানো
   const { data, isLoading } = useGetProductsQuery(
-    { 
-      search: searchTerm.trim(), 
-      ...(currentCategoryId !== undefined && { category_id: currentCategoryId }), 
+    {
+      search: searchTerm.trim(),
+      ...(currentCategoryId !== undefined && {
+        category_id: currentCategoryId,
+      }),
     },
-    { skip: searchTerm.trim().length < 1 }
+    {
+      skip: searchTerm.trim().length < 1,
+    },
   );
 
   // ড্রপডাউন এর বাইরে ক্লিক করলে শুধুমাত্র ড্রপডাউন বন্ধ করার জন্য
@@ -58,12 +51,16 @@ export default function ProductSearch() {
   const searchResults = (data?.data.products || []).slice(0, 10);
   const hasResults = searchResults.length > 0;
 
-  const targetCategoryId = currentCategoryId ?? searchResults?.[0]?.id;
+  const targetCategoryId = currentCategoryId;
 
+  const searchUrl = `/search?query=${encodeURIComponent(searchTerm.trim())}${targetCategoryId !== undefined
+    ? `&category_id=${targetCategoryId}`
+    : ""
+    }`;
   return (
     <div ref={containerRef} className="relative z-50 flex justify-end">
       {/* 🎯 সর্বদাই ওপেন ও প্রসারিত সার্চ বার কন্টেইনার */}
-      <div 
+      <div
         className="flex items-center rounded-full border border-[#00416A]/30 bg-transparent h-8 sm:h-10 px-2 sm:px-3 shadow-sm transition-all duration-300 w-36 sm:w-44 md:w-44 focus-within:border-[#00416A]"
       >
         <input
@@ -93,18 +90,23 @@ export default function ProductSearch() {
           ) : hasResults ? (
             <>
               <div className="max-h-80 overflow-y-auto p-2 space-y-1">
-                {searchResults.map((product: any) => {
+                {searchResults.map((product: Product) => {
                   const firstVariant = product.variant;
                   const firstImage = firstVariant?.images?.[0];
-                  
+
                   const imageUrl = product.thumbnail || firstImage || "https://via.placeholder.com/150";
-                  const price = firstVariant?.price || product.price || 0;
+                  const price = firstVariant?.price || 0;
                   const sku = firstVariant?.sku || `PD-00${product.id}`;
+
+                  const productUrl =
+                    product.category === "Electronics"
+                      ? `/electronics/${product.slug}`
+                      : `/products/${product.slug}`;
 
                   return (
                     <Link
                       key={product.id}
-                      to={currentCategoryId === 2 ? `/electronics/${product.slug}` : `/products/${product.slug}`}
+                      to={productUrl}
                       onClick={() => {
                         setIsOpen(false);
                         setSearchTerm("");
@@ -137,18 +139,20 @@ export default function ProductSearch() {
                 })}
               </div>
 
+            
               <div className="border-t border-gray-100 mt-1 p-2 bg-gray-50/50">
                 <Link
-                  to={`/search?query=${encodeURIComponent(searchTerm)}${targetCategoryId ? `&category_id=${targetCategoryId}` : ""}`}
+                  to={searchUrl}
                   onClick={() => {
                     setIsOpen(false);
                     setSearchTerm("");
                   }}
-                  className="block w-full text-center py-2 text-xs font-bold home-black-text hover:underline hover:cursor-pointer transition-all"
+                  className="flex items-center justify-between rounded-xl p-2 transition-colors hover:bg-gray-50 group"
                 >
                   View all results
                 </Link>
               </div>
+            
             </>
           ) : (
             <div className="py-6 text-center text-sm text-gray-400">

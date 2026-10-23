@@ -60,9 +60,6 @@ function getCleanCategoryPath(product?: Product): string {
 
 export default function AlsoLike({ subCategoryName, currentSlug }: AlsoLikeProps) {
   const navigate = useNavigate();
-  const targetSubCategorySlug = String(subCategoryName);
-  console.log(targetSubCategorySlug);
-
 
   const { data, isLoading } = useGetProductsQuery({
     category_id: 1

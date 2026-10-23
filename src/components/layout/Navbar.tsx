@@ -246,7 +246,7 @@ export default function Navbar() {
                       {/* Menu Links */}
                       <div className="py-1">
                         <Link
-                          to="/profile"
+                          to="/dashboard/my-profile"
                           onClick={() => setUserMenuOpen(false)}
                           className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
                         >

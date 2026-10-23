@@ -3,13 +3,20 @@
 import { baseApi } from "@/redux/baseApi";
 import type { ProductDetailsResponse, ProductsResponse } from "@/types/product.type";
 
-interface GetProductsParams {
-  page?: number;
-  per_page?: number;
-  category_id?: number;
-  sub_category_id?: number;
-  is_featured?: boolean;
+export interface GetProductsParams {
   search?: string;
+  category_id?: number | null;
+  sub_category_id?: number | null;
+  brand_id?: number | null;
+  is_featured?: boolean | null;
+  in_stock?: boolean | null;
+  price_min?: number | null;
+  price_max?: number | null;
+  per_page?: number;
+  page?: number;
+  sort_by?: string;
+  sort_order?: "asc" | "desc";
+  attributes?: Record<string, string[]>;
 }
 
 export const productApi = baseApi.injectEndpoints({
@@ -18,9 +25,10 @@ export const productApi = baseApi.injectEndpoints({
       query: (params = {}) => ({
         url: "/products",
         method: "POST",
-        params,
+        // params,
         body: {
-          category_id: params.category_id,
+          search: params.search,
+          category_id: params.category_id ?? null,
           is_featured: params.is_featured,
         },
       }),

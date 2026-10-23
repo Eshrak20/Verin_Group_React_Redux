@@ -45,10 +45,7 @@ export default function ProductDetails() {
       navigate("/decor");
     }
   };
-
-  console.log(product);
-
-
+  
   useEffect(() => {
     if (product?.variants && product.variants.length > 0) {
       setSelectedVariant(product.variants?.[0]);

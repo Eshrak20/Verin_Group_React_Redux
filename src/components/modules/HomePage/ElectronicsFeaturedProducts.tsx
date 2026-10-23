@@ -105,7 +105,7 @@ export default function ElectronicsFeaturedProducts() {
       {!inView || isLoading ? (
         <div className="py-2">
           <h2 className="text-center text-2xl sm:text-3xl lg:text-4xl font-bold home-black-text mb-4 sm:mb-6">
-            {isElectronicPage ? "Customer Favorites" : "Electronics Featured Products"}
+            {isElectronicPage ? "Featured Products" : "Electronics Featured Products"}
           </h2>
           <div className="flex gap-3 overflow-hidden">
             {Array.from({ length: VISIBLE }).map((_, i) => (
@@ -124,9 +124,9 @@ export default function ElectronicsFeaturedProducts() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="text-center text-2xl sm:text-3xl lg:text-4xl font-bold home-black-text mb-4 sm:mb-6"
+            className={`${isElectronicPage ? "text-left mb-6 sm:mb-9 mt-5" : "text-center mb-4 sm:mb-6"} text-2xl sm:text-3xl lg:text-4xl font-bold home-black-text`}
           >
-            {isElectronicPage ? "Customer Favorites" : "Electronics Featured Products"}
+            {isElectronicPage ? "Featured Products" : "Electronics Featured Products"}
           </motion.h2>
 
           <div className="relative">
