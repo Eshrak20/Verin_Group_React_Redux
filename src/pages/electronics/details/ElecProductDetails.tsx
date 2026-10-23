@@ -26,7 +26,7 @@ export default function ElecProductDetails() {
             {/* Top Product Section */}
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 mb-10">
                 <ElecProdDetGallery images={variantImages} productName={product.name} />
-                <ElecProdDetInfo name={product.name} variants={product.variants ?? []} />
+                <ElecProdDetInfo name={product.name} variants={product.variants ?? []} deliveryCharge={product?.delivery_charge} />
             </div>
 
             {/* Specifications & Warranty Section */}

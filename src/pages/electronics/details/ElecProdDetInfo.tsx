@@ -1,20 +1,26 @@
-
 import type { ProductDetailsVariant } from "@/types/product.type";
 import {
-    Barcode,
-    Check,
-    Copy,
-    Info,
-    MessageCircle,
-    PackageCheck,
-    PackageX,
-    Truck,
+  Barcode,
+  Check,
+  Copy,
+  Info,
+  MessageCircle,
+  Truck
 } from "lucide-react";
 import { useState } from "react";
+
+export interface DeliveryChargeInfo {
+  id?: number;
+  name?: string;
+  description?: string | null;
+  inside_dhaka_charge?: number | string;
+  outside_dhaka_charge?: number | string;
+}
 
 interface ElecProdDetInfoProps {
   name: string;
   variants: ProductDetailsVariant[];
+  deliveryCharge?: DeliveryChargeInfo | null;
 }
 
 const formatPrice = (price: number) =>
@@ -28,6 +34,7 @@ const getPrice = (price: string | number | undefined | null) =>
 export default function ElecProdDetInfo({
   name,
   variants,
+  deliveryCharge,
 }: ElecProdDetInfoProps) {
   const [selectedSku, setSelectedSku] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -48,9 +55,9 @@ export default function ElecProdDetInfo({
   // The backend returns status as 1 or 0 and stock as a number.
   const variantWithStock = activeVariant as
     | (ProductDetailsVariant & {
-        stock?: number;
-        status?: number | boolean;
-      })
+      stock?: number;
+      status?: number | boolean;
+    })
     | undefined;
 
   const stock = Number(variantWithStock?.stock ?? 0);
@@ -59,7 +66,29 @@ export default function ElecProdDetInfo({
     variantWithStock.status === 1 ||
     variantWithStock.status === true;
 
+  // Stock status logic
   const inStock = isActive && stock > 0;
+
+  let stockStatusText = "Out of Stock";
+  let stockStatusColor = "text-red-600";
+
+  if (isActive && stock > 5) {
+    stockStatusText = "In Stock";
+    stockStatusColor = "text-green-700";
+  } else if (isActive && stock > 0 && stock <= 9) {
+    stockStatusText = `Limited Stock`;
+    stockStatusColor = "text-amber-600";
+  }
+
+  // Delivery Charge Logic
+  const insideCharge = Number(deliveryCharge?.inside_dhaka_charge ?? 0);
+  const outsideCharge = Number(deliveryCharge?.outside_dhaka_charge ?? 0);
+
+  const isFreeDelivery =
+    deliveryCharge !== undefined &&
+    deliveryCharge !== null &&
+    insideCharge === 0 &&
+    outsideCharge === 0;
 
   const handleCopySku = async () => {
     if (!activeVariant?.sku) return;
@@ -153,21 +182,6 @@ export default function ElecProdDetInfo({
                 ? variantSalePrice
                 : variantPrice;
 
-              const variantStockInfo = variant as ProductDetailsVariant & {
-                stock?: number;
-                status?: number | boolean;
-              };
-
-              const variantStock = Number(variantStockInfo.stock ?? 0);
-
-              const variantIsActive =
-                variantStockInfo.status === undefined ||
-                variantStockInfo.status === 1 ||
-                variantStockInfo.status === true;
-
-              const variantInStock =
-                variantIsActive && variantStock > 0;
-
               return (
                 <button
                   key={variant.sku}
@@ -215,29 +229,11 @@ export default function ElecProdDetInfo({
                         ))}
                       </div>
 
-                      {/* SKU and availability */}
+                      {/* SKU */}
                       <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                         <span className="flex items-center gap-1 text-xs text-gray-500">
                           <Barcode className="h-3.5 w-3.5" />
                           {variant.sku}
-                        </span>
-
-                        <span
-                          className={`flex items-center gap-1 text-xs font-semibold ${
-                            variantInStock
-                              ? "text-green-700"
-                              : "text-red-600"
-                          }`}
-                        >
-                          {variantInStock ? (
-                            <PackageCheck className="h-3.5 w-3.5" />
-                          ) : (
-                            <PackageX className="h-3.5 w-3.5" />
-                          )}
-
-                          {variantInStock
-                            ? `${variantStock} in stock`
-                            : "Out of stock"}
                         </span>
                       </div>
                     </div>
@@ -284,12 +280,8 @@ export default function ElecProdDetInfo({
 
             <div className="min-w-0">
               <p className="text-xs font-medium text-gray-400">STATUS</p>
-              <p
-                className={`text-sm font-bold ${
-                  inStock ? "text-green-700" : "text-red-600"
-                }`}
-              >
-                {inStock ? "In Stock" : "Unavailable"}
+              <p className={`text-sm font-bold ${stockStatusColor}`}>
+                {stockStatusText}
               </p>
             </div>
           </div>
@@ -317,6 +309,43 @@ export default function ElecProdDetInfo({
               <Copy className="h-4 w-4 shrink-0 text-gray-400 group-hover:text-elec" />
             )}
           </button>
+        </div>
+      )}
+
+      {/* Delivery Charges Section (Enlarged Text & Numbers) */}
+      {deliveryCharge && (
+        <div className="rounded-xl border border-gray-100 bg-gray-50/70 p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Truck className="h-5 w-5 text-elec" />
+              <span className="text-sm font-bold text-gray-700 uppercase tracking-wide">
+                Delivery Charge
+              </span>
+            </div>
+
+            {isFreeDelivery && (
+              <span className="rounded-full bg-green-100 px-3.5 py-1 text-sm font-extrabold text-green-700 border border-green-200">
+                Free Delivery
+              </span>
+            )}
+          </div>
+
+          {!isFreeDelivery && (
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <div className="rounded-xl bg-white p-3 border border-gray-200/90 shadow-2xs">
+                <span className="text-gray-500 block text-xs font-medium">Inside Dhaka</span>
+                <span className="text-lg sm:text-xl font-extrabold text-gray-900">
+                  ৳{formatPrice(insideCharge)}
+                </span>
+              </div>
+              <div className="rounded-xl bg-white p-3 border border-gray-200/90 shadow-2xs">
+                <span className="text-gray-500 block text-xs font-medium">Outside Dhaka</span>
+                <span className="text-lg sm:text-xl font-extrabold text-gray-900">
+                  ৳{formatPrice(outsideCharge)}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

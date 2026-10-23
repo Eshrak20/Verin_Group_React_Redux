@@ -99,7 +99,7 @@ export interface ProductDetails {
 
   variants: ProductDetailsVariant[];
   attributes: ProductDetailsAttribute[];
-  delivery_charge: ProductDeliveryCharge | null;
+  delivery_charge?: ProductDeliveryCharge;
 }
 
 export interface ProductDetailsCategory {

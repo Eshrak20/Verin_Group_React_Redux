@@ -24,7 +24,7 @@ export default function ElecSubCatNavbar({
 			aria-label="Electronics subcategories"
 			className="w-full text-white"
 		>
-			<div className="mx-auto max-w-7xl px-3 sm:px-5 lg:px-0">
+			<div className="mx-auto max-w-7xl mt-3 px-3 sm:px-5 lg:px-0">
 				<div className="flex items-center gap-2 overflow-x-auto py-3 scrollbar-none [&::-webkit-scrollbar]:hidden">
 					<button
 						type="button"
