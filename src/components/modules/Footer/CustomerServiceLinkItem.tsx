@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
 import type {
-  CustomerServiceLink as ICustomerServiceLink,
   FooterPagesResponse,
+  CustomerServiceLink as ICustomerServiceLink,
 } from "@/types/footer.type";
+import { Link } from "react-router-dom";
 
 interface CustomerServiceLinkItemProps {
   link: ICustomerServiceLink;
@@ -68,88 +68,3 @@ export function CustomerServiceLinkItem({
     </li>
   );
 }
-
-
-
-
-
-
-
-
-
-
-// import { Link } from "react-router-dom";
-// import type { CustomerServiceLink as ICustomerServiceLink, FooterPagesResponse } from "@/types/footer.type";
-
-// interface CustomerServiceLinkItemProps {
-//   link: ICustomerServiceLink;
-//   footerPagesData?: FooterPagesResponse;
-//   companyKey: string;
-// }
-
-// export function CustomerServiceLinkItem({
-//   link,
-//   footerPagesData,
-//   companyKey,
-// }: CustomerServiceLinkItemProps) {
-//   // ডাটাবেজের পেজ খুঁজে দেখা এবং সেটি পাবলিশড কিনা নিশ্চিত হওয়া
-//   const matchedPage = footerPagesData?.data?.find(
-//     (p) => p.page_type === link.pageType && p.is_published === 1
-//   );
-
-//   const hasPageData = Boolean(matchedPage && matchedPage.content?.trim());
-
-//   return (
-//     <li>
-//       <Link
-//         to={`${link.path}?company=${companyKey}`}
-//         // state পাস করে দিচ্ছি যাতে সার্ভিস পেজ বুঝতে পারে ডাটা আছে কি নেই
-//         state={{
-//           pageData: hasPageData ? matchedPage : null,
-//           notFound: !hasPageData,
-//         }}
-//         className="text-sm text-gray-700 hover:home-black-text transition-colors duration-200"
-//       >
-//         {matchedPage?.title || link.label}
-//       </Link>
-//     </li>
-//   );
-// }
-
-
-
-
-
-
-
-
-
-// // import { Link } from "react-router-dom";
-// // import type { CustomerServiceLink as ICustomerServiceLink, FooterPagesResponse } from "@/types/footer.type";
-
-// // interface CustomerServiceLinkItemProps {
-// //   link: ICustomerServiceLink;
-// //   footerPagesData?: FooterPagesResponse;
-// //   companyKey: string;
-// // }
-
-// // export function CustomerServiceLinkItem({
-// //   link,
-// //   footerPagesData,
-// //   companyKey,
-// // }: CustomerServiceLinkItemProps) {
-// //   const matchedPage = footerPagesData?.data?.find(
-// //     (p) => p.page_type === link.pageType
-// //   );
-
-// //   return (
-// //     <li>
-// //       <Link
-// //         to={`${link.path}?company=${companyKey}`}
-// //         className="text-sm text-gray-700 hover:home-black-text transition-colors duration-200"
-// //       >
-// //         {matchedPage?.title || link.label}
-// //       </Link>
-// //     </li>
-// //   );
-// // }

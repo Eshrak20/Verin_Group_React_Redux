@@ -26,7 +26,6 @@ const ElecHome = lazy(() => import("@/pages/electronics/home/ElecHome"));
 const ProductDetailsPage = lazy(() => import("@/pages/ProductDetailsPage"));
 const Login = lazy(() => import("@/pages/authentication/Login"));
 const Register = lazy(() => import("@/pages/authentication/Register"));
-const ContactUs = lazy(() => import("@/pages/ContactUs"));
 const SearchPage = lazy(() => import("@/pages/SearchPage"));
 const FurniturePage = lazy(() => import("@/pages/FurniturePage"));
 const BooksPage = lazy(() => import("@/pages/BooksPage"));
@@ -96,10 +95,6 @@ export const router = createBrowserRouter([
             {
                 path: "privacy-policy",
                 element: <Suspense fallback={<PageLoader />}><PrivacyPolicyPage /></Suspense>
-            },
-            {
-                path: "contact",
-                element: <Suspense fallback={<PageLoader />}><ContactUs /></Suspense>
             },
             {
                 path: "furniture",
