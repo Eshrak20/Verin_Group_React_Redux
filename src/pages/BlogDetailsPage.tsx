@@ -53,7 +53,7 @@ export default function BlogDetailsPage() {
     if (!products || !products.length) return [];
 
     const blogIdNum = Number(id) || (id ? id.length : 1);
-    
+
     return [...products]
       .sort((a: any, b: any) => {
         const hashA = (Number(a.id || 0) * 17 + blogIdNum * 31) % 97;
@@ -62,6 +62,9 @@ export default function BlogDetailsPage() {
       })
       .slice(0, 5);
   }, [products, id]);
+
+  console.log(suggestedProducts[0]);
+
 
   const currentBlog = rawBlogs.find(
     (b) => b.id === Number(id) || b.slug === id
@@ -149,12 +152,12 @@ export default function BlogDetailsPage() {
 
   const date = formatDate(currentBlog.created_at, isBangla);
 
-  // ডায়নামিক ক্লিন ইউআরএল তৈরি (স্পেস রিমুভ ও সঠিক এনকোডিং)
+ 
   const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
   const cleanPath = window.location.pathname.replace(/\s+/g, "-");
-  
-  const shareUrl = isLocalhost 
-    ? `https://v.veringroup.com${cleanPath}` 
+
+  const shareUrl = isLocalhost
+    ? `https://v.veringroup.com${cleanPath}`
     : `${window.location.origin}${cleanPath}`;
 
   return (
@@ -198,21 +201,19 @@ export default function BlogDetailsPage() {
             <div className="flex bg-white dark:bg-slate-800 rounded-full p-1 border dark:border-slate-700 shadow-sm">
               <button
                 onClick={() => setIsBangla(true)}
-                className={`px-4 py-1 rounded-full text-[11px] hover:cursor-pointer font-bold transition-all duration-300 ease-in-out transform ${
-                  isBangla
+                className={`px-4 py-1 rounded-full text-[11px] hover:cursor-pointer font-bold transition-all duration-300 ease-in-out transform ${isBangla
                     ? "bg-[#262626] text-white shadow-md scale-105"
                     : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
-                }`}
+                  }`}
               >
                 বাংলা
               </button>
               <button
                 onClick={() => setIsBangla(false)}
-                className={`px-4 py-1 rounded-full text-[11px] hover:cursor-pointer font-bold transition-all duration-300 ease-in-out transform ${
-                  !isBangla
+                className={`px-4 py-1 rounded-full text-[11px] hover:cursor-pointer font-bold transition-all duration-300 ease-in-out transform ${!isBangla
                     ? "bg-[#262626] text-white shadow-md scale-105"
                     : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
-                }`}
+                  }`}
               >
                 English
               </button>
@@ -243,7 +244,7 @@ export default function BlogDetailsPage() {
               </div>
 
               {excerpt && (
-                <div 
+                <div
                   className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium transition-opacity duration-300 prose dark:prose-invert max-w-none 
                     [&_strong]:font-bold [&_b]:font-bold [&_strong]:text-slate-900 dark:[&_strong]:text-white [&_b]:text-slate-900 dark:[&_b]:text-white
                     [&_h1]:text-base [&_h1]:font-extrabold [&_h1]:text-slate-900 dark:[&_h1]:text-white [&_h1]:mt-3 [&_h1]:mb-1
@@ -395,9 +396,8 @@ export default function BlogDetailsPage() {
                       {/* Direct Copy Link Button */}
                       <button
                         onClick={handleCopyLink}
-                        className={`p-1.5 rounded text-white hover:opacity-90 hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center shadow-sm cursor-pointer ${
-                          copied ? "bg-emerald-600" : "bg-gray-700 dark:bg-slate-600"
-                        }`}
+                        className={`p-1.5 rounded text-white hover:opacity-90 hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center shadow-sm cursor-pointer ${copied ? "bg-emerald-600" : "bg-gray-700 dark:bg-slate-600"
+                          }`}
                         title={copied ? "Copied!" : "Copy Link"}
                       >
                         {copied ? <FaCheck size={13} /> : <FaRegCopy size={13} />}
@@ -422,7 +422,7 @@ export default function BlogDetailsPage() {
                 <div className="space-y-3">
                   {suggestedProducts.length > 0 ? (
                     suggestedProducts.map((product: any, index: number) => {
-                      const firstVariant = product.variants?.[0];
+                      const firstVariant = product.variant;
 
                       const displayPrice =
                         firstVariant?.sale_price ||
@@ -431,10 +431,15 @@ export default function BlogDetailsPage() {
                         "N/A";
 
                       const displayImage =
-                        firstVariant?.images?.[0]?.image_url ||
+                        firstVariant?.images?.[0] ||
                         product.image_url ||
                         product.thumbnail ||
                         "https://placehold.co/100x100/e2e8f0/94a3b8?text=Product";
+
+                      const productUrl =
+                        product.category === "Electronics"
+                          ? `/electronics/${product.slug}`
+                          : `/products/${product.slug}`;
 
                       return (
                         <motion.div
@@ -449,7 +454,7 @@ export default function BlogDetailsPage() {
                           }}
                         >
                           <Link
-                            to={`/products/${product.slug ?? product.id}`}
+                            to={productUrl}
                             className="flex gap-3 group items-center p-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-all duration-300 hover:translate-x-1"
                           >
                             <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-slate-700 border border-gray-200/80 dark:border-slate-600">

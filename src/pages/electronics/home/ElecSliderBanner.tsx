@@ -20,7 +20,7 @@ export default function ElecSliderBanner({ banners }: ElecBannerProps) {
 
   // Setup Embla Carousel with Loop and Autoplay
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
-    Autoplay({ delay: 6500, stopOnInteraction: false }),
+    Autoplay({ delay: 7000, stopOnInteraction: false }),
   ]);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -109,11 +109,10 @@ export default function ElecSliderBanner({ banners }: ElecBannerProps) {
                 key={index}
                 type="button"
                 onClick={() => scrollTo(index)}
-                className={`h-2.5 rounded-full transition-all cursor-pointer ${
-                  index === selectedIndex
+                className={`h-2.5 rounded-full transition-all cursor-pointer ${index === selectedIndex
                     ? "w-7 bg-elec"
                     : "w-2.5 bg-white/60 hover:bg-white"
-                }`}
+                  }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}
