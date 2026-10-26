@@ -10,7 +10,7 @@ import type { ProductDetailsVariant } from "@/types/product.type";
 import { useActiveCategory } from "@/utils/ActiveCategoryContext";
 
 // 🎯 আলাদা তৈরি করা AlsoLike কম্পোনেন্ট এবং WhatsApp ইউটিলিটি ইমপোর্ট
-import WishlistActionButton from "@/pages/electronics/details/WishlistActionButton";
+import WishlistActionButton from "@/components/common/WishlistActionButton";
 import { redirectToWhatsApp } from "@/utils";
 import AlsoLike from "./AlsoLike";
 

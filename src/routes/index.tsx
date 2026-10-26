@@ -5,6 +5,7 @@ import GlobalErrorPage from "@/components/layout/GlobalErrorPage";
 import { ForgotPassword } from "@/pages/authentication/ForgotPassword";
 import ResetPassword from "@/pages/authentication/ResetPassword";
 import VerifyOtp from "@/pages/authentication/VerifyOtp";
+import MyProfile from "@/pages/dashboard/MyProfile";
 import MyWishlist from "@/pages/dashboard/MyWishlist";
 import ElecProductDetails from "@/pages/electronics/details/ElecProductDetails";
 import Homepage from "@/pages/Homepage"; // হোমপেজ সরাসরি থাকবে (Fast LCP)
@@ -91,6 +92,10 @@ export const router = createBrowserRouter([
             {
                 path: "/my-wishlist",
                 element: <Suspense fallback={<PageLoader />}><MyWishlist /></Suspense>,
+            },
+            {
+                path: "/my-profile",
+                element: <Suspense fallback={<PageLoader />}><MyProfile /></Suspense>,
             },
             {
                 path: "privacy-policy",

@@ -106,7 +106,7 @@ const MyProfile = () => {
         user.is_active === null ? null : user.is_active ? "Active" : "Inactive";
 
     return (
-        <section className="mx-auto w-full max-w-5xl space-y-6">
+        <section className="mx-auto w-full space-y-6 mb-20">
             {/* Header / Hero */}
             <div className="rounded-2xl border bg-card p-6 shadow-sm sm:p-8">
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">

@@ -15,7 +15,7 @@ export const wishlistApi = baseApi.injectEndpoints({
         getWishlist: builder.query<WishlistResponse & { data: GetWishlistData }, { page?: number; per_page?: number } | void>({
             query: (params) => ({
                 url: "/saved-products",
-                params: params ?? { page: 1, per_page: 10 },
+                params: params ?? { page: 1, per_page: 12 }, // 👈 এখানে per_page: 1 এর বদলে 12 করে দিন
             }),
             providesTags: ["wishlist"],
         }),

@@ -2,16 +2,16 @@ import type { ProductDeliveryCharge, ProductDetailsVariant } from "@/types/produ
 import type { ProductWishlistVariant } from "@/types/wishlist.type";
 import { redirectToWhatsApp } from "@/utils"; // 👈 কমন ফাইল থেকে ইমপোর্ট করা হলো
 import {
-  Barcode,
-  Check,
-  Copy,
-  Info,
-  MessageCircle,
-  Truck
+    Barcode,
+    Check,
+    Copy,
+    Info,
+    MessageCircle,
+    Truck
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import WishlistActionButton from "./WishlistActionButton";
+import WishlistActionButton from "../../../components/common/WishlistActionButton";
 
 interface ElecProdDetInfoProps {
   productId: number;
