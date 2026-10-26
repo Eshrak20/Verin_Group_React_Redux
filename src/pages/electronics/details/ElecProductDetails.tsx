@@ -22,10 +22,15 @@ export default function ElecProductDetails() {
     const variantImages = product.variants?.[0]?.images ?? [];
 
     return (
-        <div className="mx-auto max-w-6xl px-4 pt-3 pb-16 sm:px-6 lg:px-0">
+        <div className="mx-auto max-w-6xl px-4 pt-6 pb-16 sm:px-6 lg:px-0">
             {/* Top Product Section */}
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 mb-10">
-                <ElecProdDetGallery images={variantImages} productName={product.name} />
+            <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2 mb-10">
+                {/* Sticky Image Gallery Section */}
+                <div className="sticky top-6">
+                    <ElecProdDetGallery images={variantImages} productName={product.name} />
+                </div>
+
+                {/* Product Information Section */}
                 <ElecProdDetInfo name={product.name} variants={product.variants ?? []} deliveryCharge={product?.delivery_charge} />
             </div>
 

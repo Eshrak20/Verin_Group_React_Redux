@@ -7,7 +7,7 @@ import {
   MessageCircle,
   Truck
 } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export interface DeliveryChargeInfo {
   id?: number;
@@ -90,6 +90,39 @@ export default function ElecProdDetInfo({
     insideCharge === 0 &&
     outsideCharge === 0;
 
+  // RAM size, Color এবং Internal Storage সবসময় দেখাবে (কমন হলেও বাদ যাবে না)
+  const alwaysShowAttributes = ["ram size", "color", "internal storage"];
+
+  // ফিল্টার লজিক
+  const filteredVariantsAttributes = useMemo(() => {
+    if (!variants || variants.length <= 1) return variants;
+
+    const attributeKeys = variants[0]?.attributes?.map(attr => attr.name) ?? [];
+    const commonAttributeNames = new Set<string>();
+
+    attributeKeys.forEach(attrName => {
+      const lowerAttrName = attrName.toLowerCase();
+      if (alwaysShowAttributes.some(item => lowerAttrName.includes(item))) {
+        return;
+      }
+
+      const firstValue = variants[0]?.attributes?.find(attr => attr.name === attrName)?.value;
+      const isAllSame = variants.every(variant => {
+        const val = variant.attributes?.find(attr => attr.name === attrName)?.value;
+        return val === firstValue;
+      });
+
+      if (isAllSame) {
+        commonAttributeNames.add(attrName);
+      }
+    });
+
+    return variants.map(variant => ({
+      ...variant,
+      attributes: variant.attributes?.filter(attr => !commonAttributeNames.has(attr.name))
+    }));
+  }, [alwaysShowAttributes, variants]);
+
   const handleCopySku = async () => {
     if (!activeVariant?.sku) return;
 
@@ -102,19 +135,20 @@ export default function ElecProdDetInfo({
     }
   };
 
+  // স্ক্রিনশটের ফরম্যাট অনুযায়ী WhatsApp মেসেজ হ্যান্ডলার
   const handleWhatsAppRedirect = () => {
     const phoneNumber = "8801805734585";
+    const currentUrl = window.location.href;
 
     const message = [
-      `I'm interested in this product: ${name}`,
-      `SKU: ${activeVariant?.sku ?? "N/A"}`,
-      `Price: ৳${formatPrice(displayPrice)}`,
-      activeVariant?.attributes
-        ?.map((attribute) => `${attribute.name}: ${attribute.value}`)
-        .join(", "),
-    ]
-      .filter(Boolean)
-      .join("\n");
+      `Hello, I am interested in this product.`,
+      ``,
+      `Product Name: ${name}`,
+      `Price: TK ${formatPrice(displayPrice)}.00`,
+      `Product URL: ${currentUrl}`,
+      ``,
+      `Please provide more details.`,
+    ].join("\n");
 
     window.open(
       `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
@@ -166,9 +200,9 @@ export default function ElecProdDetInfo({
           </span>
         </div>
 
-        {variants.length > 0 ? (
+        {filteredVariantsAttributes.length > 0 ? (
           <div className="grid grid-cols-1 gap-3">
-            {variants.map((variant) => {
+            {filteredVariantsAttributes.map((variant) => {
               const isSelected = variant.sku === activeVariant?.sku;
 
               const variantPrice = getPrice(variant.price);
@@ -191,20 +225,18 @@ export default function ElecProdDetInfo({
                     setCopied(false);
                   }}
                   aria-pressed={isSelected}
-                  className={`w-full rounded-xl border p-4 text-left transition-all ${
-                    isSelected
+                  className={`w-full rounded-xl border p-4 text-left transition-all ${isSelected
                       ? "border-elec bg-elec/5 ring-1 ring-elec"
                       : "border-gray-200 bg-white hover:border-gray-400"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-start gap-3">
                     {/* Selection indicator */}
                     <span
-                      className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
-                        isSelected
+                      className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${isSelected
                           ? "border-elec bg-elec text-white"
                           : "border-gray-300 bg-white"
-                      }`}
+                        }`}
                     >
                       {isSelected && <Check className="h-3.5 w-3.5" />}
                     </span>
@@ -215,11 +247,10 @@ export default function ElecProdDetInfo({
                         {variant.attributes?.map((attribute) => (
                           <span
                             key={`${attribute.id}-${attribute.value_id}`}
-                            className={`rounded-md px-2.5 py-1 text-xs font-semibold sm:text-sm ${
-                              isSelected
+                            className={`rounded-md px-2.5 py-1 text-xs font-semibold sm:text-sm ${isSelected
                                 ? "bg-white text-gray-900 ring-1 ring-elec/20"
                                 : "bg-gray-100 text-gray-700"
-                            }`}
+                              }`}
                           >
                             <span className="text-gray-500">
                               {attribute.name}:
@@ -241,9 +272,8 @@ export default function ElecProdDetInfo({
                     {/* Price per configuration */}
                     <div className="shrink-0 text-right">
                       <p
-                        className={`text-base font-extrabold sm:text-lg ${
-                          isSelected ? "text-elec" : "text-gray-900"
-                        }`}
+                        className={`text-base font-extrabold sm:text-lg ${isSelected ? "text-elec" : "text-gray-900"
+                          }`}
                       >
                         ৳{formatPrice(variantDisplayPrice)}
                       </p>
@@ -312,7 +342,7 @@ export default function ElecProdDetInfo({
         </div>
       )}
 
-      {/* Delivery Charges Section (Enlarged Text & Numbers) */}
+      {/* Delivery Charges Section */}
       {deliveryCharge && (
         <div className="rounded-xl border border-gray-100 bg-gray-50/70 p-4">
           <div className="flex items-center justify-between">
