@@ -1,20 +1,16 @@
 /* eslint-disable react-refresh/only-export-components */
 // src/routes/index.tsx
 import AuthLayout from "@/components/layout/AuthLayout";
-import DashboardLayout from "@/components/layout/DashboardLayout";
 import GlobalErrorPage from "@/components/layout/GlobalErrorPage";
 import { ForgotPassword } from "@/pages/authentication/ForgotPassword";
 import ResetPassword from "@/pages/authentication/ResetPassword";
 import VerifyOtp from "@/pages/authentication/VerifyOtp";
-import DashboardHome from "@/pages/dashboard/DashboardHome";
-import MyProfile from "@/pages/dashboard/MyProfile";
 import MyWishlist from "@/pages/dashboard/MyWishlist";
 import ElecProductDetails from "@/pages/electronics/details/ElecProductDetails";
 import Homepage from "@/pages/Homepage"; // হোমপেজ সরাসরি থাকবে (Fast LCP)
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
 import App from "../App";
-import ProtectedRoute from "./ProtectedRoute";
 import PublicOnlyRoute from "./PublicOnlyRoute";
 
 // 🎯 বাকি পেজগুলো Lazy Loading করা হলো
@@ -91,6 +87,10 @@ export const router = createBrowserRouter([
             {
                 path: "/products/:slug",
                 element: <Suspense fallback={<PageLoader />}><ProductDetailsPage /></Suspense>,
+            },
+            {
+                path: "/my-wishlist",
+                element: <Suspense fallback={<PageLoader />}><MyWishlist /></Suspense>,
             },
             {
                 path: "privacy-policy",
@@ -186,28 +186,28 @@ export const router = createBrowserRouter([
     },
 
 
-    {
-        Component: ProtectedRoute,
-        children: [
-            {
-                Component: DashboardLayout,
-                children: [
-                    {
-                        path: "dashboard",
-                        Component: DashboardHome,
-                    },
-                    {
-                        path: "dashboard/my-profile",
-                        Component: MyProfile,
-                    },
-                    {
-                        path: "/dashboard/my-wishlist",
-                        Component: MyWishlist,
-                    },
-                ],
-            },
-        ],
-    },
+    // {
+    //     Component: ProtectedRoute,
+    //     children: [
+    //         {
+    //             Component: DashboardLayout,
+    //             children: [
+    //                 {
+    //                     path: "dashboard",
+    //                     Component: DashboardHome,
+    //                 },
+    //                 {
+    //                     path: "dashboard/my-profile",
+    //                     Component: MyProfile,
+    //                 },
+    //                 {
+    //                     path: "/dashboard/my-wishlist",
+    //                     Component: MyWishlist,
+    //                 },
+    //             ],
+    //         },
+    //     ],
+    // },
     {
         path: "*",
         element: <GlobalErrorPage />,

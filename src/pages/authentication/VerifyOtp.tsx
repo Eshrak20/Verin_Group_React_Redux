@@ -122,6 +122,9 @@ const VerifyOtp = () => {
                 sessionStorage.removeItem(expiryKey);
             }
 
+            // 🎯 ওটিপি ভেরিফিকেশন ও অটো-লগইন সফল হওয়ার পর লোকাল স্টোরেজের গেস্ট উইশলিস্ট ক্লিয়ার করে দেওয়া হলো
+            localStorage.removeItem("guest_wishlist");
+
              setAuthCookies(response.data.token, "Bearer");
 
             dispatch(

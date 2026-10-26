@@ -31,7 +31,7 @@ export default function ElecProductDetails() {
                 </div>
 
                 {/* Product Information Section */}
-                <ElecProdDetInfo name={product.name} variants={product.variants ?? []} deliveryCharge={product?.delivery_charge} />
+                <ElecProdDetInfo productId={product.id} name={product.name} variants={product.variants ?? []} deliveryCharge={product?.delivery_charge} />
             </div>
 
             {/* Specifications & Warranty Section */}

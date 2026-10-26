@@ -41,13 +41,16 @@ export const Login = () => {
   const redirectTo =
     returnTo?.startsWith("/") && !returnTo.startsWith("//")
       ? returnTo
-      : "/dashboard";
+      : "/";
 
     const onSubmit = async (data: LoginFormValues) => {
         try {
             const response = await loginUser(data).unwrap();
 
             console.log("Login response:", response);
+
+            // 🎯 সাকসেসফুল লগইন হওয়ার পর লোকাল স্টোরেজের গেস্ট উইশলিস্ট ক্লিয়ার করে দেওয়া হলো
+            localStorage.removeItem("guest_wishlist");
 
             setAuthCookies(response.data.token, "Bearer");
 
@@ -157,11 +160,11 @@ export const Login = () => {
                         {isLoading ? (
                             <>
                                 <Loader2 className="size-4 animate-spin" />
-                                Signing in...
+                                Logging in...
                             </>
                         ) : (
                             <>
-                                Sign in
+                                Log in
                                 <ArrowRight className="ml-1 size-4" />
                             </>
                         )}

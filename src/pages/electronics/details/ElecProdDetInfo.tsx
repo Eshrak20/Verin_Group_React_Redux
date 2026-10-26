@@ -1,4 +1,6 @@
-import type { ProductDetailsVariant } from "@/types/product.type";
+import type { ProductDeliveryCharge, ProductDetailsVariant } from "@/types/product.type";
+import type { ProductWishlistVariant } from "@/types/wishlist.type";
+import { redirectToWhatsApp } from "@/utils"; // 👈 কমন ফাইল থেকে ইমপোর্ট করা হলো
 import {
   Barcode,
   Check,
@@ -8,19 +10,14 @@ import {
   Truck
 } from "lucide-react";
 import { useMemo, useState } from "react";
-
-export interface DeliveryChargeInfo {
-  id?: number;
-  name?: string;
-  description?: string | null;
-  inside_dhaka_charge?: number | string;
-  outside_dhaka_charge?: number | string;
-}
+import { toast } from "sonner";
+import WishlistActionButton from "./WishlistActionButton";
 
 interface ElecProdDetInfoProps {
+  productId: number;
   name: string;
   variants: ProductDetailsVariant[];
-  deliveryCharge?: DeliveryChargeInfo | null;
+  deliveryCharge?: ProductDeliveryCharge | null;
 }
 
 const formatPrice = (price: number) =>
@@ -32,6 +29,7 @@ const getPrice = (price: string | number | undefined | null) =>
   Number(price ?? 0);
 
 export default function ElecProdDetInfo({
+  productId,
   name,
   variants,
   deliveryCharge,
@@ -39,26 +37,23 @@ export default function ElecProdDetInfo({
   const [selectedSku, setSelectedSku] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  // Support variants arriving asynchronously from the API.
   const activeVariant =
     variants.find((variant) => variant.sku === selectedSku) ??
     variants[0];
 
+  console.log(activeVariant);
+
+
   const originalPrice = getPrice(activeVariant?.price);
   const salePrice = getPrice(activeVariant?.sale_price);
 
-  const hasDiscount =
-    salePrice > 0 && salePrice < originalPrice;
-
+  const hasDiscount = salePrice > 0 && salePrice < originalPrice;
   const displayPrice = hasDiscount ? salePrice : originalPrice;
 
-  // The backend returns status as 1 or 0 and stock as a number.
-  const variantWithStock = activeVariant as
-    | (ProductDetailsVariant & {
-      stock?: number;
-      status?: number | boolean;
-    })
-    | undefined;
+  const variantWithStock = activeVariant as unknown as (ProductWishlistVariant & {
+    stock?: number;
+    status?: number | boolean;
+  });
 
   const stock = Number(variantWithStock?.stock ?? 0);
   const isActive =
@@ -66,7 +61,6 @@ export default function ElecProdDetInfo({
     variantWithStock.status === 1 ||
     variantWithStock.status === true;
 
-  // Stock status logic
   const inStock = isActive && stock > 0;
 
   let stockStatusText = "Out of Stock";
@@ -80,20 +74,16 @@ export default function ElecProdDetInfo({
     stockStatusColor = "text-amber-600";
   }
 
-  // Delivery Charge Logic
   const insideCharge = Number(deliveryCharge?.inside_dhaka_charge ?? 0);
   const outsideCharge = Number(deliveryCharge?.outside_dhaka_charge ?? 0);
-
   const isFreeDelivery =
     deliveryCharge !== undefined &&
     deliveryCharge !== null &&
     insideCharge === 0 &&
     outsideCharge === 0;
 
-  // RAM size, Color এবং Internal Storage সবসময় দেখাবে (কমন হলেও বাদ যাবে না)
   const alwaysShowAttributes = ["ram size", "color", "internal storage"];
 
-  // ফিল্টার লজিক
   const filteredVariantsAttributes = useMemo(() => {
     if (!variants || variants.length <= 1) return variants;
 
@@ -125,36 +115,23 @@ export default function ElecProdDetInfo({
 
   const handleCopySku = async () => {
     if (!activeVariant?.sku) return;
-
     try {
       await navigator.clipboard.writeText(activeVariant.sku);
       setCopied(true);
+      toast.success("SKU copied to clipboard!");
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
       setCopied(false);
+      toast.error("Failed to copy SKU.");
     }
   };
 
-  // স্ক্রিনশটের ফরম্যাট অনুযায়ী WhatsApp মেসেজ হ্যান্ডলার
+  // 🎯 এখানে কমন ফাংশনটি কল করা হলো
   const handleWhatsAppRedirect = () => {
-    const phoneNumber = "8801805734585";
-    const currentUrl = window.location.href;
-
-    const message = [
-      `Hello, I am interested in this product.`,
-      ``,
-      `Product Name: ${name}`,
-      `Price: TK ${formatPrice(displayPrice)}.00`,
-      `Product URL: ${currentUrl}`,
-      ``,
-      `Please provide more details.`,
-    ].join("\n");
-
-    window.open(
-      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
-      "_blank",
-      "noopener,noreferrer",
-    );
+    redirectToWhatsApp({
+      productName: name,
+      displayPrice: formatPrice(displayPrice),
+    });
   };
 
   return (
@@ -226,30 +203,28 @@ export default function ElecProdDetInfo({
                   }}
                   aria-pressed={isSelected}
                   className={`w-full rounded-xl border p-4 text-left transition-all ${isSelected
-                      ? "border-elec bg-elec/5 ring-1 ring-elec"
-                      : "border-gray-200 bg-white hover:border-gray-400"
+                    ? "border-elec bg-elec/5 ring-1 ring-elec"
+                    : "border-gray-200 bg-white hover:border-gray-400"
                     }`}
                 >
                   <div className="flex items-start gap-3">
-                    {/* Selection indicator */}
                     <span
                       className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${isSelected
-                          ? "border-elec bg-elec text-white"
-                          : "border-gray-300 bg-white"
+                        ? "border-elec bg-elec text-white"
+                        : "border-gray-300 bg-white"
                         }`}
                     >
                       {isSelected && <Check className="h-3.5 w-3.5" />}
                     </span>
 
                     <div className="min-w-0 flex-1">
-                      {/* Attribute options */}
                       <div className="flex flex-wrap gap-2">
                         {variant.attributes?.map((attribute) => (
                           <span
                             key={`${attribute.id}-${attribute.value_id}`}
                             className={`rounded-md px-2.5 py-1 text-xs font-semibold sm:text-sm ${isSelected
-                                ? "bg-white text-gray-900 ring-1 ring-elec/20"
-                                : "bg-gray-100 text-gray-700"
+                              ? "bg-white text-gray-900 ring-1 ring-elec/20"
+                              : "bg-gray-100 text-gray-700"
                               }`}
                           >
                             <span className="text-gray-500">
@@ -260,7 +235,6 @@ export default function ElecProdDetInfo({
                         ))}
                       </div>
 
-                      {/* SKU */}
                       <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                         <span className="flex items-center gap-1 text-xs text-gray-500">
                           <Barcode className="h-3.5 w-3.5" />
@@ -269,7 +243,6 @@ export default function ElecProdDetInfo({
                       </div>
                     </div>
 
-                    {/* Price per configuration */}
                     <div className="shrink-0 text-right">
                       <p
                         className={`text-base font-extrabold sm:text-lg ${isSelected ? "text-elec" : "text-gray-900"
@@ -381,13 +354,21 @@ export default function ElecProdDetInfo({
 
       {/* Purchase actions */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <button
-          type="button"
-          disabled={!inStock}
-          className="rounded-xl border border-gray-300 px-3 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Add to Wishlist
-        </button>
+        <WishlistActionButton
+          productId={productId}
+          name={name}
+          originalPrice={originalPrice}
+          salePrice={salePrice}
+          thumbnail={
+            activeVariant && typeof activeVariant === "object"
+              ? ("thumbnail" in activeVariant ? (activeVariant as { thumbnail?: string | null }).thumbnail : null) ??
+              ("images" in activeVariant ? (activeVariant as { images?: string[] }).images?.[0] : null)
+              : variants[0] && typeof variants[0] === "object"
+                ? ("thumbnail" in variants[0] ? (variants[0] as { thumbnail?: string | null }).thumbnail : null) ??
+                ("images" in variants[0] ? (variants[0] as { images?: string[] }).images?.[0] : null)
+                : null
+          }
+        />
 
         <button
           type="button"

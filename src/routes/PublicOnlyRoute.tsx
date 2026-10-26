@@ -16,7 +16,7 @@ const PublicOnlyRoute = () => {
   const redirectTo =
     from?.startsWith("/") && !from.startsWith("//")
       ? from
-      : "/dashboard";
+      : "/";
 
   if (isAuthenticated) {
     return <Navigate to={redirectTo} replace />;

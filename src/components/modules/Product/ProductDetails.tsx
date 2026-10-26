@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import { motion } from "framer-motion";
-import { MessageCircle, PackageCheck, Tag, X } from "lucide-react";
+import { MessageCircle, PackageCheck, Truck, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
@@ -9,8 +9,10 @@ import { useGetProductBySlugQuery } from "@/redux/services/product/product.api";
 import type { ProductDetailsVariant } from "@/types/product.type";
 import { useActiveCategory } from "@/utils/ActiveCategoryContext";
 
-// 🎯 আলাদা তৈরি করা AlsoLike কম্পোনেন্ট ইমপোর্ট
-import AlsoLike from "./AlsoLike"; // (পাথ টি আপনার ফোল্ডার স্ট্রাকচার অনুযায়ী অ্যাডজাস্ট করে নিন)
+// 🎯 আলাদা তৈরি করা AlsoLike কম্পোনেন্ট এবং WhatsApp ইউটিলিটি ইমপোর্ট
+import WishlistActionButton from "@/pages/electronics/details/WishlistActionButton";
+import { redirectToWhatsApp } from "@/utils";
+import AlsoLike from "./AlsoLike";
 
 export default function ProductDetails() {
   const { slug } = useParams<{ slug: string }>();
@@ -20,8 +22,6 @@ export default function ProductDetails() {
   const { data: response, isLoading } = useGetProductBySlugQuery(slug!, {
     skip: !slug,
   });
-  console.log(response);
-
 
   const product = response?.data;
   const { setActiveCategory } = useActiveCategory();
@@ -45,7 +45,7 @@ export default function ProductDetails() {
       navigate("/decor");
     }
   };
-  
+
   useEffect(() => {
     if (product?.variants && product.variants.length > 0) {
       setSelectedVariant(product.variants?.[0]);
@@ -105,18 +105,26 @@ export default function ProductDetails() {
     );
   }
 
+  // 🎯 সেফলি প্রাইস নাম্বার ফরম্যাটে রূপান্তর করার ফাংশন
+  const getSafePrice = (val: unknown): number => {
+    if (typeof val === "number") return val;
+    if (typeof val === "string") return Number(val) || 0;
+    return 0;
+  };
+
   const currentVariant = selectedVariant || product.variants?.[0];
 
-  const price = Number(currentVariant?.price ?? 0);
-  const salePrice = Number(currentVariant?.sale_price ?? 0);
+  // ভেরিয়েন্ট বা প্রোডাক্ট থেকে প্রাইস রিড করা
+  const originalPrice = getSafePrice(currentVariant?.price ?? 0);
+  const salePrice = getSafePrice(currentVariant?.sale_price ?? 0);
 
   const hasDiscount =
-    salePrice > 0 && price > 0 && salePrice < price;
+    salePrice > 0 && originalPrice > 0 && salePrice < originalPrice;
 
-  const currentPrice = hasDiscount ? salePrice : price;
+  const displayPrice = hasDiscount ? salePrice : originalPrice;
 
   const discountPercent = hasDiscount
-    ? Math.round(((price - salePrice) / price) * 100)
+    ? Math.round(((originalPrice - salePrice) / originalPrice) * 100)
     : 0;
 
   const productImages: string[] =
@@ -127,24 +135,9 @@ export default function ProductDetails() {
   const stock = Number(currentVariant?.stock ?? 0);
   const isInStock = stock > 0;
 
-  const whatsappNumber = "8801805734585";
-  const productUrl = window.location.href;
-
-  const rawText = `Hello, I am interested in this product.
-
-Product Name: ${product.name}
-Price: TK ${currentPrice.toLocaleString()}.00
-Product URL: ${productUrl}
-
-Please provide more details.`;
-
-  const whatsappMessage = encodeURIComponent(rawText);
-
   return (
     <motion.section
-      key={
-        slug
-      } /* 👈 key={slug} যুক্ত করার ফলে প্রতিবার slug পরিবর্তন হলে framer-motion এনিমেশন পুনরায় রান করবে */
+      key={slug}
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -223,7 +216,7 @@ Please provide more details.`;
       <div className="flex flex-col lg:flex-row gap-8 sm:gap-10 lg:gap-20">
         {/* LEFT SECTION */}
         <motion.div
-          key={`left-${slug}`} /* 👈 এখানেও key যোগ করা হলো যাতে ছবির অংশটি আলাদাভাবে Fade In করে */
+          key={`left-${slug}`}
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
@@ -282,7 +275,7 @@ Please provide more details.`;
 
         {/* RIGHT SECTION */}
         <motion.div
-          key={`right-${slug}`} /* 👈 এখানেও key যোগ করা হলো যাতে তথ্যের অংশটি সুন্দরভাবে Fade In করে */
+          key={`right-${slug}`}
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
@@ -306,11 +299,11 @@ Please provide more details.`;
 
           <div className="flex items-end gap-3 sm:gap-4 mb-6 sm:mb-8">
             <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1A1A1A]">
-              TK {(hasDiscount ? salePrice : price).toLocaleString()}.00
+              TK {displayPrice.toLocaleString()}.00
             </span>
             {hasDiscount && (
               <span className="text-base sm:text-xl text-neutral-900/40 line-through mb-0.5 sm:mb-1">
-                TK {price.toLocaleString()}.00
+                TK {originalPrice.toLocaleString()}.00
               </span>
             )}
           </div>
@@ -352,12 +345,6 @@ Please provide more details.`;
                 {isInStock ? "In Stock" : "Out of Stock"}
               </span>
             </div>
-            <div className="flex items-center gap-2 text-neutral-500">
-              <Tag className="w-4 h-4 sm:w-5 sm:h-5 stroke-2" />
-              <span className="text-sm sm:text-base font-medium">
-                Direct Order
-              </span>
-            </div>
           </div>
 
           {product.variants && product.variants.length > 1 && (
@@ -382,22 +369,56 @@ Please provide more details.`;
             </div>
           )}
 
-          <div>
-            <a
-              href={`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${whatsappMessage}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2.5 sm:gap-3 bg-[#1A1A1A] text-white w-full sm:w-auto px-6 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-xs tracking-widest hover:bg-[#5A5A40] transition-colors"
+          {/* Purchase actions & WhatsApp Section */}
+          <div className="flex flex-col gap-3">
+            {/* Top Row: Wishlist, Add to Cart, Buy Now */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <WishlistActionButton
+                productId={product.id}
+                name={product.name}
+                originalPrice={originalPrice}
+                salePrice={salePrice}
+                thumbnail={productImages[0] ?? null}
+              />
+
+              <button
+                type="button"
+                disabled={!isInStock}
+                className="rounded-xl border border-primary px-3 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Add To Cart
+              </button>
+
+              <button
+                type="button"
+                disabled={!isInStock}
+                className="rounded-xl bg-primary px-3 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Buy Now
+              </button>
+            </div>
+
+            {/* 🎯 WhatsApp Button */}
+            <button
+              type="button"
+              onClick={() =>
+                redirectToWhatsApp({
+                  productName: product.name,
+                  displayPrice: displayPrice.toLocaleString(),
+                })
+              }
+              className="inline-flex items-center justify-center gap-2.5 sm:gap-3 bg-[#1A1A1A] text-white w-full px-6 py-3.5 sm:py-4 rounded-full font-bold text-xs tracking-widest hover:bg-[#5A5A40] transition-colors shadow-sm"
             >
-              <MessageCircle size={18} className="sm:w-5 sm:h-5" />
-              BUY NOW ON WHATSAPP
-            </a>
+              <MessageCircle size={18} className="sm:w-5 sm:h-5 text-green-400" />
+              ASK ABOUT THIS PRODUCT ON WHATSAPP
+            </button>
           </div>
 
-          <p className="text-[10px] text-[#1A1A1A]/50 uppercase mt-3 sm:mt-4 tracking-wider text-center md:text-left">
-            Clicking this will open a prefilled WhatsApp chat to process your
-            order.
+          <p className="flex items-center justify-center gap-2 text-center text-xs text-gray-500 mt-3">
+            <Truck className="h-4 w-4" />
+            Contact us for delivery and availability details.
           </p>
+
         </motion.div>
       </div>
 
