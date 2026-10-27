@@ -35,7 +35,7 @@ export default function Navbar() {
   const currentCompanyParam = searchParams.get("company");
 
   // Redux Auth State
-  const { isAuthenticated, user} = useSelector((state: RootState) => state.auth || { isAuthenticated: false, user: null, token: null });
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth || { isAuthenticated: false, user: null, token: null });
 
   const { data: categoriesData } = useGetCategoriesQuery();
   const categories = categoriesData?.data || [];
@@ -44,6 +44,25 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0); // 🎯 কার্ট আইটেম কাউন্ট স্টেট
+
+  // 🎯 লোকালস্টোরেজ থেকে কার্ট আইটেম কাউন্ট রিড করার এফেক্ট
+  useEffect(() => {
+    const updateCartCount = () => {
+      try {
+        const storedCart = JSON.parse(localStorage.getItem("guest_cart") || "[]");
+        const total = storedCart.reduce((acc: number, item: { quantity: number }) => acc + (item.quantity || 1), 0);
+        setCartCount(total);
+      } catch {
+        setCartCount(0);
+      }
+    };
+
+    updateCartCount();
+
+    window.addEventListener("storage", updateCartCount);
+    return () => window.removeEventListener("storage", updateCartCount);
+  }, []);
 
   const { data } = useGetFooterSettingsQuery();
   const { activeCategory } = useActiveCategory();
@@ -154,7 +173,6 @@ export default function Navbar() {
       await logoutMutation().unwrap();
       toast.success("Logged out successfully");
     } catch (error) {
-      // যদি টোকেন ইতিমধ্যে এক্সপায়ার হয়ে থাকে বা সার্ভার থেকে আনঅথেন্টিকেটেড দেয়, তবুও ক্লায়েন্ট সাইড ক্লিন করে দেবো
       console.error(getApiErrorMessage(error, "Logout API request failed."));
     } finally {
       removeAuthCookies();
@@ -164,6 +182,7 @@ export default function Navbar() {
   };
 
   const userName = user?.name || user?.email || "User";
+  const userEmail = user?.email;
 
   return (
     <nav className="fixed top-0 left-0 right-0 w-full z-50">
@@ -205,13 +224,18 @@ export default function Navbar() {
                 <Heart className="h-4 w-4" />
               </Link>
 
-              {/* Cart Icon Button */}
+              {/* 🎯 Cart Icon Button with Badge */}
               <Link
-                to="/cart"
+                to="/my-cart"
                 aria-label="Cart"
                 className="relative flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-700 hover:border-primary hover:text-primary transition-colors"
               >
                 <ShoppingBag className="h-4 w-4" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white shadow-xs">
+                    {cartCount}
+                  </span>
+                )}
               </Link>
 
               {/* Conditional Auth Section: Avatar/User Icon with Dropdown */}
@@ -239,8 +263,9 @@ export default function Navbar() {
                     <div className="absolute right-0 mt-2 w-52 rounded-2xl bg-white border border-gray-100 shadow-xl py-2 z-50 text-left animate-in fade-in slide-in-from-top-2 duration-200">
                       {/* User Info Header */}
                       <div className="px-4 py-2.5 border-b border-gray-100">
-                        <p className="text-xs text-gray-400 font-medium">Signed in as</p>
-                        <p className="text-sm font-bold text-gray-900 truncate">{userName}</p>
+                        <p className="text-xs text-gray-400 font-medium mb-1">Signed in as</p>
+                        <p className="text-sm font-bold text-gray-900 truncate mb-0.5">{userName}</p>
+                        <p className="text-xs text-gray-900 truncate">{userEmail}</p>
                       </div>
 
                       {/* Menu Links */}

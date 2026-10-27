@@ -9,7 +9,8 @@ import { useGetProductBySlugQuery } from "@/redux/services/product/product.api";
 import type { ProductDetailsVariant } from "@/types/product.type";
 import { useActiveCategory } from "@/utils/ActiveCategoryContext";
 
-// 🎯 আলাদা তৈরি করা AlsoLike কম্পোনেন্ট এবং WhatsApp ইউটিলিটি ইমপোর্ট
+// 🎯 AddToCartActionButton এবং WishlistActionButton ইমপোর্ট করা হলো
+import AddToCartActionButton from "@/components/common/AddToCartButtonAction";
 import WishlistActionButton from "@/components/common/WishlistActionButton";
 import { redirectToWhatsApp } from "@/utils";
 import AlsoLike from "./AlsoLike";
@@ -24,6 +25,8 @@ export default function ProductDetails() {
   });
 
   const product = response?.data;
+  console.log(product);
+
   const { setActiveCategory } = useActiveCategory();
 
   const [selectedVariant, setSelectedVariant] = useState<ProductDetailsVariant | null>(
@@ -376,26 +379,24 @@ export default function ProductDetails() {
               <WishlistActionButton
                 productId={product.id}
                 name={product.name}
+                slug={product.slug}
                 originalPrice={originalPrice}
                 salePrice={salePrice}
                 thumbnail={productImages[0] ?? null}
               />
 
-              <button
-                type="button"
-                disabled={!isInStock}
-                className="rounded-xl border border-primary px-3 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Add To Cart
-              </button>
-
-              <button
-                type="button"
-                disabled={!isInStock}
-                className="rounded-xl bg-primary px-3 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Buy Now
-              </button>
+              {/* 🎯 Add to Cart & Buy Now Action Buttons */}
+              <AddToCartActionButton
+                productId={product.id}
+                name={product.name}
+                slug={product.slug}
+                category={product.category?.name} // ক্যাটেগরি আইডি পাস করা হলো যাতে কার্ট পেজে সঠিক URL তৈরি হয়
+                activeVariant={currentVariant}
+                originalPrice={originalPrice}
+                salePrice={salePrice}
+                thumbnail={productImages[0] ?? null}
+                inStock={isInStock}
+              />
             </div>
 
             {/* 🎯 WhatsApp Button */}
@@ -407,7 +408,7 @@ export default function ProductDetails() {
                   displayPrice: displayPrice.toLocaleString(),
                 })
               }
-              className="inline-flex items-center justify-center gap-2.5 sm:gap-3 bg-[#1A1A1A] text-white w-full px-6 py-3.5 sm:py-4 rounded-full font-bold text-xs tracking-widest hover:bg-[#5A5A40] transition-colors shadow-sm"
+              className="inline-flex items-center justify-center gap-2.5 sm:gap-3 bg-[#1A1A1A] text-white w-full px-6 py-3.5 sm:py-4 rounded-full font-bold text-xs tracking-widest hover:bg-[#5A5A40] transition-colors shadow-sm cursor-pointer"
             >
               <MessageCircle size={18} className="sm:w-5 sm:h-5 text-green-400" />
               ASK ABOUT THIS PRODUCT ON WHATSAPP

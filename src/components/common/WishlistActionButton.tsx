@@ -5,6 +5,8 @@ import { toast } from "sonner";
 
 interface WishlistActionButtonProps {
   productId: number;
+  category?: string;
+  slug?: string;
   name: string;
   originalPrice: number;
   salePrice: number;
@@ -14,11 +16,15 @@ interface WishlistActionButtonProps {
 
 export default function WishlistActionButton({
   productId,
+  category,
+  slug,
   name,
   originalPrice,
   salePrice,
   thumbnail,
 }: WishlistActionButtonProps) {
+  // console.log(slug);
+  
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const [addToWishlist, { isLoading: isWishlistLoading }] = useAddToWishlistMutation();
 
@@ -36,8 +42,9 @@ export default function WishlistActionButton({
     if (!isAuthenticated) {
       const guestItem = {
         id: productId,
+        category: category,
         name: name,
-        slug: `product-${productId}`,
+        slug: slug,
         thumbnail: resolvedThumbnail,
         price: originalPrice,
         sale_price: salePrice,

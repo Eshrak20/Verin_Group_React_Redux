@@ -10,6 +10,9 @@ export default function ElecProductDetails() {
 
     const product = response?.data;
 
+    // console.log(product);
+    
+
     if (isLoading) {
         return <div className="mx-auto max-w-6xl px-4 py-12 text-center text-gray-500">Loading product details...</div>;
     }
@@ -31,7 +34,7 @@ export default function ElecProductDetails() {
                 </div>
 
                 {/* Product Information Section */}
-                <ElecProdDetInfo productId={product.id} name={product.name} variants={product.variants ?? []} deliveryCharge={product?.delivery_charge} />
+                <ElecProdDetInfo productId={product.id} category={product?.category?.name} slug={product.slug}  name={product.name} variants={product.variants ?? []} deliveryCharge={product?.delivery_charge} />
             </div>
 
             {/* Specifications & Warranty Section */}

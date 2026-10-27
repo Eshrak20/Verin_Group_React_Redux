@@ -3,7 +3,7 @@ import { getApiErrorMessage } from "@/lib/getApiErrorMessage";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useAddToWishlistMutation, useGetWishlistQuery } from "@/redux/services/wishlist/wishlist.api";
 import { setWishlistPage } from "@/redux/slices/wishlist.slice";
-import { Eye, ShoppingCart, Trash2 } from "lucide-react";
+import { Eye, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 import { toast } from "sonner";
@@ -15,17 +15,33 @@ const formatPrice = (price: number | string) =>
 
 interface GuestWishlistItem {
     id: number;
+    category: string;
     name: string;
     slug: string;
+    sku: string;
     thumbnail: string | null;
     price: number;
     sale_price: number;
 }
 
+// interface CartItem {
+//     id: number;
+//     category: string;
+//     name: string;
+//     slug?: string;
+//     sku?: string;
+//     price: number;
+//     sale_price: number;
+//     thumbnail: string | null;
+//     quantity: number;
+//     attributes?: Array<{ name: string; value: string }>;
+// }
+
 export default function MyWishlist() {
     const dispatch = useAppDispatch();
+    // const navigate = useNavigate();
     const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
-    
+
     // 🎯 আপনার তৈরি করা স্লাইস থেকে বর্তমান পেজ নম্বর রিড করা হচ্ছে
     const currentPage = useAppSelector((state) => state.wishlist.page);
 
@@ -38,7 +54,10 @@ export default function MyWishlist() {
         return [];
     });
 
-    // Logged-in ইউজারের জন্য RTK Query API কল (ডায়নামিক currentPage পাস করা হলো)
+    // console.log(guestWishlist);
+
+
+    // Logged-in ইউজারের জন্য RTK Query API কল (ডায়নামিক currentPage পাস করা হলো)
     const { data: response, isLoading, refetch } = useGetWishlistQuery(
         { page: currentPage, per_page: 12 },
         { skip: !isAuthenticated }
@@ -48,7 +67,7 @@ export default function MyWishlist() {
         try {
             const res = await addToWishlist({ product_id: productId }).unwrap();
             toast.success(res.message || "Product removed from wishlist");
-            refetch(); 
+            refetch();
         } catch (error) {
             toast.error(getApiErrorMessage(error))
         }
@@ -60,6 +79,51 @@ export default function MyWishlist() {
         localStorage.setItem("guest_wishlist", JSON.stringify(updatedList));
         toast.success("Product removed from wishlist");
     };
+
+    // 🎯 লোকালস্টোরেজে Add to Cart হ্যান্ডলার
+    // const handleAddToCart = (
+    //     product: { id: number; name: string; category: string; slug?: string; thumbnail: string | null; price: number; sale_price: number },
+    //     isBuyNow: boolean = false
+    // ) => {
+    //     console.log(product);
+
+    //     const cartItem: CartItem = {
+    //         id: product.id,
+    //         name: product.name,
+    //         category: product.category,
+    //         slug: product.slug || `product-${product.id}`,
+    //         sku: product?.variant.sku,
+    //         price: product.price,
+    //         sale_price: product.sale_price,
+    //         thumbnail: product.thumbnail,
+    //         quantity: 1,
+    //         attributes: [],
+    //     };
+
+    //     const existingCart: CartItem[] = JSON.parse(
+    //         localStorage.getItem("guest_cart") || "[]"
+    //     );
+
+    //     const existingIndex = existingCart.findIndex(
+    //         (item) => item.id === product.id && item.sku === "N/A"
+    //     );
+
+    //     if (existingIndex > -1) {
+    //         existingCart[existingIndex].quantity += 1;
+    //     } else {
+    //         existingCart.push(cartItem);
+    //     }
+
+    //     localStorage.setItem("guest_cart", JSON.stringify(existingCart));
+    //     window.dispatchEvent(new Event("storage")); // নেভবার ও কার্ট আপডেট করার জন্য
+
+    //     if (isBuyNow) {
+    //         toast.success("Proceeding to checkout...");
+    //         navigate("/checkout");
+    //     } else {
+    //         toast.success("Product added to cart!");
+    //     }
+    // };
 
     if (isAuthenticated && isLoading) {
         return (
@@ -86,6 +150,8 @@ export default function MyWishlist() {
                 <>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:mb-28">
                         {savedItems.map((item) => {
+                            console.log(item);
+
                             const product = item.product;
                             const primaryVariant = product.variants?.[0];
                             const price = Number(primaryVariant?.price ?? 0);
@@ -129,23 +195,41 @@ export default function MyWishlist() {
                                             >
                                                 <Eye className="h-4 w-4" />
                                             </Link>
-                                            <button
+
+                                            {/* 🎯 Add To Cart Button */}
+                                            {/* <button
                                                 type="button"
-                                                onClick={() => toast.success("Added to cart!")}
-                                                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white shadow-lg hover:bg-primary hover:scale-110 transition-all"
+                                                onClick={() => handleAddToCart({
+                                                    id: product.id,
+                                                    name: product.name,
+                                                    slug: product.slug,
+                                                    thumbnail: imageUrl,
+                                                    price,
+                                                    sale_price: salePrice,
+                                                }, false)}
+                                                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white shadow-lg hover:bg-primary hover:scale-110 transition-all cursor-pointer"
                                                 title="Add to Cart"
                                             >
                                                 <ShoppingCart className="h-4 w-4" />
-                                            </button>
+                                            </button> */}
                                         </div>
 
+                                        {/* 🎯 Buy Now Button */}
                                         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <Link
-                                                to={productUrl}
-                                                className="px-4 py-1.5 bg-white text-gray-900 font-semibold text-xs rounded-full shadow-md hover:bg-gray-100 hover:scale-105 transition-all"
+                                            <button
+                                                type="button"
+                                                // onClick={() => handleAddToCart({
+                                                //     id: product.id,
+                                                //     name: product.name,
+                                                //     slug: product.slug,
+                                                //     thumbnail: imageUrl,
+                                                //     price,
+                                                //     sale_price: salePrice,
+                                                // }, true)}
+                                                className="px-4 py-1.5 bg-white text-gray-900 font-semibold text-xs rounded-full shadow-md hover:bg-gray-100 hover:scale-105 transition-all cursor-pointer"
                                             >
                                                 Buy Now
-                                            </Link>
+                                            </button>
                                         </div>
                                     </div>
 
@@ -189,10 +273,15 @@ export default function MyWishlist() {
             {!isAuthenticated && guestWishlist.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {guestWishlist.map((item) => {
+                        // console.log(item);
+
                         const hasDiscount = item.sale_price > 0 && item.sale_price < item.price;
                         const displayPrice = hasDiscount ? item.sale_price : item.price;
                         const imageUrl = item.thumbnail || "/placeholder.png";
-                        const productUrl = `/products/${item.slug}`;
+                        const productUrl =
+                            item.category === "Electronics"
+                                ? `/electronics/${item.slug}`
+                                : `/products/${item.slug}`;
 
                         return (
                             <div
@@ -225,23 +314,42 @@ export default function MyWishlist() {
                                         >
                                             <Eye className="h-4 w-4" />
                                         </Link>
-                                        <button
+
+                                        {/* 🎯 Add To Cart Button */}
+                                        {/* <button
                                             type="button"
-                                            onClick={() => toast.success("Added to cart!")}
-                                            className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white shadow-lg hover:bg-primary hover:scale-110 transition-all"
+                                            onClick={() => handleAddToCart({
+                                                id: item.id,
+                                                category_id: item.category_id,
+                                                name: item.name,
+                                                slug: item.slug,
+                                                thumbnail: imageUrl,
+                                                price: item.price,
+                                                sale_price: item.sale_price,
+                                            }, false)}
+                                            className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white shadow-lg hover:bg-primary hover:scale-110 transition-all cursor-pointer"
                                             title="Add to Cart"
                                         >
                                             <ShoppingCart className="h-4 w-4" />
-                                        </button>
+                                        </button> */}
                                     </div>
 
+                                    {/* 🎯 Buy Now Button */}
                                     <div className="absolute bottom-3 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <Link
-                                            to={productUrl}
-                                            className="px-4 py-1.5 bg-white text-gray-900 font-semibold text-xs rounded-full shadow-md hover:bg-gray-100 hover:scale-105 transition-all whitespace-nowrap"
+                                        <button
+                                            type="button"
+                                            // onClick={() => handleAddToCart({
+                                            //     id: item.id,
+                                            //     name: item.name,
+                                            //     slug: item.slug,
+                                            //     thumbnail: imageUrl,
+                                            //     price: item.price,
+                                            //     sale_price: item.sale_price,
+                                            // }, true)}
+                                            className="px-4 py-1.5 bg-white text-gray-900 font-semibold text-xs rounded-full shadow-md hover:bg-gray-100 hover:scale-105 transition-all whitespace-nowrap cursor-pointer"
                                         >
                                             Buy Now
-                                        </Link>
+                                        </button>
                                     </div>
                                 </div>
 

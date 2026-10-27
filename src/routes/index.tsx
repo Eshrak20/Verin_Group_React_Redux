@@ -5,6 +5,7 @@ import GlobalErrorPage from "@/components/layout/GlobalErrorPage";
 import { ForgotPassword } from "@/pages/authentication/ForgotPassword";
 import ResetPassword from "@/pages/authentication/ResetPassword";
 import VerifyOtp from "@/pages/authentication/VerifyOtp";
+import MyCart from "@/pages/dashboard/MyCart";
 import MyProfile from "@/pages/dashboard/MyProfile";
 import MyWishlist from "@/pages/dashboard/MyWishlist";
 import ElecProductDetails from "@/pages/electronics/details/ElecProductDetails";
@@ -92,6 +93,10 @@ export const router = createBrowserRouter([
             {
                 path: "/my-wishlist",
                 element: <Suspense fallback={<PageLoader />}><MyWishlist /></Suspense>,
+            },
+            {
+                path: "/my-cart",
+                element: <Suspense fallback={<PageLoader />}><MyCart /></Suspense>,
             },
             {
                 path: "/my-profile",

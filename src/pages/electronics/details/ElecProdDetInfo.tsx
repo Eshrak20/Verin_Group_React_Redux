@@ -1,21 +1,24 @@
+import AddToCartActionButton from "@/components/common/AddToCartButtonAction";
+import WishlistActionButton from "@/components/common/WishlistActionButton";
 import type { ProductDeliveryCharge, ProductDetailsVariant } from "@/types/product.type";
 import type { ProductWishlistVariant } from "@/types/wishlist.type";
-import { redirectToWhatsApp } from "@/utils"; // 👈 কমন ফাইল থেকে ইমপোর্ট করা হলো
+import { redirectToWhatsApp } from "@/utils";
 import {
-    Barcode,
-    Check,
-    Copy,
-    Info,
-    MessageCircle,
-    Truck
+  Barcode,
+  Check,
+  Copy,
+  Info,
+  MessageCircle,
+  Truck
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import WishlistActionButton from "../../../components/common/WishlistActionButton";
 
 interface ElecProdDetInfoProps {
   productId: number;
+  category?: string
   name: string;
+  slug?: string;
   variants: ProductDetailsVariant[];
   deliveryCharge?: ProductDeliveryCharge | null;
 }
@@ -30,19 +33,20 @@ const getPrice = (price: string | number | undefined | null) =>
 
 export default function ElecProdDetInfo({
   productId,
+  category,
   name,
+  slug,
   variants,
   deliveryCharge,
 }: ElecProdDetInfoProps) {
+  console.log(slug);
+
   const [selectedSku, setSelectedSku] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
   const activeVariant =
     variants.find((variant) => variant.sku === selectedSku) ??
     variants[0];
-
-  console.log(activeVariant);
-
 
   const originalPrice = getPrice(activeVariant?.price);
   const salePrice = getPrice(activeVariant?.sale_price);
@@ -56,6 +60,8 @@ export default function ElecProdDetInfo({
   });
 
   const stock = Number(variantWithStock?.stock ?? 0);
+  console.log(stock);
+
   const isActive =
     variantWithStock?.status === undefined ||
     variantWithStock.status === 1 ||
@@ -66,12 +72,13 @@ export default function ElecProdDetInfo({
   let stockStatusText = "Out of Stock";
   let stockStatusColor = "text-red-600";
 
-  if (isActive && stock > 5) {
-    stockStatusText = "In Stock";
-    stockStatusColor = "text-green-700";
-  } else if (isActive && stock > 0 && stock <= 9) {
+  if (isActive && stock > 0 && stock <= 9) {
     stockStatusText = `Limited Stock`;
     stockStatusColor = "text-amber-600";
+
+  } else if (isActive && stock) {
+    stockStatusText = "In Stock";
+    stockStatusColor = "text-green-700";
   }
 
   const insideCharge = Number(deliveryCharge?.inside_dhaka_charge ?? 0);
@@ -126,13 +133,21 @@ export default function ElecProdDetInfo({
     }
   };
 
-  // 🎯 এখানে কমন ফাংশনটি কল করা হলো
   const handleWhatsAppRedirect = () => {
     redirectToWhatsApp({
       productName: name,
       displayPrice: formatPrice(displayPrice),
     });
   };
+
+  const variantThumbnail =
+    activeVariant && typeof activeVariant === "object"
+      ? ("thumbnail" in activeVariant ? (activeVariant as { thumbnail?: string | null }).thumbnail : null) ??
+      ("images" in activeVariant ? (activeVariant as { images?: string[] }).images?.[0] : null)
+      : variants[0] && typeof variants[0] === "object"
+        ? ("thumbnail" in variants[0] ? (variants[0] as { thumbnail?: string | null }).thumbnail : null) ??
+        ("images" in variants[0] ? (variants[0] as { images?: string[] }).images?.[0] : null)
+        : null;
 
   return (
     <div className="flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-6">
@@ -356,35 +371,26 @@ export default function ElecProdDetInfo({
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <WishlistActionButton
           productId={productId}
+          category={category}
+          slug={slug}
           name={name}
           originalPrice={originalPrice}
           salePrice={salePrice}
-          thumbnail={
-            activeVariant && typeof activeVariant === "object"
-              ? ("thumbnail" in activeVariant ? (activeVariant as { thumbnail?: string | null }).thumbnail : null) ??
-              ("images" in activeVariant ? (activeVariant as { images?: string[] }).images?.[0] : null)
-              : variants[0] && typeof variants[0] === "object"
-                ? ("thumbnail" in variants[0] ? (variants[0] as { thumbnail?: string | null }).thumbnail : null) ??
-                ("images" in variants[0] ? (variants[0] as { images?: string[] }).images?.[0] : null)
-                : null
-          }
+          thumbnail={variantThumbnail}
         />
 
-        <button
-          type="button"
-          disabled={!inStock}
-          className="rounded-xl border border-elec px-3 py-3 text-sm font-semibold text-elec transition-colors hover:bg-elec/5 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Add To Cart
-        </button>
-
-        <button
-          type="button"
-          disabled={!inStock}
-          className="rounded-xl bg-elec px-3 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-elec/90 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Buy Now
-        </button>
+        {/* Add to Cart & Buy Now Buttons */}
+        <AddToCartActionButton
+          productId={productId}
+          name={name}
+          category={category}
+          slug={slug}
+          activeVariant={activeVariant}
+          originalPrice={originalPrice}
+          salePrice={salePrice}
+          thumbnail={variantThumbnail}
+          inStock={inStock}
+        />
       </div>
 
       {/* WhatsApp */}
