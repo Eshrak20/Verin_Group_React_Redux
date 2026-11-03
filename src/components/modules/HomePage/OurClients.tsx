@@ -28,7 +28,7 @@ export default function OurClients() {
   });
 
   // 🎯 skip: !inView দিয়ে API Call ডিলে করা হয়েছে
-  const { data, isLoading, isError } = useGetClientQuery({}, { skip: !inView });
+  const { data, isLoading, isError } = useGetClientQuery({}, { skip: !inView });  
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);

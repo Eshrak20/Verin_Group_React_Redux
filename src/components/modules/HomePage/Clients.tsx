@@ -1,12 +1,11 @@
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import ClientTestimonials from "./ClientTestimonials";
-import OurClients from "./OurClients";
+// import OurClients from "./OurClients";
 
 export default function Clients() {
   return (
     <div className="max-w-6xl mx-auto w-full">
-      <div className="flex justify-center">
-        {/* 🎯 Header with Scroll-Triggered Fade-In Animation */}
+      {/* <div className="flex justify-center">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -18,7 +17,7 @@ export default function Clients() {
         </motion.h1>
       </div>
 
-      <OurClients />
+      <OurClients /> */}
 
       <div className="border-t border-gray-200 dark:border-gray-700 mx-3 sm:mx-6 lg:mx-6" />
 
