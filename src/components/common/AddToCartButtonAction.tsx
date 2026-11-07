@@ -1,4 +1,4 @@
-import type { ProductDetailsVariant } from "@/types/product.type";
+import type { ProductDeliveryCharge, ProductDetailsVariant } from "@/types/product.type";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -9,6 +9,7 @@ interface CartItem {
     slug?: string;
     sku?: string;
     stock: number;
+    deliveryCharge?: ProductDeliveryCharge
     price: number;
     sale_price: number;
     thumbnail?: string | null;
@@ -26,6 +27,7 @@ interface AddToCartActionButtonProps {
     salePrice: number;
     thumbnail?: string | null;
     inStock: boolean;
+    deliveryCharge?: ProductDeliveryCharge
 }
 
 export default function AddToCartActionButton({
@@ -38,7 +40,11 @@ export default function AddToCartActionButton({
     salePrice,
     thumbnail,
     inStock,
+    deliveryCharge
 }: AddToCartActionButtonProps) {
+
+    console.log(activeVariant);
+    
 
     // console.log(activeVariant.sku);
 
@@ -59,6 +65,7 @@ export default function AddToCartActionButton({
             slug: slug || `product-${productId}`,
             sku: activeVariant?.sku || "N/A",
             stock: Number(activeVariant?.stock ?? 0),
+            deliveryCharge,
             price: originalPrice,
             sale_price: salePrice,
             thumbnail,

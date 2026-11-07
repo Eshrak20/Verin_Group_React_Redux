@@ -1,7 +1,10 @@
-import { ArrowRight, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import OrderSummary from "@/components/common/OrderSummary";
+import { formatPrice } from "@/lib/utils";
+import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 interface CartItem {
   id: number;
@@ -13,34 +16,78 @@ interface CartItem {
   sale_price: number;
   thumbnail: string | null;
   quantity: number;
-  stock: number; // 🎯 স্টক ইনফরমেশন যুক্ত করা হলো
+  stock: number;
+  deliveryCharge?: {
+    inside_dhaka_charge?: number;
+    outside_dhaka_charge?: number;
+  } | null;
   attributes?: Array<{ name: string; value: string }>;
 }
-
-const formatPrice = (price: number | string) =>
-  new Intl.NumberFormat("en-BD", {
-    maximumFractionDigits: 0,
-  }).format(Number(price));
 
 export default function MyCart() {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [selectedItemIds, setSelectedItemIds] = useState<number[]>([]);
 
-  // লোকালস্টোরেজ থেকে কার্ট আইটেম লোড করা
+  // লোকালস্টোরেজ থেকে কার্ট আইটেম লোড করা এবং ডিফল্টভাবে সব সিলেক্ট করে রাখা
   useEffect(() => {
     const loadCart = () => {
       const storedCart = JSON.parse(localStorage.getItem("guest_cart") || "[]");
       setCartItems(storedCart);
+      // প্রথমে সব আইটেম সিলেক্টেড থাকবে
+      setSelectedItemIds(storedCart.map((item: CartItem) => item.id));
     };
 
     loadCart();
 
-    // উইন্ডো স্টোরেজ ইভেন্ট লিসেনার যাতে অন্য ট্যাব বা কম্পোনেন্ট থেকে আপডেট হলে এখানে রিফ্লেক্ট করে
     window.addEventListener("storage", loadCart);
     return () => window.removeEventListener("storage", loadCart);
   }, []);
 
-  // 🎯 কোয়ান্টিটি আপডেট হ্যান্ডলার (স্টক লিমিটেড চেকসহ)
+  // Select All Toggle
+  const handleToggleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedItemIds(cartItems.map((item) => item.id));
+    } else {
+      setSelectedItemIds([]);
+    }
+  };
+
+  // Individual Item Select Toggle
+  const handleToggleSelectItem = (id: number) => {
+    setSelectedItemIds((prev) =>
+      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
+    );
+  };
+
+  const isAllSelected = cartItems.length > 0 && selectedItemIds.length === cartItems.length;
+
+  // 🎯 সিলেক্টেড আইটেমগুলোর সাবটোটাল, কোয়ান্টিটি এবং শিপিং ফি ক্যালকুলেশন
+  const { selectedSubtotal, selectedTotalQuantity, selectedShippingFee } = useMemo(() => {
+    let subtotal = 0;
+    let totalQty = 0;
+    let shipping = 0;
+
+    cartItems.forEach((item) => {
+      if (selectedItemIds.includes(item.id)) {
+        const effectivePrice = item.sale_price > 0 && item.sale_price < item.price ? item.sale_price : item.price;
+        subtotal += effectivePrice * item.quantity;
+        totalQty += item.quantity;
+
+        // আইটেমের নিজস্ব ডেলিভারি চার্জ অথবা ডিফল্ট ১৫০ টাকা
+        const itemShipping = item.deliveryCharge?.inside_dhaka_charge ?? 150;
+        shipping += Number(itemShipping);
+      }
+    });
+
+    return {
+      selectedSubtotal: subtotal,
+      selectedTotalQuantity: totalQty,
+      selectedShippingFee: shipping,
+    };
+  }, [cartItems, selectedItemIds]);
+
+  // কোয়ান্টিটি আপডেট হ্যান্ডলার (স্টক লিমিট চেকসহ)
   const handleUpdateQuantity = (index: number, delta: number) => {
     const updatedCart = [...cartItems];
     const currentItem = updatedCart[index];
@@ -60,50 +107,116 @@ export default function MyCart() {
   };
 
   // নির্দিষ্ট আইটেম কার্ট থেকে রিমুভ করা
-  const handleRemoveItem = (index: number) => {
-    const updatedCart = cartItems.filter((_, i) => i !== index);
-    setCartItems(updatedCart);
-    localStorage.setItem("guest_cart", JSON.stringify(updatedCart));
-    window.dispatchEvent(new Event("storage"));
-    toast.success("Item removed from cart");
+  const handleRemoveItem = (item: CartItem, index: number) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `Do you want to remove "${item.name}" from your cart?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, remove it!",
+      cancelButtonText: "Cancel",
+      buttonsStyling: false,
+      customClass: {
+        popup: "rounded-2xl border border-border bg-card p-6 text-foreground shadow-2xl",
+        title: "text-xl font-bold text-foreground",
+        htmlContainer: "text-sm text-muted-foreground mt-2",
+        actions: "flex items-center justify-center gap-3 mt-6 w-full",
+        confirmButton: "rounded-lg bg-destructive px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-destructive/90",
+        cancelButton: "rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedCart = cartItems.filter((_, i) => i !== index);
+        setCartItems(updatedCart);
+        localStorage.setItem("guest_cart", JSON.stringify(updatedCart));
+        window.dispatchEvent(new Event("storage"));
+        setSelectedItemIds((prev) => prev.filter((id) => id !== item.id));
+        toast.success("Item removed from cart");
+      }
+    });
   };
 
-  // 🎯 শুধুমাত্র এই অ্যাট্রিবিউটগুলোই স্ক্রিনে দেখাবে, বাকিগুলো ফিল্টার হয়ে বাদ যাবে
-  const allowedAttributes = ["ram size", "color", "internal storage", "storage"];
+  const handleClearCart = () => {
+    Swal.fire({
+      title: "Clear entire cart?",
+      text: "Are you sure you want to remove all items from your cart?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, clear cart!",
+      cancelButtonText: "Cancel",
+      buttonsStyling: false,
+      customClass: {
+        popup: "rounded-2xl border border-border bg-card p-6 text-foreground shadow-2xl",
+        title: "text-xl font-bold text-foreground",
+        htmlContainer: "text-sm text-muted-foreground mt-2",
+        actions: "flex items-center justify-center gap-3 mt-6 w-full",
+        confirmButton: "rounded-lg bg-destructive px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-destructive/90",
+        cancelButton: "rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setCartItems([]);
+        setSelectedItemIds([]);
+        localStorage.removeItem("guest_cart");
+        window.dispatchEvent(new Event("storage"));
+        toast.success("Cart cleared successfully.");
+      }
+    });
+  };
 
+  // অ্যাট্রিবিউট ফিল্টারিং
+  const allowedAttributes = ["ram size", "color", "internal storage", "storage"];
   const getFilteredAttributes = (attributes?: Array<{ name: string; value: string }>) => {
     if (!attributes || attributes.length === 0) return [];
-
     return attributes.filter((attr) => {
       const lowerAttrName = attr.name.toLowerCase();
       return allowedAttributes.some((allowed) => lowerAttrName.includes(allowed));
     });
   };
 
-  // সাবটোটাল ক্যালকুলেশন
-  const subtotal = cartItems.reduce((acc, item) => {
-    const effectivePrice = item.sale_price > 0 && item.sale_price < item.price ? item.sale_price : item.price;
-    return acc + effectivePrice * item.quantity;
-  }, 0);
-
-  const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const handleProceedToCheckout = () => {
+    if (selectedItemIds.length === 0) {
+      toast.error("Please select at least one item to proceed to checkout.");
+      return;
+    }
+    // লোকালস্টোরেজ থেকে শুধুমাত্র সিলেক্টেড আইটেমগুলো চেকআউটে পাস করার জন্য ফিল্টার করা যায়
+    const selectedItems = cartItems.filter((item) => selectedItemIds.includes(item.id));
+    navigate("/checkout", { state: { selectedItems, selectedItemIds } });
+  };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-0 min-h-[70vh]">
-      {/* Top Continue Shopping Link */}
-      <div className="flex justify-end mb-6">
-        <Link
-          to="/electronics"
-          className="text-xs sm:text-sm font-semibold text-primary hover:underline flex items-center gap-1.5"
-        >
-          ← Continue Shopping
-        </Link>
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-0 min-h-[70vh] space-y-6">
+      {/* Top Continue Shopping Link & Clear Cart */}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+          Shopping Cart
+        </h1>
+        <div className="flex items-center gap-4">
+          {cartItems.length > 0 && (
+            <button
+              type="button"
+              onClick={handleClearCart}
+              className="flex items-center gap-1.5 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-1.5 text-xs font-semibold text-destructive transition-colors hover:bg-destructive/20 cursor-pointer"
+            >
+              <Trash2 className="size-3.5" />
+              <span>Clear Cart</span>
+            </button>
+          )}
+          <Link
+            to="/electronics"
+            className="text-xs sm:text-sm font-semibold text-primary hover:underline flex items-center gap-1.5"
+          >
+            ← Continue Shopping
+          </Link>
+        </div>
       </div>
 
       {cartItems.length === 0 ? (
         /* Empty State */
-        <div className="text-center py-20 bg-white rounded-2xl border border-gray-100 shadow-xs">
-          <ShoppingBag className="mx-auto h-16 w-16 text-gray-300 mb-4" />
+        <div className="flex min-h-64 flex-col items-center justify-center rounded-lg border border-dashed border-border bg-card p-8 text-center">
+          <div className="mb-3 flex size-14 items-center justify-center rounded-full bg-muted">
+            <ShoppingBag className="size-7 text-muted-foreground" />
+          </div>
           <h2 className="text-xl font-bold text-gray-800 mb-2">Your Cart is Empty</h2>
           <p className="text-gray-500 text-sm mb-6">Looks like you haven't added anything to your cart yet.</p>
           <Link
@@ -117,32 +230,28 @@ export default function MyCart() {
         /* Cart Layout */
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left: Cart Items List */}
-          <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-sm">
-            <div className="flex items-center justify-between pb-4 mb-6 border-b border-gray-100">
-              <div className="flex items-center gap-3">
-                <h1 className="text-xl sm:text-2xl font-extrabold text-gray-900">Shopping Cart</h1>
-                <span className="rounded-full bg-primary/10 px-3 py-0.5 text-xs font-bold text-primary">
-                  {totalItems} {totalItems === 1 ? "item" : "items"}
-                </span>
-              </div>
-              <span className="text-xs text-gray-400">You have {totalItems} item in your cart</span>
-            </div>
-
-            {/* Table Header for Desktop */}
-            <div className="hidden sm:grid grid-cols-12 text-xs font-bold text-gray-400 uppercase tracking-wider pb-3 border-b border-gray-100">
-              <div className="col-span-6">Product</div>
-              <div className="col-span-2 text-center">Price</div>
-              <div className="col-span-2 text-center">Quantity</div>
-              <div className="col-span-2 text-right">Total</div>
+          <div className="space-y-4 lg:col-span-2">
+            {/* Select All Bar */}
+            <div className="flex items-center justify-between rounded-xl border border-border/70 bg-card px-4 py-3">
+              <label className="flex items-center gap-3 cursor-pointer text-xs sm:text-sm font-semibold text-foreground">
+                <input
+                  type="checkbox"
+                  checked={isAllSelected}
+                  onChange={handleToggleSelectAll}
+                  className="size-4 rounded border-border text-primary focus:ring-primary cursor-pointer"
+                />
+                <span>SELECT ALL ({cartItems.length} ITEM(S))</span>
+              </label>
             </div>
 
             {/* Items Loop */}
-            <div className="divide-y divide-gray-100">
+            <div className="space-y-3">
               {cartItems.map((item, index) => {
                 const hasDiscount = item.sale_price > 0 && item.sale_price < item.price;
                 const displayPrice = hasDiscount ? item.sale_price : item.price;
                 const itemTotal = displayPrice * item.quantity;
                 const filteredAttributes = getFilteredAttributes(item.attributes);
+                const isSelected = selectedItemIds.includes(item.id);
 
                 const productUrl =
                   item.category === "Electronics"
@@ -150,9 +259,22 @@ export default function MyCart() {
                     : `/products/${item.slug}`;
 
                 return (
-                  <div key={`${item.id}-${item.sku || index}`} className="py-4 sm:grid sm:grid-cols-12 sm:items-center gap-4 flex flex-col">
-                    {/* Product Info */}
-                    <div className="col-span-6 flex items-center gap-4">
+                  <div
+                    key={`${item.id}-${item.sku || index}`}
+                    className={`relative flex flex-col gap-4 rounded-xl border bg-card p-4 sm:flex-row sm:items-center sm:justify-between transition-colors ${
+                      isSelected ? "border-primary/60 bg-primary/5" : "border-border/75"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3.5">
+                      {/* Checkbox */}
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => handleToggleSelectItem(item.id)}
+                        className="size-4 shrink-0 rounded border-border text-primary focus:ring-primary cursor-pointer"
+                      />
+
+                      {/* Product Image */}
                       <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-50 rounded-xl overflow-hidden shrink-0 border border-gray-100 flex items-center justify-center p-1">
                         <img
                           src={item.thumbnail || "/placeholder.png"}
@@ -160,15 +282,17 @@ export default function MyCart() {
                           className="w-full h-full object-contain"
                         />
                       </div>
+
+                      {/* Product Info */}
                       <div className="min-w-0 flex-1">
                         <Link to={productUrl} className="font-semibold text-gray-900 text-sm line-clamp-1 hover:text-primary">
                           {item.name}
                         </Link>
-                        {item.sku && (
+                        {item.sku && item.sku !== "N/A" && (
                           <p className="text-xs text-gray-400 mt-0.5 font-mono">SKU: {item.sku}</p>
                         )}
 
-                        {/* Filtered Attributes Display */}
+                        {/* Filtered Attributes */}
                         {filteredAttributes.length > 0 && (
                           <div className="flex flex-wrap gap-1.5 mt-1.5">
                             {filteredAttributes.map((attr, attrIdx) => (
@@ -181,50 +305,41 @@ export default function MyCart() {
                       </div>
                     </div>
 
-                    {/* Price */}
-                    <div className="col-span-2 text-left sm:text-center">
-                      <span className="sm:hidden text-xs text-gray-400 mr-2">Price:</span>
-                      <span className="text-sm font-bold text-gray-900">৳{formatPrice(displayPrice)}</span>
-                      {hasDiscount && (
-                        <span className="block text-xs text-gray-400 line-through">৳{formatPrice(item.price)}</span>
-                      )}
-                    </div>
-
-                    {/* Quantity Selector */}
-                    <div className="col-span-2 flex items-center justify-start sm:justify-center">
-                      <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-gray-50/50">
+                    {/* Price & Quantity & Delete */}
+                    <div className="flex items-center justify-between border-t border-border/50 pt-3 sm:flex-col sm:items-end sm:gap-2 sm:border-t-0 sm:pt-0">
+                      <div className="flex items-center gap-3">
+                        <div className="text-sm font-bold text-primary sm:text-base">
+                          ৳{formatPrice(itemTotal)}
+                        </div>
                         <button
                           type="button"
+                          onClick={() => handleRemoveItem(item, index)}
+                          className="flex size-7 items-center justify-center rounded-full bg-muted/60 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive cursor-pointer"
+                          title="Remove item"
+                        >
+                          <Trash2 className="size-3.5" />
+                        </button>
+                      </div>
+
+                      {/* Quantity Controls */}
+                      <div className="flex items-center rounded-lg border border-border bg-background shadow-2xs">
+                        <button
+                          type="button"
+                          disabled={item.quantity <= 1}
                           onClick={() => handleUpdateQuantity(index, -1)}
-                          className="p-1.5 hover:bg-gray-200 text-gray-600 transition-colors cursor-pointer"
+                          className="p-1.5 hover:bg-muted text-gray-600 transition-colors cursor-pointer disabled:opacity-40"
                         >
                           <Minus size={14} />
                         </button>
-                        <span className="px-3 text-xs font-bold text-gray-800">{item.quantity}</span>
+                        <span className="px-3 text-xs font-semibold tabular-nums text-foreground">{item.quantity}</span>
                         <button
                           type="button"
                           onClick={() => handleUpdateQuantity(index, 1)}
-                          className="p-1.5 hover:bg-gray-200 text-gray-600 transition-colors cursor-pointer"
+                          className="p-1.5 hover:bg-muted text-gray-600 transition-colors cursor-pointer disabled:opacity-40"
                         >
                           <Plus size={14} />
                         </button>
                       </div>
-                    </div>
-
-                    {/* Total & Delete */}
-                    <div className="col-span-2 flex items-center justify-between sm:justify-end gap-3">
-                      <div className="text-right">
-                        <span className="sm:hidden text-xs text-gray-400 mr-2">Total:</span>
-                        <span className="text-sm font-extrabold text-primary">৳{formatPrice(itemTotal)}</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveItem(index)}
-                        className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                        title="Remove item"
-                      >
-                        <Trash2 size={16} />
-                      </button>
                     </div>
                   </div>
                 );
@@ -236,52 +351,16 @@ export default function MyCart() {
             </div>
           </div>
 
-          {/* Right: Order Summary */}
+          {/* Right: Order Summary (Reusable Component) */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm sticky top-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4 pb-3 border-b border-gray-100">
-                Order Summary
-              </h2>
-
-              <div className="space-y-3 text-sm mb-6">
-                <div className="flex justify-between text-gray-600">
-                  <span>Subtotal ({totalItems} items)</span>
-                  <span className="font-semibold text-gray-900">৳{formatPrice(subtotal)}</span>
-                </div>
-                <div className="flex justify-between text-gray-600">
-                  <span>Shipping Fee</span>
-                  <span className="text-xs text-gray-400">Calculated at checkout</span>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-gray-100 mb-6">
-                <div className="flex justify-between items-center">
-                  <span className="text-base font-bold text-gray-900">Total</span>
-                  <span className="text-xl font-extrabold text-primary">৳{formatPrice(subtotal)}</span>
-                </div>
-                <p className="text-[10px] text-gray-400 mt-1">VAT included where applicable</p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => {
-                  toast.success("Proceeding to checkout...");
-                  navigate("/checkout");
-                }}
-                className="w-full flex items-center justify-center gap-2 bg-primary text-white py-3.5 px-4 rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors shadow-sm cursor-pointer"
-              >
-                Proceed to Checkout <ArrowRight size={16} />
-              </button>
-
-              <div className="mt-6 space-y-2 text-xs text-gray-500 border-t border-gray-100 pt-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-green-600 font-bold">✓</span> Safe and Secure Checkout
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-green-600 font-bold">✓</span> Original & Guaranteed Products
-                </div>
-              </div>
-            </div>
+            <OrderSummary
+              subtotal={selectedSubtotal}
+              totalItemsCount={selectedTotalQuantity}
+              shippingFee={selectedShippingFee}
+              onActionClick={handleProceedToCheckout}
+              actionButtonText="PROCEED TO CHECKOUT"
+              isActionDisabled={selectedItemIds.length === 0}
+            />
           </div>
         </div>
       )}

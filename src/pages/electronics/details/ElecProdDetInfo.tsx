@@ -20,7 +20,7 @@ interface ElecProdDetInfoProps {
   name: string;
   slug?: string;
   variants: ProductDetailsVariant[];
-  deliveryCharge?: ProductDeliveryCharge | null;
+  deliveryCharge?: ProductDeliveryCharge;
 }
 
 const formatPrice = (price: number) =>
@@ -390,6 +390,7 @@ export default function ElecProdDetInfo({
           salePrice={salePrice}
           thumbnail={variantThumbnail}
           inStock={inStock}
+          deliveryCharge={deliveryCharge}
         />
       </div>
 
