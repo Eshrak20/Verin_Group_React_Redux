@@ -17,7 +17,6 @@ export const checkIsActive = (
   activeCategory: string | null,
   categories: any[]
 ): boolean => {
-  // ১. ইউআরএল প্যারামিটারে company থাকলে
   if (currentCompanyParam) {
     if (currentCompanyParam === "verin-decor" && link.path === "/decor") return true;
     if (currentCompanyParam === "verin-electronics" && link.path === "/electronics") return true;
@@ -30,7 +29,6 @@ export const checkIsActive = (
     return locationPathname === "/";
   }
 
-  // ৩. সার্চ পেজে থাকলে dynamic category_id ম্যাচ করা
   if (locationPathname === "/search" && currentCategoryId) {
     const matchedCategory = categories.find(
       (cat: any) => cat.name?.toLowerCase() === link.label.toLowerCase()
@@ -41,12 +39,10 @@ export const checkIsActive = (
     }
   }
 
-  // ৪. নির্দিষ্ট পেজের রুটে থাকলে
   if (locationPathname.startsWith(link.path)) {
     return true;
   }
 
-  // ৫. সিঙ্গেল প্রোডাক্ট পেজে থাকলে
   if (
     locationPathname.startsWith("/products") &&
     activeCategory &&

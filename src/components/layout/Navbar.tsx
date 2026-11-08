@@ -44,9 +44,8 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0); // 🎯 কার্ট আইটেম কাউন্ট স্টেট
+  const [cartCount, setCartCount] = useState(0);
 
-  // 🎯 লোকালস্টোরেজ থেকে কার্ট আইটেম কাউন্ট রিড করার এফেক্ট
   useEffect(() => {
     const updateCartCount = () => {
       try {
@@ -190,7 +189,7 @@ export default function Navbar() {
         <div className="flex items-center bg-white border-b-2 border-gray-200/70 h-16 shadow-lg shadow-black/5 backdrop-blur-md">
           {/* Main Container */}
           <div className="max-w-6xl mx-auto flex w-full items-center justify-between px-4 sm:px-6 lg:px-0 gap-4">
-            {/* Left Section: Logo & Navlinks */}
+            {/* Left Section: Logo & Nav links */}
             <div className="flex items-center gap-6 lg:gap-14 shrink-0">
               <NavLogo
                 logoPath={logoPath}

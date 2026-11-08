@@ -18,7 +18,6 @@ export default function ClientsPage() {
 
   const rawClients: Client[] = data?.data ?? [];
 
-  // Active ক্লায়েন্ট ফিল্টার এবং Sort করা
   const clients = rawClients
     .filter((client) => Number(client.is_active) === 1)
     .sort((a, b) => Number(a.sort_order) - Number(b.sort_order));
@@ -83,8 +82,8 @@ export default function ClientsPage() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{
                 duration: 0.5,
-                delay: index * 0.05, // FeaturedPieces-এর মতো ১টির পর ১টি স্মুথ স্ট্যাগার এনিমেশন
-                ease: [0.16, 1, 0.3, 1], // অতি স্মুথ বেজিয়ার কার্ভ
+                delay: index * 0.05,
+                ease: [0.16, 1, 0.3, 1],
               }}
               className="
                 group bg-white dark:bg-slate-800 

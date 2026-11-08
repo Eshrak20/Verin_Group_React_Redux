@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-// 🎯 ক্যাটাগরি আইডি থেকে ইংরেজি নামের ম্যাপ
 const BLOG_CATEGORIES: Record<number, string> = {
   1: "Tech",
   2: "Business",
@@ -43,7 +42,6 @@ export default function BlogsPage() {
 
   const rawBlogs: Blog[] = data?.data ?? [];
 
-  // Published ব্লগ ফিল্টার করা
   const blogs = rawBlogs.filter((blog) => blog.status === "published");
 
   // Date Format Helper
@@ -57,7 +55,6 @@ export default function BlogsPage() {
     });
   };
 
-  // 🎯 Dynamic Category Name Helper (সবসময় ইংরেজিতে রিটার্ন করবে)
   const getCategoryName = (blog: Blog): string => {
     if (blog.category?.name) return blog.category.name;
     if (blog.category_id && BLOG_CATEGORIES[blog.category_id]) {
@@ -87,7 +84,6 @@ export default function BlogsPage() {
     );
   }
 
-  // Error অথবা No Data State
   if (isError) {
     return (
       <div className="min-h-screen flex items-center justify-center text-red-500 font-medium animate-pulse">
@@ -183,7 +179,7 @@ export default function BlogsPage() {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{
                   duration: 0.5,
-                  delay: (index % 3) * 0.15, // একটার পর একটা নিচ থেকে আসার জন্য সিকুয়েন্সিয়াল বিলম্ব
+                  delay: (index % 3) * 0.15, 
                   ease: "easeOut",
                 }}
               >

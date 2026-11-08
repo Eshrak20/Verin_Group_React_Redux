@@ -34,7 +34,6 @@ export interface DeliveryCharge {
     updated_at: string;
 }
 
-// Product Details Type (GET /saved-products এর ভেতরের প্রোডাক্ট অবজেক্ট)
 export interface WishlistProduct {
     id: number;
     name: string;

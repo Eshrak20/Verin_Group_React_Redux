@@ -9,13 +9,12 @@ import MyCart from "@/pages/dashboard/MyCart";
 import MyProfile from "@/pages/dashboard/MyProfile";
 import MyWishlist from "@/pages/dashboard/MyWishlist";
 import ElecProductDetails from "@/pages/electronics/details/ElecProductDetails";
-import Homepage from "@/pages/Homepage"; // হোমপেজ সরাসরি থাকবে (Fast LCP)
+import Homepage from "@/pages/Homepage";
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
 import App from "../App";
 import PublicOnlyRoute from "./PublicOnlyRoute";
 
-// 🎯 বাকি পেজগুলো Lazy Loading করা হলো
 const DecorPage = lazy(() => import("@/pages/DecorPage"));
 const ClothingPage = lazy(() => import("@/pages/ClothingPage"));
 const LogisticsPage = lazy(() => import("@/pages/LogisticsPage"));
@@ -40,7 +39,6 @@ const ReturnRefundPage = lazy(() => import("@/pages/ReturnRefundPage"));
 const TermsPage = lazy(() => import("@/pages/TermsPage"));
 const FaqPage = lazy(() => import("@/pages/FaqPage"));
 
-// হালকা লোডিং ফলব্যাক
 const PageLoader = () => (
     <div className="h-screen flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />

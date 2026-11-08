@@ -93,7 +93,7 @@ const MyProfile = () => {
     const profile = user?.profile;
 
     console.log(user);
-    
+
 
     if (isError || !user || !profile) {
         return (

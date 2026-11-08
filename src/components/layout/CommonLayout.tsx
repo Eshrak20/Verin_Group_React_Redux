@@ -28,10 +28,8 @@ export default function CommonLayout({ children }: IProps) {
     }
   }, [pathname]);
 
-  // 🎯 আসল ট্রিক: ইউজার অন্তত ৫০px স্ক্রোল করলে তবেই ফুটার লোড হবে
   useEffect(() => {
     const handleScroll = () => {
-      // ব্রাউজারের অটো-ট্রিগার আটকানোর জন্য window.scrollY > 50 চেক
       if (window.scrollY > 50) {
         setShowFooter(true);
         window.removeEventListener("scroll", handleScroll);
@@ -40,7 +38,6 @@ export default function CommonLayout({ children }: IProps) {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 
-    // ইউজার একদমই স্ক্রোল না করলে ৮ সেকেন্ড পর লোড হবে
     const timer = setTimeout(() => {
       setShowFooter(true);
     }, 8000);
@@ -61,7 +58,6 @@ export default function CommonLayout({ children }: IProps) {
         {children}
       </div>
 
-      {/* 🎯 showFooter true না হলে DOM-এ ফুটার আসবেই না */}
       {showFooter && (
         <Suspense fallback={<div className="h-20 bg-transparent" />}>
           <Footer />

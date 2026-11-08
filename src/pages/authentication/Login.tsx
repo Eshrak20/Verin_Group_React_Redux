@@ -49,7 +49,6 @@ export const Login = () => {
 
             console.log("Login response:", response);
 
-            // 🎯 সাকসেসফুল লগইন হওয়ার পর লোকাল স্টোরেজের গেস্ট উইশলিস্ট ক্লিয়ার করে দেওয়া হলো
             localStorage.removeItem("guest_wishlist");
 
             setAuthCookies(response.data.token, "Bearer");

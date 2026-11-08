@@ -18,11 +18,10 @@ export default function DecorFeaturedProducts() {
 
   // 🎯 Priority 2 Intersection Observer Setup
   const { ref: containerRef, inView } = useInView({
-    triggerOnce: true, // একবার ভিউপোর্টে আসলেই ডাটা লোড হবে
-    rootMargin: "300px", // স্ক্রিনে আসার ৩০০ পিক্সেল আগেই API কল শুরু হবে
+    triggerOnce: true, 
+    rootMargin: "300px", 
   });
 
-  // 🎯 skip: !inView -> ইউজার কাছাকাছি না আসা পর্যন্ত API Request অফ থাকবে
   const { data, isLoading } = useGetProductsQuery(
     {
       category_id: 1,
@@ -75,7 +74,6 @@ export default function DecorFeaturedProducts() {
     const maxScrollLeft = el.scrollWidth - el.clientWidth;
 
     if (el.scrollLeft >= maxScrollLeft - 2) {
-      // শেষ থেকে হঠাৎ উল্টো দিকে লম্বা smooth scroll নয়
       el.scrollTo({ left: 0, behavior: "instant" });
     } else {
       el.scrollBy({ left: step, behavior: "smooth" });
@@ -155,10 +153,10 @@ export default function DecorFeaturedProducts() {
               onMouseLeave={startAuto}
               onTouchStart={
                 stopAuto
-              } /* 🎯 মোবাইলে স্পর্শ/প্রেস করলেই অটো-স্লাইড স্টপ হবে */
+              } 
               onTouchEnd={
                 startAuto
-              } /* 🎯 স্পর্শ ছেড়ে দিলে বা স্লাইড করা শেষ হলে আবার চালু হবে */
+              } 
               className="flex gap-3 overflow-x-auto pb-2"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >

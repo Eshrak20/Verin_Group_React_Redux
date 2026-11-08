@@ -10,7 +10,6 @@ interface WishlistActionButtonProps {
   name: string;
   originalPrice: number;
   salePrice: number;
-  // 🎯 thumbnail এর টাইপে string[] বা any যুক্ত করা হলো যাতে 'length' প্রপার্টি নিয়ে এরর না আসে
   thumbnail: string | string[] | null | undefined;
 }
 
@@ -29,7 +28,6 @@ export default function WishlistActionButton({
   const [addToWishlist, { isLoading: isWishlistLoading }] = useAddToWishlistMutation();
 
   const handleAddToWishlist = async () => {
-    // 🎯 ইলেকট্রনিক্স বা ডেকোর যেকোনো জায়গা থেকে ছবি পাস হলে সেটি স্ট্রিং কি না চেক করা বা এক্সট্রাক্ট করা
     let resolvedThumbnail: string | null = null;
     if (typeof thumbnail === "string") {
       resolvedThumbnail = thumbnail;

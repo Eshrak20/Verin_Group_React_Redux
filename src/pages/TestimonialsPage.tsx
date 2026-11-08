@@ -80,7 +80,6 @@ export default function TestimonialsPage() {
 
   const reviewsList: ApiReview[] = data?.data ?? [];
 
-  // 🎯 Dynamic Sorting: প্রথমে sort_order দিয়ে, সমান হলে created_at (Latest first) অনুযায়ী
   const activeReviews = [...reviewsList]
     .filter((item) => Number(item.is_active) === 1)
     .sort((a, b) => {
@@ -88,10 +87,9 @@ export default function TestimonialsPage() {
       const orderB = Number(b.sort_order) || 0;
 
       if (orderA !== orderB) {
-        return orderA - orderB; // ছোট sort_order আগে দেখাবে (Ascending)
+        return orderA - orderB;
       }
 
-      // sort_order সমান হলে সাম্প্রতিক তৈরি হওয়া রিভিও আগে দেখাবে (Descending)
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
 

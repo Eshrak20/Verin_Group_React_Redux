@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 export default function DecorFeaturedProductsPage() {
   const { data, isLoading } = useGetProductsQuery({ category_id: 1 });
 
-  // 🎯 শুধুমাত্র Decor ক্যাটাগরির ALL Featured Products ফিল্টারিং
   const featuredProducts = useMemo(() => {
     const allProducts = Array.isArray(data) ? data : data?.data.products ?? [];
 

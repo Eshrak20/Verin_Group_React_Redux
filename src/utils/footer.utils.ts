@@ -18,14 +18,12 @@ export const getCompanyKey = (
   pathname: string, 
   companyFromQuery: string | null
 ): string => {
-  // ১. URL প্যারামিটারে Valid company থাকলে সেটা আগে প্রাধান্য পাবে
   if (companyFromQuery && companyFromQuery.trim() !== "") {
     return companyFromQuery;
   }
 
   const path = pathname.toLowerCase();
 
-  // 🎯 ২. Route Based Validation (Clothing, Decor, Electronics যোগ করা হয়েছে)
   if (path.includes("/clothing") || path === "/clothing") {
     return "verin-clothing";
   }
@@ -36,7 +34,6 @@ export const getCompanyKey = (
     return "verin-electronics";
   }
 
-  // ৩. উপরের কোনটা না মিললে default Group
   return "verin-group";
 };
 

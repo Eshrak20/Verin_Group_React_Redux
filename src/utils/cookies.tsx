@@ -5,7 +5,6 @@ export const setCookie = (name: string, value: string, days: number): void => {
   document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
 };
 
-// কুকি থেকে ডাটা রিড করার হেল্পার ফাংশন
 export const getCookie = (name: string): string | null => {
   const nameEQ = name + "=";
   const ca = document.cookie.split(';');
@@ -17,7 +16,6 @@ export const getCookie = (name: string): string | null => {
   return null;
 };
 
-// কুকি ডিলিট করার হেল্পার ফাংশন
 export const deleteCookie = (name: string): void => {
   document.cookie = name + '=; Max-Age=-99999999; path=/;';
 };

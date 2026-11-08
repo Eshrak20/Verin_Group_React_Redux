@@ -29,12 +29,10 @@ export default function MyCart() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [selectedItemIds, setSelectedItemIds] = useState<number[]>([]);
 
-  // লোকালস্টোরেজ থেকে কার্ট আইটেম লোড করা এবং ডিফল্টভাবে সব সিলেক্ট করে রাখা
   useEffect(() => {
     const loadCart = () => {
       const storedCart = JSON.parse(localStorage.getItem("guest_cart") || "[]");
       setCartItems(storedCart);
-      // প্রথমে সব আইটেম সিলেক্টেড থাকবে
       setSelectedItemIds(storedCart.map((item: CartItem) => item.id));
     };
 
@@ -62,7 +60,6 @@ export default function MyCart() {
 
   const isAllSelected = cartItems.length > 0 && selectedItemIds.length === cartItems.length;
 
-  // 🎯 সিলেক্টেড আইটেমগুলোর সাবটোটাল, কোয়ান্টিটি এবং শিপিং ফি ক্যালকুলেশন
   const { selectedSubtotal, selectedTotalQuantity, selectedShippingFee } = useMemo(() => {
     let subtotal = 0;
     let totalQty = 0;
@@ -74,7 +71,6 @@ export default function MyCart() {
         subtotal += effectivePrice * item.quantity;
         totalQty += item.quantity;
 
-        // আইটেমের নিজস্ব ডেলিভারি চার্জ অথবা ডিফল্ট ১৫০ টাকা
         const itemShipping = item.deliveryCharge?.inside_dhaka_charge ?? 150;
         shipping += Number(itemShipping);
       }
@@ -87,7 +83,6 @@ export default function MyCart() {
     };
   }, [cartItems, selectedItemIds]);
 
-  // কোয়ান্টিটি আপডেট হ্যান্ডলার (স্টক লিমিট চেকসহ)
   const handleUpdateQuantity = (index: number, delta: number) => {
     const updatedCart = [...cartItems];
     const currentItem = updatedCart[index];
@@ -106,7 +101,6 @@ export default function MyCart() {
     }
   };
 
-  // নির্দিষ্ট আইটেম কার্ট থেকে রিমুভ করা
   const handleRemoveItem = (item: CartItem, index: number) => {
     Swal.fire({
       title: "Are you sure?",
@@ -164,7 +158,6 @@ export default function MyCart() {
     });
   };
 
-  // অ্যাট্রিবিউট ফিল্টারিং
   const allowedAttributes = ["ram size", "color", "internal storage", "storage"];
   const getFilteredAttributes = (attributes?: Array<{ name: string; value: string }>) => {
     if (!attributes || attributes.length === 0) return [];
@@ -179,7 +172,6 @@ export default function MyCart() {
       toast.error("Please select at least one item to proceed to checkout.");
       return;
     }
-    // লোকালস্টোরেজ থেকে শুধুমাত্র সিলেক্টেড আইটেমগুলো চেকআউটে পাস করার জন্য ফিল্টার করা যায়
     const selectedItems = cartItems.filter((item) => selectedItemIds.includes(item.id));
     navigate("/checkout", { state: { selectedItems, selectedItemIds } });
   };

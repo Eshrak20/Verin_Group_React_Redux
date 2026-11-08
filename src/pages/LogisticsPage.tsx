@@ -44,7 +44,6 @@ export default function LogisticsPage() {
             className="flex items-center justify-between bg-slate-800/40 border border-slate-700/40 hover:border-blue-500/50 hover:bg-slate-800/70 text-slate-300 px-6 py-4 rounded-2xl transition-all duration-300 group shadow-md"
           >
             <div className="flex items-center gap-3">
-              {/* 🎯 FaFacebookF ব্যবহার করা হয়েছে */}
               <FaFacebookF size={16} className="text-blue-500" />
               <span className="text-sm font-semibold tracking-wide">Facebook</span>
             </div>
@@ -59,7 +58,6 @@ export default function LogisticsPage() {
             className="flex items-center justify-between bg-slate-800/40 border border-slate-700/40 hover:border-pink-500/50 hover:bg-slate-800/70 text-slate-300 px-6 py-4 rounded-2xl transition-all duration-300 group shadow-md"
           >
             <div className="flex items-center gap-3">
-              {/* 🎯 FaInstagram ব্যবহার করা হয়েছে */}
               <FaInstagram size={18} className="text-pink-500" />
               <span className="text-sm font-semibold tracking-wide">Instagram</span>
             </div>
@@ -74,7 +72,6 @@ export default function LogisticsPage() {
             className="flex items-center justify-between bg-slate-800/40 border border-slate-700/40 hover:border-red-500/50 hover:bg-slate-800/70 text-slate-300 px-6 py-4 rounded-2xl transition-all duration-300 group shadow-md"
           >
             <div className="flex items-center gap-3">
-              {/* 🎯 FaYoutube ব্যবহার করা হয়েছে */}
               <FaYoutube size={18} className="text-red-500" />
               <span className="text-sm font-semibold tracking-wide">YouTube</span>
             </div>

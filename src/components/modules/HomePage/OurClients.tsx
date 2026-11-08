@@ -27,7 +27,6 @@ export default function OurClients() {
     rootMargin: "300px",
   });
 
-  // 🎯 skip: !inView দিয়ে API Call ডিলে করা হয়েছে
   const { data, isLoading, isError } = useGetClientQuery({}, { skip: !inView });  
 
   const scrollRef = useRef<HTMLDivElement>(null);

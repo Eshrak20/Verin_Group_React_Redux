@@ -94,7 +94,6 @@ export function EditProfileDialog({
     const [open, setOpen] = useState(false);
     const [calendarOpen, setCalendarOpen] = useState(false);
 
-    // ইনিশিয়াল স্টেটেই ফর্ম ডাটা সেট করা হয়েছে (useEffect রিমুভ করা হয়েছে)
     const [form, setForm] = useState<ProfileForm>(() =>
         createFormData(user, profile),
     );
@@ -236,9 +235,8 @@ export function EditProfileDialog({
                                     <SelectValue placeholder="Select gender" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="male">Male</SelectItem>
-                                    <SelectItem value="female">Female</SelectItem>
-                                    <SelectItem value="other">Other</SelectItem>
+                                    <SelectItem value="Male">Male</SelectItem>
+                                    <SelectItem value="Female">Female</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>

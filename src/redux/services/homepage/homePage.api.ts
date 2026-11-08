@@ -1,4 +1,3 @@
-// src/redux/services/homepage/homePage.api.ts (অথবা সংশ্লিষ্ট API ফাইল)
 import { baseApi } from "@/redux/baseApi";
 import type { FooterResponse } from "@/types/footer.type";
 
@@ -68,7 +67,7 @@ export const bannerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getBanner: builder.query<BannerResponse, string>({
       query: (slug) => `/banners/${slug}`,
-      keepUnusedDataFor: 300, // 🎯 ক্যাশ সময় ৫ মিনিট করা হলো
+      keepUnusedDataFor: 300,
       providesTags: ["Banner"],
     }),
   }),
@@ -79,7 +78,7 @@ export const categoriesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getCategories: builder.query<CategoryResponse, void>({
       query: () => "/categories",
-      keepUnusedDataFor: 300, // 🎯 ক্যাশ সময় ৫ মিনিট করা হলো
+      keepUnusedDataFor: 300,
       providesTags: ["Categories"],
     }),
   }),

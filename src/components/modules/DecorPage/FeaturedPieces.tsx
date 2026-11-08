@@ -35,7 +35,6 @@ export default function FeaturedPieces() {
     rootMargin: "300px",
   });
 
-  // 🎯 skip: !inView দিয়ে API Call ডিলে করা হয়েছে
   const { data, isLoading } = useGetProductsQuery(
     { category_id: 1, is_featured: true },
     { skip: !inView }

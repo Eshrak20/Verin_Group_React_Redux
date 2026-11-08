@@ -47,8 +47,6 @@ export default function BlogDetailsPage() {
   const rawBlogs: Blog[] = blogData?.data ?? [];
   const products = productsData?.data.products ?? [];
 
-  // 🎯 FIX: Math.random() সরিয়ে Deterministic Stable Algorithm ব্যবহার করা হয়েছে
-  // এতে UI র‍্যান্ডম প্রোডাক্টই দেখাবে কিন্তু Infinite Loop/Error পুরোপুরি বন্ধ হয়ে যাবে
   const suggestedProducts = useMemo(() => {
     if (!products || !products.length) return [];
 

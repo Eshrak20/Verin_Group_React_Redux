@@ -75,7 +75,6 @@ export default function AddToCartActionButton({
 
         const existingCart: CartItem[] = JSON.parse(localStorage.getItem("guest_cart") || "[]");
 
-        // ভেরিয়েন্ট বা আইডি মিলিয়ে কার্টে অলরেডি আছে কি না চেক করা
         const existingIndex = existingCart.findIndex(
             (item) => item.id === productId && item.sku === cartItem.sku
         );
@@ -88,12 +87,11 @@ export default function AddToCartActionButton({
 
         localStorage.setItem("guest_cart", JSON.stringify(existingCart));
 
-        // কার্ট আপডেট ইভেন্ট ট্রিগার করা যদি প্রয়োজন হয়
         window.dispatchEvent(new Event("storage"));
 
         if (isBuyNow) {
             toast.success("Proceeding to checkout...");
-            navigate("/checkout"); // অথবা আপনার কার্ট/চেকআউট রুট
+            navigate("/checkout");
         } else {
             toast.success("Product added to cart successfully!");
         }

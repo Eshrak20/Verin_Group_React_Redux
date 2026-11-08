@@ -42,7 +42,6 @@ export default function MyWishlist() {
     // const navigate = useNavigate();
     const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
-    // 🎯 আপনার তৈরি করা স্লাইস থেকে বর্তমান পেজ নম্বর রিড করা হচ্ছে
     const currentPage = useAppSelector((state) => state.wishlist.page);
 
     const [addToWishlist] = useAddToWishlistMutation();
@@ -57,7 +56,6 @@ export default function MyWishlist() {
     // console.log(guestWishlist);
 
 
-    // Logged-in ইউজারের জন্য RTK Query API কল (ডায়নামিক currentPage পাস করা হলো)
     const { data: response, isLoading, refetch } = useGetWishlistQuery(
         { page: currentPage, per_page: 12 },
         { skip: !isAuthenticated }
@@ -80,7 +78,6 @@ export default function MyWishlist() {
         toast.success("Product removed from wishlist");
     };
 
-    // 🎯 লোকালস্টোরেজে Add to Cart হ্যান্ডলার
     // const handleAddToCart = (
     //     product: { id: number; name: string; category: string; slug?: string; thumbnail: string | null; price: number; sale_price: number },
     //     isBuyNow: boolean = false
@@ -115,7 +112,7 @@ export default function MyWishlist() {
     //     }
 
     //     localStorage.setItem("guest_cart", JSON.stringify(existingCart));
-    //     window.dispatchEvent(new Event("storage")); // নেভবার ও কার্ট আপডেট করার জন্য
+    //     window.dispatchEvent(new Event("storage"));
 
     //     if (isBuyNow) {
     //         toast.success("Proceeding to checkout...");

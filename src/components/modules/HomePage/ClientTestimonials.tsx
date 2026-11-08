@@ -80,7 +80,6 @@ export default function ClientTestimonials() {
     rootMargin: "300px",
   });
 
-  // 🎯 skip: !inView দিয়ে API Call ডিলে করা হয়েছে
   const { data, isLoading, isError } = useGetReviewsQuery({}, { skip: !inView });
 
   const reviewsList: ApiReview[] = data?.data ?? [];

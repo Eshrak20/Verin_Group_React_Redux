@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
 
-// 🎯 আপনার এডমিন প্যানেলের ক্যাটাগরি আইডি এবং নাম ম্যাপ করা হলো
 const BLOG_CATEGORIES: Record<number, string> = {
   1: "Tech",
   2: "Business",
@@ -30,7 +29,7 @@ interface Blog {
   excerpt: string | null;
   featured_image: string | null;
   category_id: number | null;
-  category?: Category | null; // যদি ব্যাকএন্ড অবজেক্ট ফিল্ড পাঠায়
+  category?: Category | null;
   author_id: number | null;
   status: string;
   created_at: string;
@@ -52,8 +51,6 @@ export default function OurBlogs() {
 
   const rawBlogs: Blog[] = data?.data ?? [];
 
-  // ১. শুধুমাত্র Published ব্লগ নেওয়া
-  // ২. slice(0, 6) দিয়ে সর্বোচ্চ ৬টি ব্লগ ফিল্টার করা
   const blogs = rawBlogs
     .filter((blog) => blog.status === "published")
     .slice(0, 6);
@@ -69,13 +66,11 @@ export default function OurBlogs() {
     });
   };
 
-  // HTML tag রিমুভ করার জন্য হেল্পার ফাংশন
   const stripHtml = (html: string | null) => {
     if (!html) return "";
     return html.replace(/<[^>]*>?/gm, "");
   };
 
-  // 🎯 Dynamic Category Name (বাংলা / ইংরেজি যেকোনো ভাষাতেই ইংরেজি দেখাবে)
   const getCategoryName = (blog: Blog): string => {
     if (blog.category?.name) return blog.category.name;
     if (blog.category_id && BLOG_CATEGORIES[blog.category_id]) {
@@ -107,7 +102,6 @@ export default function OurBlogs() {
     );
   }
 
-  // Error অথবা No Data Handle
   if (isError || blogs.length === 0) {
     return null;
   }
@@ -192,7 +186,6 @@ export default function OurBlogs() {
 
           const date = formatDate(blog.created_at, isBangla);
 
-          // 🎯 Category Name (সর্বদা ইংরেজিতে দেখাবে: Business, Tech, etc.)
           const categoryName = getCategoryName(blog);
 
           return (
@@ -237,7 +230,6 @@ export default function OurBlogs() {
                 <div className="p-4 flex flex-col gap-2 flex-1">
                   {/* Category + Date */}
                   <div className="flex items-center justify-between">
-                    {/* 🎯 বাংলা সুইচ করলেও সবসময় ইংরেজি Category (Tech, Business...) দেখাবে */}
                     <span
                       className="
                       text-xs font-semibold px-3 py-1 rounded-full

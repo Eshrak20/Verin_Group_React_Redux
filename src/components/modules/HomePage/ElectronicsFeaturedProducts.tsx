@@ -26,7 +26,6 @@ export default function ElectronicsFeaturedProducts() {
     rootMargin: "300px",
   });
 
-  // 🎯 skip: !inView -> ইউজার কাছাকাছি আসার আগ পর্যন্ত API কল বন্ধ থাকবে
   const { data, isLoading } = useGetProductsQuery(
     {
       category_id: 2,
@@ -156,10 +155,10 @@ export default function ElectronicsFeaturedProducts() {
               onMouseLeave={startAuto}
               onTouchStart={
                 stopAuto
-              } /* 🎯 মোবাইলে টাচ করার সাথে সাথে অটো-স্লাইড স্টপ হবে */
+              } 
               onTouchEnd={
                 startAuto
-              } /* 🎯 আঙুল ছেড়ে দিলে বা স্লাইড শেষ হলে আবার অন হবে */
+              }
               className="flex gap-3 overflow-x-auto pb-2"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
