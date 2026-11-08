@@ -1,4 +1,5 @@
 import { ChangePasswordDialog } from "@/components/modals/ChangePasswordModal";
+import { EditProfileDialog } from "@/components/modals/EditProfileDialog";
 import { Button } from "@/components/ui/button";
 import { getApiErrorMessage } from "@/lib/getApiErrorMessage";
 import { useGetMyProfileQuery } from "@/redux/auth.api";
@@ -21,6 +22,17 @@ const formatDateOnly = (value: string | null) => {
             day: "numeric",
         });
 };
+
+// const getInitials = (name?: string | null): string => {
+//     if (!name?.trim()) return "U";
+
+//     return name
+//         .trim()
+//         .split(/\s+/)
+//         .slice(0, 2)
+//         .map((part) => part.charAt(0).toUpperCase())
+//         .join("");
+// };
 
 const Field = ({
     label,
@@ -79,6 +91,9 @@ const MyProfile = () => {
 
     const user = data?.data.user;
     const profile = user?.profile;
+
+    console.log(user);
+    
 
     if (isError || !user || !profile) {
         return (
@@ -155,7 +170,8 @@ const MyProfile = () => {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex shrink-0 gap-2">
+                    <div className="flex shrink-0 flex-wrap gap-2">
+                        <EditProfileDialog user={user} profile={profile} />
                         <ChangePasswordDialog />
                     </div>
                 </div>

@@ -1,21 +1,37 @@
 import type {
-    ChangePasswordRequest,
-    ChangePasswordResponse,
-    ForgotPasswordResponse,
-    LoginRequest,
-    LoginResponse,
-    LogoutResponse,
-    MyProfileResponse,
-    RegisterRequest,
-    RegisterResponse,
-    ResendOtpRequest,
-    ResendOtpResponse,
-    ResetPasswordRequest,
-    ResetPasswordResponse,
-    VerifyOtpRequest,
-    VerifyOtpResponse,
+  ChangePasswordRequest,
+  ChangePasswordResponse,
+  ForgotPasswordResponse,
+  LoginRequest,
+  LoginResponse,
+  LogoutResponse,
+  MyProfileResponse,
+  RegisterRequest,
+  RegisterResponse,
+  ResendOtpRequest,
+  ResendOtpResponse,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
+  VerifyOtpRequest,
+  VerifyOtpResponse,
 } from "@/types/auth.type";
 import { baseApi } from "./baseApi";
+
+export interface UpdateProfilePayload {
+  name: string;
+  phone: string;
+  date_of_birth: string;
+  gender: string;
+  address_line_1: string;
+  address_line_2: string;
+  city: string;
+  state: string;
+  postal_code: string;
+  country: string;
+  metadata: {
+    occupation: string;
+  };
+}
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -81,6 +97,16 @@ export const authApi = baseApi.injectEndpoints({
         url: "/auth/myprofile",
         method: "GET",
       }),
+      providesTags: ["Profile"]
+    }),
+
+    updateProfile: builder.mutation<MyProfileResponse, UpdateProfilePayload>({
+      query: (body) => ({
+        url: "/auth/myprofile",
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["Profile"],
     }),
 
     changePassword: builder.mutation<ChangePasswordResponse, ChangePasswordRequest>({
@@ -103,5 +129,6 @@ export const {
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useGetMyProfileQuery,
+  useUpdateProfileMutation,
   useChangePasswordMutation
 } = authApi;
