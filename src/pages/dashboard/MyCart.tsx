@@ -230,7 +230,7 @@ export default function MyCart() {
                   type="checkbox"
                   checked={isAllSelected}
                   onChange={handleToggleSelectAll}
-                  className="size-4 rounded border-border text-primary focus:ring-primary cursor-pointer"
+                  className="size-4 rounded border-border accent-primary focus:ring-primary cursor-pointer"
                 />
                 <span>SELECT ALL ({cartItems.length} ITEM(S))</span>
               </label>
@@ -253,9 +253,8 @@ export default function MyCart() {
                 return (
                   <div
                     key={`${item.id}-${item.sku || index}`}
-                    className={`relative flex flex-col gap-4 rounded-xl border bg-card p-4 sm:flex-row sm:items-center sm:justify-between transition-colors ${
-                      isSelected ? "border-primary/60 bg-primary/5" : "border-border/75"
-                    }`}
+                    className={`relative flex flex-col gap-4 rounded-xl border bg-card p-4 sm:flex-row sm:items-center sm:justify-between transition-colors ${isSelected ? "border-primary/60 bg-primary/5" : "border-border/75"
+                      }`}
                   >
                     <div className="flex items-center gap-3.5">
                       {/* Checkbox */}
@@ -263,7 +262,7 @@ export default function MyCart() {
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => handleToggleSelectItem(item.id)}
-                        className="size-4 shrink-0 rounded border-border text-primary focus:ring-primary cursor-pointer"
+                        className="size-4 shrink-0 rounded border-border accent-primary focus:ring-primary cursor-pointer"
                       />
 
                       {/* Product Image */}

@@ -42,7 +42,7 @@ export default function ElecSubCatNavbar({
 							aria-pressed={
 								activeSubCategory?.id === subCategory.id
 							}
-							className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${activeSubCategory?.id === subCategory.id
+							className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium cursor-pointer transition-colors ${activeSubCategory?.id === subCategory.id
 									? "bg-elec text-white"
 									: "bg-elec/10 text-elec hover:bg-elec/20"
 								}`}

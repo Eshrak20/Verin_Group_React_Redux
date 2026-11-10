@@ -89,10 +89,10 @@ export const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
-            {
-                path: "/electronics/:subCategory/:brand",
-                element: <Suspense fallback={<PageLoader />}><ProductListMain /></Suspense>,
-            },
+            // {
+            //     path: "/electronics/:subCategory/:brand",
+            //     element: <Suspense fallback={<PageLoader />}><ProductListMain /></Suspense>,
+            // },
             {
                 path: "/electronics/products/:slug",
                 element: <Suspense fallback={<PageLoader />}><ElecProductDetails /></Suspense>,

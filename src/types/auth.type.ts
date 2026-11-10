@@ -35,7 +35,9 @@ export interface VerifyOtpProfile {
   state: string | null;
   postal_code: string | null;
   country: string | null;
-  metadata: Record<string, unknown> | null;
+  metadata: {
+    occupation: string
+  }
   created_at: string;
   updated_at: string;
 }

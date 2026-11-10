@@ -209,8 +209,7 @@ const MyProfile = () => {
             <SectionCard title="Additional Metadata" icon={Calendar}>
                 <Field
                     label="Metadata"
-                    value={profile.metadata ? JSON.stringify(profile.metadata, null, 2) : null}
-                    isMultiline
+                    value={profile.metadata.occupation}
                 />
                 <Field label="Profile created" value={formatDate(profile.created_at)} />
                 <Field label="Profile updated" value={formatDate(profile.updated_at)} />

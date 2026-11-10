@@ -2,7 +2,7 @@ import { useGetProductsQuery } from "@/redux/services/product/product.api";
 import type { Product } from "@/types/product.type";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
-import { useInView } from "react-intersection-observer"; // 🎯 Lazy Fetching
+import { useInView } from "react-intersection-observer";
 import { Link, useNavigate } from "react-router-dom";
 
 function getDiscount(price: number, salePrice: number): number {
