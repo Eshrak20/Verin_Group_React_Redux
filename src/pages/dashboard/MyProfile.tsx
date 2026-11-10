@@ -3,6 +3,7 @@ import { EditProfileDialog } from "@/components/modals/EditProfileDialog";
 import { Button } from "@/components/ui/button";
 import { getApiErrorMessage } from "@/lib/getApiErrorMessage";
 import { useGetMyProfileQuery } from "@/redux/auth.api";
+import { PageLoader } from "@/routes";
 import { Calendar, Mail, MapPin, Phone, RefreshCw, User } from "lucide-react";
 
 const formatDate = (value: string | null) => {
@@ -87,13 +88,14 @@ const SectionCard = ({
 );
 
 const MyProfile = () => {
-    const { data, error, isError, refetch } = useGetMyProfileQuery();
+    const { data, isLoading, error, isError, refetch } = useGetMyProfileQuery();
 
     const user = data?.data.user;
     const profile = user?.profile;
 
-    console.log(user);
-
+    if (isLoading) {
+        return <PageLoader />
+    }
 
     if (isError || !user || !profile) {
         return (

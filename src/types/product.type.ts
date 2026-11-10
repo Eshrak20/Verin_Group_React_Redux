@@ -2,8 +2,8 @@
 export interface ProductVariant {
   id?: number;
   product_id?: number;
-  price: string;
-  sale_price?: string;
+  price: number;
+  sale_price?: number;
   sku: string;
   thumbnail?: string | null;
   status?: boolean | string | number;

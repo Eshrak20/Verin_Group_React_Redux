@@ -9,6 +9,7 @@ import MyCart from "@/pages/dashboard/MyCart";
 import MyProfile from "@/pages/dashboard/MyProfile";
 import MyWishlist from "@/pages/dashboard/MyWishlist";
 import ElecProductDetails from "@/pages/electronics/details/ElecProductDetails";
+import ProductListMain from "@/pages/electronics/product-list/ProductListMain";
 import Homepage from "@/pages/Homepage";
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
@@ -39,7 +40,7 @@ const ReturnRefundPage = lazy(() => import("@/pages/ReturnRefundPage"));
 const TermsPage = lazy(() => import("@/pages/TermsPage"));
 const FaqPage = lazy(() => import("@/pages/FaqPage"));
 
-const PageLoader = () => (
+export const PageLoader = () => (
     <div className="h-screen flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
     </div>
@@ -81,7 +82,23 @@ export const router = createBrowserRouter([
                 ]
             },
             {
-                path: "/electronics/:slug",
+                path: "/electronics/:subCategorySlug",
+                element: (
+                    <Suspense fallback={<PageLoader />}>
+                        <ProductListMain />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "/electronics/:subCategory/:brand",
+                element: <Suspense fallback={<PageLoader />}><ProductListMain /></Suspense>,
+            },
+            {
+                path: "/electronics/products/:slug",
+                element: <Suspense fallback={<PageLoader />}><ElecProductDetails /></Suspense>,
+            },
+            {
+                path: "/electronics/products/:slug",
                 element: <Suspense fallback={<PageLoader />}><ElecProductDetails /></Suspense>,
             },
             {

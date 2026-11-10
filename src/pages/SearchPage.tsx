@@ -75,7 +75,7 @@ export default function SearchPage() {
             const variant = product.variant ?? product.variants?.[0];
 
             const productUrl =
-              product.category === "Electronics" ? `/electronics/${product.slug}`
+              product.category === "Electronics" ? `/electronics/products${product.slug}`
                 : `/products/${product.slug}`;
 
             const price = Number(variant?.price ?? 0);

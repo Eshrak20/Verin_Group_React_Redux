@@ -1,4 +1,3 @@
-
 import { useGetProductsQuery } from "@/redux/services/product/product.api";
 import type { Product } from "@/types/product.type";
 import { useMemo } from "react";

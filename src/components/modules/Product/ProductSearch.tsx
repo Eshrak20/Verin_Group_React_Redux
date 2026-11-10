@@ -100,7 +100,7 @@ export default function ProductSearch() {
 
                   const productUrl =
                     product.category === "Electronics"
-                      ? `/electronics/${product.slug}`
+                      ? `/electronics/products/${product.slug}`
                       : `/products/${product.slug}`;
 
                   return (

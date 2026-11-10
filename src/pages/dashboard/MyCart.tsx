@@ -212,7 +212,7 @@ export default function MyCart() {
           <h2 className="text-xl font-bold text-gray-800 mb-2">Your Cart is Empty</h2>
           <p className="text-gray-500 text-sm mb-6">Looks like you haven't added anything to your cart yet.</p>
           <Link
-            to="/electronics"
+            to="/"
             className="inline-block px-6 py-3 bg-primary text-white font-semibold rounded-xl text-sm hover:bg-primary/90 transition-colors shadow-sm"
           >
             Explore Products
@@ -247,7 +247,7 @@ export default function MyCart() {
 
                 const productUrl =
                   item.category === "Electronics"
-                    ? `/electronics/${item.slug}`
+                    ? `/electronics/products/${item.slug}`
                     : `/products/${item.slug}`;
 
                 return (

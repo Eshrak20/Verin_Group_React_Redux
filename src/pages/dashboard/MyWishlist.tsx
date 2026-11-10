@@ -3,6 +3,7 @@ import { getApiErrorMessage } from "@/lib/getApiErrorMessage";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useAddToWishlistMutation, useGetWishlistQuery } from "@/redux/services/wishlist/wishlist.api";
 import { setWishlistPage } from "@/redux/slices/wishlist.slice";
+import type { SavedProductItem } from "@/types/wishlist.type";
 import { Eye, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
@@ -24,22 +25,8 @@ interface GuestWishlistItem {
     sale_price: number;
 }
 
-// interface CartItem {
-//     id: number;
-//     category: string;
-//     name: string;
-//     slug?: string;
-//     sku?: string;
-//     price: number;
-//     sale_price: number;
-//     thumbnail: string | null;
-//     quantity: number;
-//     attributes?: Array<{ name: string; value: string }>;
-// }
-
 export default function MyWishlist() {
     const dispatch = useAppDispatch();
-    // const navigate = useNavigate();
     const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
     const currentPage = useAppSelector((state) => state.wishlist.page);
@@ -53,9 +40,6 @@ export default function MyWishlist() {
         return [];
     });
 
-    // console.log(guestWishlist);
-
-
     const { data: response, isLoading, refetch } = useGetWishlistQuery(
         { page: currentPage, per_page: 12 },
         { skip: !isAuthenticated }
@@ -67,7 +51,7 @@ export default function MyWishlist() {
             toast.success(res.message || "Product removed from wishlist");
             refetch();
         } catch (error) {
-            toast.error(getApiErrorMessage(error))
+            toast.error(getApiErrorMessage(error));
         }
     };
 
@@ -78,50 +62,6 @@ export default function MyWishlist() {
         toast.success("Product removed from wishlist");
     };
 
-    // const handleAddToCart = (
-    //     product: { id: number; name: string; category: string; slug?: string; thumbnail: string | null; price: number; sale_price: number },
-    //     isBuyNow: boolean = false
-    // ) => {
-    //     console.log(product);
-
-    //     const cartItem: CartItem = {
-    //         id: product.id,
-    //         name: product.name,
-    //         category: product.category,
-    //         slug: product.slug || `product-${product.id}`,
-    //         sku: product?.variant.sku,
-    //         price: product.price,
-    //         sale_price: product.sale_price,
-    //         thumbnail: product.thumbnail,
-    //         quantity: 1,
-    //         attributes: [],
-    //     };
-
-    //     const existingCart: CartItem[] = JSON.parse(
-    //         localStorage.getItem("guest_cart") || "[]"
-    //     );
-
-    //     const existingIndex = existingCart.findIndex(
-    //         (item) => item.id === product.id && item.sku === "N/A"
-    //     );
-
-    //     if (existingIndex > -1) {
-    //         existingCart[existingIndex].quantity += 1;
-    //     } else {
-    //         existingCart.push(cartItem);
-    //     }
-
-    //     localStorage.setItem("guest_cart", JSON.stringify(existingCart));
-    //     window.dispatchEvent(new Event("storage"));
-
-    //     if (isBuyNow) {
-    //         toast.success("Proceeding to checkout...");
-    //         navigate("/checkout");
-    //     } else {
-    //         toast.success("Product added to cart!");
-    //     }
-    // };
-
     if (isAuthenticated && isLoading) {
         return (
             <div className="flex justify-center items-center min-h-[60vh] text-gray-500">
@@ -130,7 +70,7 @@ export default function MyWishlist() {
         );
     }
 
-    const savedItems = isAuthenticated ? response?.data?.items ?? [] : [];
+    const savedItems: SavedProductItem[] = isAuthenticated ? response?.data?.products ?? [] : [];
     const paginationData = isAuthenticated ? response?.data?.pagination : { current_page: 1, last_page: 1 };
 
     return (
@@ -146,38 +86,39 @@ export default function MyWishlist() {
             {isAuthenticated && savedItems.length > 0 && (
                 <>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:mb-28">
-                        {savedItems.map((item) => {
-                            console.log(item);
-
-                            const product = item.product;
-                            const primaryVariant = product.variants?.[0];
-                            const price = Number(primaryVariant?.price ?? 0);
-                            const salePrice = Number(primaryVariant?.sale_price ?? 0);
+                        {savedItems.map((item: SavedProductItem) => {
+                            const price = Number(item.price ?? 0);
+                            const salePrice = Number(item.sale_price ?? 0);
                             const hasDiscount = salePrice > 0 && salePrice < price;
                             const displayPrice = hasDiscount ? salePrice : price;
-                            const imageUrl = primaryVariant?.thumbnail || product.thumbnail || "/placeholder.png";
+                            const imageUrl = item.image || "/placeholder.png";
+
                             const productUrl =
-                                product.category_id === 2
-                                    ? `/electronics/${product.slug}`
-                                    : `/products/${product.slug}`;
+                                item.category_name?.toLowerCase() === "electronics"
+                                    ? `/electronics/products/${item.slug}`
+                                    : `/products/${item.slug}`;
 
                             return (
                                 <div
-                                    key={item.id}
+                                    key={item.saved_product_id}
                                     className="group relative flex flex-col bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300"
                                 >
                                     <div className="relative w-full h-60 bg-gray-50 rounded-xl overflow-hidden flex items-center justify-center mb-4">
                                         <Link to={productUrl} className="h-full w-full flex items-center justify-center">
                                             <img
                                                 src={imageUrl}
-                                                alt={product.name}
+                                                alt={item.name}
                                                 className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-300"
+                                                onError={(e) => {
+                                                    e.currentTarget.onerror = null;
+                                                    e.currentTarget.src = "/placeholder.png";
+                                                }}
                                             />
                                         </Link>
 
                                         <button
                                             type="button"
-                                            onClick={() => handleRemoveAuthItem(product.id)}
+                                            onClick={() => handleRemoveAuthItem(item.product_id)}
                                             className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white backdrop-blur-sm transition-all hover:bg-black hover:scale-110 shadow-md"
                                             title="Remove from wishlist"
                                         >
@@ -192,41 +133,16 @@ export default function MyWishlist() {
                                             >
                                                 <Eye className="h-4 w-4" />
                                             </Link>
-
-                                            {/* 🎯 Add To Cart Button */}
-                                            {/* <button
-                                                type="button"
-                                                onClick={() => handleAddToCart({
-                                                    id: product.id,
-                                                    name: product.name,
-                                                    slug: product.slug,
-                                                    thumbnail: imageUrl,
-                                                    price,
-                                                    sale_price: salePrice,
-                                                }, false)}
-                                                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white shadow-lg hover:bg-primary hover:scale-110 transition-all cursor-pointer"
-                                                title="Add to Cart"
-                                            >
-                                                <ShoppingCart className="h-4 w-4" />
-                                            </button> */}
                                         </div>
 
                                         {/* 🎯 Buy Now Button */}
                                         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <button
-                                                type="button"
-                                                // onClick={() => handleAddToCart({
-                                                //     id: product.id,
-                                                //     name: product.name,
-                                                //     slug: product.slug,
-                                                //     thumbnail: imageUrl,
-                                                //     price,
-                                                //     sale_price: salePrice,
-                                                // }, true)}
-                                                className="px-4 py-1.5 bg-white text-gray-900 font-semibold text-xs rounded-full shadow-md hover:bg-gray-100 hover:scale-105 transition-all cursor-pointer"
+                                            <Link
+                                                to={productUrl}
+                                                className="px-4 py-1.5 bg-white text-gray-900 font-semibold text-xs rounded-full shadow-md hover:bg-gray-100 hover:scale-105 transition-all cursor-pointer whitespace-nowrap"
                                             >
-                                                Buy Now
-                                            </button>
+                                                View Product
+                                            </Link>
                                         </div>
                                     </div>
 
@@ -236,10 +152,21 @@ export default function MyWishlist() {
                                                 to={productUrl}
                                                 className="font-semibold text-gray-800 text-sm line-clamp-1 hover:text-primary transition-colors"
                                             >
-                                                {product.name}
+                                                {item.name}
                                             </Link>
 
-                                            <div className="mt-1.5 flex items-baseline gap-2">
+                                            <div className="mt-1 flex items-center justify-between">
+                                                <span className="text-xs text-gray-500 font-medium">
+                                                    {item.subcategory_name || item.category_name}
+                                                </span>
+                                                {!item.in_stock && (
+                                                    <span className="text-[10px] font-semibold text-red-500 bg-red-50 px-2 py-0.5 rounded-full">
+                                                        Out of Stock
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            <div className="mt-2 flex items-baseline gap-2">
                                                 <span className="text-base font-extrabold text-gray-900">
                                                     ৳{formatPrice(displayPrice)}
                                                 </span>
@@ -270,8 +197,6 @@ export default function MyWishlist() {
             {!isAuthenticated && guestWishlist.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {guestWishlist.map((item) => {
-                        // console.log(item);
-
                         const hasDiscount = item.sale_price > 0 && item.sale_price < item.price;
                         const displayPrice = hasDiscount ? item.sale_price : item.price;
                         const imageUrl = item.thumbnail || "/placeholder.png";
@@ -291,6 +216,10 @@ export default function MyWishlist() {
                                             src={imageUrl}
                                             alt={item.name}
                                             className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-300"
+                                            onError={(e) => {
+                                                e.currentTarget.onerror = null;
+                                                e.currentTarget.src = "/placeholder.png";
+                                            }}
                                         />
                                     </Link>
 
@@ -311,42 +240,6 @@ export default function MyWishlist() {
                                         >
                                             <Eye className="h-4 w-4" />
                                         </Link>
-
-                                        {/* 🎯 Add To Cart Button */}
-                                        {/* <button
-                                            type="button"
-                                            onClick={() => handleAddToCart({
-                                                id: item.id,
-                                                category_id: item.category_id,
-                                                name: item.name,
-                                                slug: item.slug,
-                                                thumbnail: imageUrl,
-                                                price: item.price,
-                                                sale_price: item.sale_price,
-                                            }, false)}
-                                            className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white shadow-lg hover:bg-primary hover:scale-110 transition-all cursor-pointer"
-                                            title="Add to Cart"
-                                        >
-                                            <ShoppingCart className="h-4 w-4" />
-                                        </button> */}
-                                    </div>
-
-                                    {/* 🎯 Buy Now Button */}
-                                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <button
-                                            type="button"
-                                            // onClick={() => handleAddToCart({
-                                            //     id: item.id,
-                                            //     name: item.name,
-                                            //     slug: item.slug,
-                                            //     thumbnail: imageUrl,
-                                            //     price: item.price,
-                                            //     sale_price: item.sale_price,
-                                            // }, true)}
-                                            className="px-4 py-1.5 bg-white text-gray-900 font-semibold text-xs rounded-full shadow-md hover:bg-gray-100 hover:scale-105 transition-all whitespace-nowrap cursor-pointer"
-                                        >
-                                            Buy Now
-                                        </button>
                                     </div>
                                 </div>
 
@@ -382,7 +275,7 @@ export default function MyWishlist() {
                 <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 shadow-2xs mt-4">
                     <p className="text-gray-500 text-base font-medium mb-4">Your wishlist is empty.</p>
                     <Link
-                        to="/electronics"
+                        to="/"
                         className="inline-block px-6 py-2.5 bg-gray-900 text-white font-semibold rounded-xl text-sm hover:bg-gray-800 transition-colors"
                     >
                         Explore Products
