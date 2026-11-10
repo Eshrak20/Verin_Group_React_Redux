@@ -8,10 +8,7 @@ export default function ElecProductDetails() {
     const slug = useParams<{ slug: string }>().slug;
     const { data: response, isLoading } = useGetElecProductDetailsQuery(slug as string);
 
-    const product = response?.data;
-
-    // console.log(product);
-    
+    const product = response?.data;    
 
     if (isLoading) {
         return <div className="mx-auto max-w-6xl px-4 py-12 text-center text-gray-500">Loading product details...</div>;

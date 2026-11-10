@@ -43,11 +43,7 @@ export default function AddToCartActionButton({
     deliveryCharge
 }: AddToCartActionButtonProps) {
 
-    console.log(activeVariant);
     
-
-    // console.log(activeVariant.sku);
-
     const navigate = useNavigate();
     const location = useLocation()
     const isElectronicsPage = location.pathname.startsWith("/electronics")

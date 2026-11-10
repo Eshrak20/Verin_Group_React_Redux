@@ -22,52 +22,84 @@ export default function WishlistActionButton({
   salePrice,
   thumbnail,
 }: WishlistActionButtonProps) {
-  // console.log(slug);
-  
+
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const [addToWishlist, { isLoading: isWishlistLoading }] = useAddToWishlistMutation();
 
+
   const handleAddToWishlist = async () => {
     let resolvedThumbnail: string | null = null;
+
     if (typeof thumbnail === "string") {
       resolvedThumbnail = thumbnail;
     } else if (Array.isArray(thumbnail) && thumbnail.length > 0) {
       resolvedThumbnail = thumbnail[0];
-    } else if (thumbnail && typeof thumbnail === "object" && "thumbnail" in thumbnail) {
-      resolvedThumbnail = (thumbnail as { thumbnail?: string }).thumbnail ?? null;
+    } else if (
+      thumbnail &&
+      typeof thumbnail === "object" &&
+      "thumbnail" in thumbnail
+    ) {
+      resolvedThumbnail =
+        (thumbnail as { thumbnail?: string }).thumbnail ?? null;
     }
 
+    // Guest User
     if (!isAuthenticated) {
-      const guestItem = {
-        id: productId,
-        category: category,
-        name: name,
-        slug: slug,
-        thumbnail: resolvedThumbnail,
-        price: originalPrice,
-        sale_price: salePrice,
-      };
+      try {
+        const existingWishlist = JSON.parse(
+          localStorage.getItem("guest_wishlist") || "[]"
+        );
 
-      const existingWishlist = JSON.parse(localStorage.getItem("guest_wishlist") || "[]");
-      const exists = existingWishlist.some((item: { id: number }) => item.id === productId);
+        const exists = existingWishlist.some(
+          (item: { id: number }) => item.id === productId
+        );
 
-      if (!exists) {
-        existingWishlist.push(guestItem);
-        localStorage.setItem("guest_wishlist", JSON.stringify(existingWishlist));
-        toast.success("Product added to wishlist!");
-      } else {
-        toast.info("Product is already in your wishlist.");
+        let updatedWishlist;
+
+        if (exists) {
+          updatedWishlist = existingWishlist.filter(
+            (item: { id: number }) => item.id !== productId
+          );
+
+          toast.success("Product removed from wishlist!");
+        } else {
+          const guestItem = {
+            id: productId,
+            category,
+            name,
+            slug,
+            thumbnail: resolvedThumbnail,
+            price: originalPrice,
+            sale_price: salePrice,
+          };
+
+          updatedWishlist = [...existingWishlist, guestItem];
+
+          toast.success("Product added to wishlist!");
+        }
+
+        localStorage.setItem(
+          "guest_wishlist",
+          JSON.stringify(updatedWishlist)
+        );
+
+        window.dispatchEvent(new Event("guest-wishlist-updated"));
+      } catch {
+        toast.error("Failed to update wishlist.");
       }
+
       return;
     }
 
+    // Authenticated User
     try {
       const res = await addToWishlist({ product_id: productId }).unwrap();
-      toast.success(res.message || "Product saved to wishlist!");
+      toast.success(res.message || "Wishlist updated successfully!");
     } catch (error) {
       toast.error(getApiErrorMessage(error));
     }
   };
+
 
   return (
     <button

@@ -193,7 +193,7 @@ export default function ElectronicsFeaturedProducts() {
                         delay: index * 0.08,
                         ease: "easeOut",
                       }}
-                      onClick={() => navigate(`/electronics/${product.slug}`)}
+                      onClick={() => navigate(`/electronics/products/${product.slug}`)}
                       className="shrink-0 flex flex-col hover:cursor-pointer group w-[calc((100%-12px)/2)] sm:w-[calc((100%-24px)/3)] lg:w-[calc((100%-48px)/5)]"
                     >
                       {/* Image Box */}

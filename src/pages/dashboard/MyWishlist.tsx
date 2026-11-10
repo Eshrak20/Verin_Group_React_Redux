@@ -57,8 +57,12 @@ export default function MyWishlist() {
 
     const handleRemoveGuestItem = (productId: number) => {
         const updatedList = guestWishlist.filter((item) => item.id !== productId);
+
         setGuestWishlist(updatedList);
         localStorage.setItem("guest_wishlist", JSON.stringify(updatedList));
+
+        window.dispatchEvent(new Event("guest-wishlist-updated"));
+
         toast.success("Product removed from wishlist");
     };
 
@@ -91,7 +95,7 @@ export default function MyWishlist() {
                             const salePrice = Number(item.sale_price ?? 0);
                             const hasDiscount = salePrice > 0 && salePrice < price;
                             const displayPrice = hasDiscount ? salePrice : price;
-                            const imageUrl = item.image || "/placeholder.png";
+                            const imageUrl = item.image || "https://media.istockphoto.com/id/1421035376/vector/realistic-macbook-mockup-blank-white-screen-laptop-vector-template.jpg?s=612x612&w=0&k=20&c=S_-Swr90G3-6gSQI_dmLjSYCA0dEi5vYY9Wesnu-rFE=";
 
                             const productUrl =
                                 item.category_name?.toLowerCase() === "electronics"
@@ -202,7 +206,7 @@ export default function MyWishlist() {
                         const imageUrl = item.thumbnail || "/placeholder.png";
                         const productUrl =
                             item.category === "Electronics"
-                                ? `/electronics/${item.slug}`
+                                ? `/electronics/products/${item.slug}`
                                 : `/products/${item.slug}`;
 
                         return (

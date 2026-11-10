@@ -24,7 +24,7 @@ export default function ElecProdDetSpec({ descriptionHtml }: ElecProdDetSpecProp
       </div>
 
       {/* Right Sidebar: Warranty & Delivery Info */}
-      <div className="flex flex-col gap-4">
+      <div className="flex h-fit flex-col gap-4 lg:sticky lg:top-20 lg:self-start">
         {/* Warranty Section */}
         {/* <div className="rounded-2xl bg-white p-5 shadow-sm border border-gray-100">
           <div className="flex items-center gap-2 font-bold text-gray-900 text-base mb-2">

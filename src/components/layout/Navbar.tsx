@@ -18,6 +18,7 @@ import { Heart, LogOut, Package, Settings, ShoppingBag, User } from "lucide-reac
 import { removeAuthCookies } from "@/lib/authCookie";
 import { getApiErrorMessage } from "@/lib/getApiErrorMessage";
 import { useLogoutMutation } from "@/redux/auth.api";
+import { useGetWishlistQuery } from "@/redux/services/wishlist/wishlist.api";
 import type { PillStyle } from "@/types/navbar.type";
 import { checkIsActive, getCompanyKey, getLogoPath, navLinks } from "@/utils/navbar.utils";
 import { toast } from "sonner";
@@ -44,6 +45,56 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  const [wishlistCount, setWishlistCount] = useState(0);
+
+  const { data: wishlistResponse } = useGetWishlistQuery(
+    { page: 1, per_page: 1 },
+    { skip: !isAuthenticated }
+  );
+
+  useEffect(() => {
+    const updateWishlistCount = () => {
+      if (isAuthenticated) return;
+
+      try {
+        const storedWishlist = JSON.parse(
+          localStorage.getItem("guest_wishlist") || "[]"
+        );
+
+        setWishlistCount(
+          Array.isArray(storedWishlist) ? storedWishlist.length : 0
+        );
+      } catch {
+        setWishlistCount(0);
+      }
+    };
+
+    if (isAuthenticated) {
+      setWishlistCount(0);
+    } else {
+      updateWishlistCount();
+    }
+
+    window.addEventListener("storage", updateWishlistCount);
+    window.addEventListener("guest-wishlist-updated", updateWishlistCount);
+
+    return () => {
+      window.removeEventListener("storage", updateWishlistCount);
+      window.removeEventListener("guest-wishlist-updated", updateWishlistCount);
+    };
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setWishlistCount(
+        wishlistResponse?.data?.pagination?.total ??
+        wishlistResponse?.data?.products?.length ??
+        0
+      );
+    }
+  }, [isAuthenticated, wishlistResponse]);
+
   const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
@@ -217,10 +268,16 @@ export default function Navbar() {
               {/* Wishlist Icon Button */}
               <Link
                 to="/my-wishlist"
-                aria-label="Wishlist"
+                aria-label={`Wishlist${wishlistCount > 0 ? ` (${wishlistCount})` : ""}`}
                 className="relative flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-700 hover:border-primary hover:text-primary transition-colors"
               >
                 <Heart className="h-4 w-4" />
+
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white shadow-xs">
+                    {wishlistCount > 99 ? "99+" : wishlistCount}
+                  </span>
+                )}
               </Link>
 
               {/* 🎯 Cart Icon Button with Badge */}
