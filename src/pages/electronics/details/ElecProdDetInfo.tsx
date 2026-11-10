@@ -1,7 +1,6 @@
 import AddToCartActionButton from "@/components/common/AddToCartButtonAction";
 import WishlistActionButton from "@/components/common/WishlistActionButton";
 import type { ProductDeliveryCharge, ProductDetailsVariant } from "@/types/product.type";
-import type { ProductWishlistVariant } from "@/types/wishlist.type";
 import { redirectToWhatsApp } from "@/utils";
 import {
   Barcode,
@@ -54,10 +53,10 @@ export default function ElecProdDetInfo({
   const hasDiscount = salePrice > 0 && salePrice < originalPrice;
   const displayPrice = hasDiscount ? salePrice : originalPrice;
 
-  const variantWithStock = activeVariant as unknown as (ProductWishlistVariant & {
+  const variantWithStock = activeVariant as unknown as {
     stock?: number;
     status?: number | boolean;
-  });
+  };
 
   const stock = Number(variantWithStock?.stock ?? 0);
   console.log(stock);

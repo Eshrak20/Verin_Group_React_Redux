@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { useInView } from "react-intersection-observer"; // 🎯 Lazy Fetching
 import { Link, useNavigate } from "react-router-dom";
 
-function getDiscount(price: string, salePrice: string): number {
+function getDiscount(price: number, salePrice: number): number {
   const p = typeof price === "number" ? price : parseFloat(price);
   const s = typeof salePrice === "number" ? salePrice : parseFloat(salePrice);
   if (!s || s >= p) return 0;
@@ -20,7 +20,7 @@ function getImage(product: Product) {
   );
 }
 
-function getDisplayPrice(price: string, salePrice: string): number {
+function getDisplayPrice(price: number, salePrice: number): number {
   const p = typeof price === "number" ? price : parseFloat(price);
   const s = typeof salePrice === "number" ? salePrice : parseFloat(salePrice);
   return s > 0 && s < p ? s : p;
@@ -128,8 +128,8 @@ export default function FeaturedPieces() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
             {featuredItems.map((product: Product, index: number) => {
               const variant = product.variant;
-              const price = variant?.price || "0";
-              const salePrice = variant?.sale_price ?? "0";
+              const price = variant?.price || 0;
+              const salePrice = variant?.sale_price ?? 0;
               const discount = getDiscount(price, salePrice);
               const displayPrice = getDisplayPrice(price, salePrice);
               const originalPrice = typeof price === "number" ? price : parseFloat(price);

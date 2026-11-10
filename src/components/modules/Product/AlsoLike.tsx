@@ -18,17 +18,13 @@ function normalizeCategory(value?: string | null): string {
     .replace(/^-|-$/g, "");
 }
 
-function getDiscount(price: string, salePrice: string): number {
-  const p = parseFloat(price);
-  const s = parseFloat(salePrice);
-  if (!s || s >= p || p <= 0) return 0;
-  return Math.round(((p - s) / p) * 100);
+function getDiscount(price: number, salePrice: number): number {
+  if (!salePrice || salePrice >= price || price <= 0) return 0;
+  return Math.round(((price - salePrice) / price) * 100);
 }
 
-function getDisplayPrice(price: string, salePrice: string): number {
-  const p = parseFloat(price);
-  const s = parseFloat(salePrice);
-  return s > 0 && s < p ? s : p;
+function getDisplayPrice(price: number, salePrice: number): number {
+  return salePrice > 0 && salePrice < price ? salePrice : price;
 }
 
 function getImage(product: Product): string {
@@ -149,13 +145,13 @@ export default function AlsoLike({ subCategoryName, currentSlug }: AlsoLikeProps
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {relatedProducts.map((product, index) => {
             const variant = product.variant;
-            const price = variant?.price || "0";
-            const salePrice = variant?.sale_price || "0";
+            const price = variant?.price || 0;
+            const salePrice = variant?.sale_price || 0;
             const sku = variant?.sku || "";
 
             const discount = getDiscount(price, salePrice);
             const displayPrice = getDisplayPrice(price, salePrice);
-            const originalPrice = parseFloat(price);
+            const originalPrice = price;
             const image = getImage(product);
 
             const handleCardClick = () => {
