@@ -1,28 +1,12 @@
 import OrderSummary from "@/components/common/OrderSummary";
 import { formatPrice } from "@/lib/utils";
+import type { CartItem } from "@/types/order.type";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 
-interface CartItem {
-  id: number;
-  name: string;
-  category: string;
-  slug?: string;
-  sku?: string;
-  price: number;
-  sale_price: number;
-  thumbnail: string | null;
-  quantity: number;
-  stock: number;
-  deliveryCharge?: {
-    inside_dhaka_charge?: number;
-    outside_dhaka_charge?: number;
-  } | null;
-  attributes?: Array<{ name: string; value: string }>;
-}
 
 export default function MyCart() {
   const navigate = useNavigate();
@@ -33,7 +17,12 @@ export default function MyCart() {
     const loadCart = () => {
       const storedCart = JSON.parse(localStorage.getItem("guest_cart") || "[]");
       setCartItems(storedCart);
-      setSelectedItemIds(storedCart.map((item: CartItem) => item.id));
+
+      const preSelectedIds = JSON.parse(localStorage.getItem("cart_selected_ids") || "[]");
+      if (preSelectedIds.length > 0) {
+        setSelectedItemIds(preSelectedIds);
+        localStorage.removeItem("cart_selected_ids"); 
+      }
     };
 
     loadCart();
@@ -50,6 +39,9 @@ export default function MyCart() {
       setSelectedItemIds([]);
     }
   };
+
+console.log(cartItems);
+
 
   // Individual Item Select Toggle
   const handleToggleSelectItem = (id: number) => {
@@ -175,9 +167,6 @@ export default function MyCart() {
     const selectedItems = cartItems.filter((item) => selectedItemIds.includes(item.id));
     navigate("/checkout", { state: { selectedItems, selectedItemIds } });
   };
-
-  console.log(cartItems);
-  
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-0 min-h-[70vh] space-y-6">

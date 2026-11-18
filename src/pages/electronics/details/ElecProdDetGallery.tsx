@@ -13,18 +13,15 @@ export default function ElecProdDetGallery({
 }: ElecProdDetGalleryProps) {
   const primaryImage = images[0] ?? "/placeholder.png";
 
-  // యూসার যদি নিজে থাম্বনেইল ক্লিক করে ইমেজ পরিবর্তন করে, শুধু তার জন্য লোকাল স্টেট
   const [userSelectedImage, setUserSelectedImage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
   const [isHovered, setIsHovered] = useState(false);
 
-  // যদি ইউজার নতুন কোনো ইমেজ সিলেক্ট না করে অথবা ভ্যারিয়েন্ট বদলায়, তবে লেটেস্ট ভ্যারিয়েন্টের প্রথম ইমেজ দেখাবে
   const selectedImage = userSelectedImage && images.includes(userSelectedImage)
     ? userSelectedImage
     : primaryImage;
 
-  // Esc কি (Key) চাপলে মোডাল বন্ধ হওয়ার জন্য এবং ব্যাকগ্রাউন্ড স্ক্রোল লক করতে
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -41,7 +38,6 @@ export default function ElecProdDetGallery({
     };
   }, [isModalOpen]);
 
-  // মাউস মুভমেন্ট হ্যান্ডলার (শুধু ফ্রেমের ভেতরে থাকলেই পজিশন ক্যালকুলেট করবে)
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - left) / width) * 100;
@@ -49,7 +45,6 @@ export default function ElecProdDetGallery({
     setZoomPosition({ x, y });
   };
 
-  // লাইটবক্স মোডাল কন্টেন্ট (পোর্টালের মাধ্যমে বডিতে রেন্ডার হবে)
   const modalContent = isModalOpen ? (
     <div className="fixed inset-0 z-999999 flex flex-col items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-200">
 

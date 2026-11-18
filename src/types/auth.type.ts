@@ -22,6 +22,7 @@ export interface VerifyOtpRequest {
   purpose: string;
 }
 
+
 export interface VerifyOtpProfile {
   id: number;
   user_id: number;

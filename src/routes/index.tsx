@@ -5,9 +5,12 @@ import GlobalErrorPage from "@/components/layout/GlobalErrorPage";
 import { ForgotPassword } from "@/pages/authentication/ForgotPassword";
 import ResetPassword from "@/pages/authentication/ResetPassword";
 import VerifyOtp from "@/pages/authentication/VerifyOtp";
+import Checkout from "@/pages/dashboard/Checkout";
 import MyCart from "@/pages/dashboard/MyCart";
+import MyOrders from "@/pages/dashboard/MyOrders";
 import MyProfile from "@/pages/dashboard/MyProfile";
 import MyWishlist from "@/pages/dashboard/MyWishlist";
+import OrderDetails from "@/pages/dashboard/OrderDetails";
 import ElecProductDetails from "@/pages/electronics/details/ElecProductDetails";
 import ProductListMain from "@/pages/electronics/product-list/ProductListMain";
 import Homepage from "@/pages/Homepage";
@@ -116,6 +119,18 @@ export const router = createBrowserRouter([
             {
                 path: "/my-profile",
                 element: <Suspense fallback={<PageLoader />}><MyProfile /></Suspense>,
+            },
+            {
+                path: "/my-orders",
+                element: <Suspense fallback={<PageLoader />}><MyOrders /></Suspense>,
+            },
+            {
+                path: "/my-orders/:orderNumber",
+                element: <Suspense fallback={<PageLoader />}><OrderDetails /></Suspense>,
+            },
+            {
+                path: "/checkout",
+                element: <Suspense fallback={<PageLoader />}><Checkout /></Suspense>,
             },
             {
                 path: "privacy-policy",

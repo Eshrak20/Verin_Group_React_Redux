@@ -396,6 +396,7 @@ export default function ProductDetails() {
                 salePrice={salePrice}
                 thumbnail={productImages[0] ?? null}
                 inStock={isInStock}
+                deliveryCharge={product.delivery_charge}
               />
             </div>
 

@@ -4,7 +4,7 @@ import React from "react";
 interface OrderSummaryProps {
     subtotal: number;
     totalItemsCount: number;
-    shippingFee: number;
+    shippingFee: number; // ডাইনামিক ডেলিভারি চার্জ প্রপস
     onActionClick: () => void;
     actionButtonText: string;
     isActionDisabled?: boolean;
@@ -33,15 +33,17 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                     <span>Subtotal ({totalItemsCount} {totalItemsCount === 1 ? "item" : "items"})</span>
                     <span className="font-semibold text-foreground">৳{formatPrice(subtotal)}</span>
                 </div>
+                
+                {/* ডাইনামিক ডেলিভারি চার্জ শো করার সেকশন */}
                 <div className="flex justify-between items-center text-muted-foreground">
                     <span>Shipping Fee</span>
                     {isFreeDelivery ? (
-                        <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-extrabold text-green-700 border border-green-200 dark:bg-green-900/30 dark:text-green-400">
+                        <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400">
                             Free Delivery
                         </span>
                     ) : (
                         <span className="font-semibold text-foreground">
-                            ৳{formatPrice(subtotal > 0 ? actualShippingFee : 0)}
+                            ৳{formatPrice(actualShippingFee)}
                         </span>
                     )}
                 </div>

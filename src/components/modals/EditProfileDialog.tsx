@@ -34,7 +34,7 @@ interface EditProfileDialogProps {
     profile: VerifyOtpProfile;
 }
 
-interface ProfileForm {
+export interface ProfileForm {
     name: string;
     phone: string;
     date_of_birth: string;

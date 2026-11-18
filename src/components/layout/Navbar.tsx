@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import ProductSearch from "@/components/modules/Product/ProductSearch";
-import { Heart, LogOut, Settings, ShoppingBag, User } from "lucide-react";
+import { Heart, LogOut, Package, Settings, ShoppingBag, User } from "lucide-react";
 
 import { removeAuthCookies } from "@/lib/authCookie";
 import { getApiErrorMessage } from "@/lib/getApiErrorMessage";
@@ -350,14 +350,14 @@ export default function Navbar() {
                           <ShoppingBag className="h-4 w-4 text-gray-500" />
                           My Cart
                         </Link>
-                        {/* <Link
+                        <Link
                           to="/my-orders"
                           onClick={() => setUserMenuOpen(false)}
                           className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
                         >
                           <Package className="h-4 w-4 text-gray-500" />
                           My Orders
-                        </Link> */}
+                        </Link>
                       </div>
 
                       {/* Logout Action */}

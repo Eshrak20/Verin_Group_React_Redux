@@ -7,10 +7,10 @@ interface CartItem {
     name: string;
     category?: string;
     slug?: string;
-    variantId: number,
+    variantId: number;
     sku?: string;
     stock: number;
-    deliveryCharge?: ProductDeliveryCharge
+    deliveryCharge?: ProductDeliveryCharge;
     price: number;
     sale_price: number;
     thumbnail?: string | null;
@@ -28,7 +28,7 @@ interface AddToCartActionButtonProps {
     salePrice: number;
     thumbnail?: string | null;
     inStock: boolean;
-    deliveryCharge?: ProductDeliveryCharge
+    deliveryCharge?: ProductDeliveryCharge;
 }
 
 export default function AddToCartActionButton({
@@ -44,10 +44,9 @@ export default function AddToCartActionButton({
     deliveryCharge
 }: AddToCartActionButtonProps) {
 
-
     const navigate = useNavigate();
-    const location = useLocation()
-    const isElectronicsPage = location.pathname.startsWith("/electronics")
+    const location = useLocation();
+    const isElectronicsPage = location.pathname.startsWith("/electronics");
 
     const handleAddToCart = (isBuyNow: boolean = false) => {
         if (!inStock) {
@@ -63,7 +62,7 @@ export default function AddToCartActionButton({
             slug: slug || `product-${productId}`,
             sku: activeVariant?.sku || "N/A",
             stock: Number(activeVariant?.stock ?? 0),
-            deliveryCharge,
+            deliveryCharge: deliveryCharge,
             price: originalPrice,
             sale_price: salePrice,
             thumbnail,
@@ -79,17 +78,20 @@ export default function AddToCartActionButton({
 
         if (existingIndex > -1) {
             existingCart[existingIndex].quantity += 1;
+            if (!existingCart[existingIndex].deliveryCharge) {
+                existingCart[existingIndex].deliveryCharge = cartItem.deliveryCharge;
+            }
         } else {
             existingCart.push(cartItem);
         }
 
         localStorage.setItem("guest_cart", JSON.stringify(existingCart));
-
         window.dispatchEvent(new Event("storage"));
 
         if (isBuyNow) {
-            toast.success("Proceeding to checkout...");
-            navigate("/checkout");
+            localStorage.setItem("cart_selected_ids", JSON.stringify([productId]));
+            toast.success("Proceeding to cart...");
+            navigate("/my-cart");
         } else {
             toast.success("Product added to cart successfully!");
         }
@@ -101,7 +103,7 @@ export default function AddToCartActionButton({
                 type="button"
                 disabled={!inStock}
                 onClick={() => handleAddToCart(false)}
-                className={`${isElectronicsPage ? "border-elec text-elec hover:bg-elec/5" : "border-primary text-primary hover:bg-primary/5"} rounded-xl border  px-3 py-3 text-sm font-semibold  transition-colors  disabled:cursor-not-allowed disabled:opacity-50`}
+                className={`${isElectronicsPage ? "border-elec text-elec hover:bg-elec/5" : "border-primary text-primary hover:bg-primary/5"} rounded-xl border px-3 py-3 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer`}
             >
                 Add To Cart
             </button>
@@ -110,7 +112,7 @@ export default function AddToCartActionButton({
                 type="button"
                 disabled={!inStock}
                 onClick={() => handleAddToCart(true)}
-                className={`${isElectronicsPage ? "bg-elec hover:bg-elec/90" : "bg-primary hover:bg-primary/90"} rounded-xl  px-3 py-3 text-sm font-semibold text-white shadow-sm transition-colors  disabled:cursor-not-allowed disabled:opacity-50`}
+                className={`${isElectronicsPage ? "bg-elec hover:bg-elec/90" : "bg-primary hover:bg-primary/90"} rounded-xl px-3 py-3 text-sm font-semibold text-white shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer`}
             >
                 Buy Now
             </button>
