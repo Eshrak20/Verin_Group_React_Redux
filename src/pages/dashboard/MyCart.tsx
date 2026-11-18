@@ -176,6 +176,9 @@ export default function MyCart() {
     navigate("/checkout", { state: { selectedItems, selectedItemIds } });
   };
 
+  console.log(cartItems);
+  
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-0 min-h-[70vh] space-y-6">
       {/* Top Continue Shopping Link & Clear Cart */}

@@ -7,6 +7,7 @@ interface CartItem {
     name: string;
     category?: string;
     slug?: string;
+    variantId: number,
     sku?: string;
     stock: number;
     deliveryCharge?: ProductDeliveryCharge
@@ -43,7 +44,7 @@ export default function AddToCartActionButton({
     deliveryCharge
 }: AddToCartActionButtonProps) {
 
-    
+
     const navigate = useNavigate();
     const location = useLocation()
     const isElectronicsPage = location.pathname.startsWith("/electronics")
@@ -58,6 +59,7 @@ export default function AddToCartActionButton({
             id: productId,
             name,
             category,
+            variantId: activeVariant.id,
             slug: slug || `product-${productId}`,
             sku: activeVariant?.sku || "N/A",
             stock: Number(activeVariant?.stock ?? 0),

@@ -118,6 +118,7 @@ export interface ProductDetailsBrand {
 }
 
 export interface ProductDetailsVariant {
+  id: number
   sku: string;
   price: string | number;
   sale_price: string | number | null;
