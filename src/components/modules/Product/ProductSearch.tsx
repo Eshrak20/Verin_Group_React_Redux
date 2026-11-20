@@ -4,7 +4,11 @@ import { Search } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-export default function ProductSearch() {
+interface ProductSearchProps {
+  variant?: "desktop" | "mobile";
+}
+
+export default function ProductSearch({ variant = "desktop" }: ProductSearchProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -12,19 +16,16 @@ export default function ProductSearch() {
 
   const location = useLocation();
 
-  // 2. ইউআরএল থেকে ডায়নামিকালি Category ID বের করা
   const currentCategoryId = useMemo<number | undefined>(() => {
     const path = location.pathname.toLowerCase();
 
     if (path === "/" || path === "") return undefined;
-
     if (path.startsWith("/decor")) return 1;
     if (path.startsWith("/electronics")) return 2;
 
     return undefined;
   }, [location.pathname]);
 
-  // 3. ব্যাকএন্ডে টাইপ-সেফ কোয়েরি প্যারামস পাঠানো
   const { data, isLoading } = useGetProductsQuery(
     {
       search: searchTerm.trim(),
@@ -37,7 +38,6 @@ export default function ProductSearch() {
     },
   );
 
-  // ড্রপডাউন এর বাইরে ক্লিক করলে শুধুমাত্র ড্রপডাউন বন্ধ করার জন্য
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -53,15 +53,24 @@ export default function ProductSearch() {
 
   const targetCategoryId = currentCategoryId;
 
-  const searchUrl = `/search?query=${encodeURIComponent(searchTerm.trim())}${targetCategoryId !== undefined
-    ? `&category_id=${targetCategoryId}`
-    : ""
-    }`;
+  const searchUrl = `/search?query=${encodeURIComponent(searchTerm.trim())}${
+    targetCategoryId !== undefined ? `&category_id=${targetCategoryId}` : ""
+  }`;
+
+  const isMobile = variant === "mobile";
+
   return (
-    <div ref={containerRef} className="relative z-50 flex justify-end">
-      {/* 🎯 সর্বদাই ওপেন ও প্রসারিত সার্চ বার কন্টেইনার */}
+    <div
+      ref={containerRef}
+      className={`relative z-50 flex ${isMobile ? "w-full" : "justify-end"}`}
+    >
+      {/* 🎯 Search Bar Container */}
       <div
-        className="flex items-center rounded-full border border-[#00416A]/30 bg-transparent h-8 sm:h-10 px-2 sm:px-3 shadow-sm transition-all duration-300 w-36 sm:w-44 md:w-44 focus-within:border-[#00416A]"
+        className={
+          isMobile
+            ? "flex h-11 w-full items-center rounded-full border border-gray-200/90 bg-white px-4 shadow-2xs transition-all duration-300 focus-within:border-[#00416A]/50"
+            : "flex h-8 w-36 items-center rounded-full border border-[#00416A]/30 bg-transparent px-2 shadow-sm transition-all duration-300 focus-within:border-[#00416A] sm:h-10 sm:w-44 sm:px-3"
+        }
       >
         <input
           ref={inputRef}
@@ -74,15 +83,37 @@ export default function ProductSearch() {
           onFocus={() => {
             if (searchTerm.trim().length > 0) setIsOpen(true);
           }}
-          placeholder={currentCategoryId ? "Search in page..." : "Search..."}
-          className="w-full bg-transparent text-[11px] sm:text-xs text-slate-700 outline-none placeholder:text-slate-400 px-1"
+          placeholder={
+            isMobile
+              ? "Search products..."
+              : currentCategoryId
+                ? "Search in page..."
+                : "Search..."
+          }
+          className={
+            isMobile
+              ? "w-full bg-transparent pr-2 text-sm text-slate-700 outline-none placeholder:text-slate-400"
+              : "w-full bg-transparent px-1 text-[11px] text-slate-700 outline-none placeholder:text-slate-400 sm:text-xs"
+          }
         />
-        <Search className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#00416A] shrink-0" />
+        <Search
+          className={
+            isMobile
+              ? "h-4 w-4 shrink-0 text-slate-400"
+              : "h-3.5 w-3.5 shrink-0 text-[#00416A] sm:h-4 sm:w-4"
+          }
+        />
       </div>
 
-      {/* 🎯 ড্রপডাউন প্যানেল */}
+      {/* 🎯 Dropdown Panel */}
       {isOpen && searchTerm.trim().length > 0 && (
-        <div className="absolute top-full -right-12 sm:right-0 bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden mt-2 flex flex-col z-50 w-72.5 sm:w-80 md:w-96 text-left animate-in fade-in slide-in-from-top-2 duration-200">
+        <div
+          className={
+            isMobile
+              ? "absolute top-full left-0 right-0 z-50 mt-2 flex w-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white text-left shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200"
+              : "absolute top-full -right-12 z-50 mt-2 flex w-72.5 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white text-left shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200 sm:right-0 sm:w-80 md:w-96"
+          }
+        >
           {isLoading ? (
             <div className="py-6 text-center text-sm text-gray-400">
               Searching...
@@ -94,7 +125,8 @@ export default function ProductSearch() {
                   const firstVariant = product.variant;
                   const firstImage = firstVariant?.images?.[0];
 
-                  const imageUrl = product.thumbnail || firstImage || "https://via.placeholder.com/150";
+                  const imageUrl =
+                    product.thumbnail || firstImage || "https://via.placeholder.com/150";
                   const price = firstVariant?.price || 0;
                   const sku = firstVariant?.sku || `PD-00${product.id}`;
 
@@ -111,26 +143,26 @@ export default function ProductSearch() {
                         setIsOpen(false);
                         setSearchTerm("");
                       }}
-                      className="flex items-center justify-between p-2 rounded-xl hover:bg-gray-50 transition-colors group"
+                      className="group flex items-center justify-between rounded-xl p-2 transition-colors hover:bg-gray-50"
                     >
-                      <div className="flex items-center gap-3 min-w-0">
+                      <div className="flex min-w-0 items-center gap-3">
                         <img
                           src={imageUrl}
                           alt={product.name}
-                          className="w-10 h-10 sm:w-11 sm:h-11 object-cover rounded-xl bg-gray-50 shrink-0 border border-gray-100"
+                          className="h-10 w-10 shrink-0 rounded-xl border border-gray-100 bg-gray-50 object-cover sm:h-11 sm:w-11"
                         />
-                        <div className="flex flex-col min-w-0">
-                          <span className="text-xs sm:text-sm font-semibold home-black-text line-clamp-1">
+                        <div className="flex min-w-0 flex-col">
+                          <span className="line-clamp-1 text-xs font-semibold home-black-text sm:text-sm">
                             {product.name}
                           </span>
-                          <span className="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-wider mt-0.5 truncate">
+                          <span className="mt-0.5 truncate text-[9px] uppercase tracking-wider text-gray-400 sm:text-[10px]">
                             {sku}
                           </span>
                         </div>
                       </div>
 
-                      <div className="text-right shrink-0 pl-2 sm:pl-3">
-                        <span className="text-xs sm:text-sm font-bold text-gray-900">
+                      <div className="shrink-0 pl-2 text-right sm:pl-3">
+                        <span className="text-xs font-bold text-gray-900 sm:text-sm">
                           TK {Number(price).toLocaleString()}
                         </span>
                       </div>
@@ -139,20 +171,18 @@ export default function ProductSearch() {
                 })}
               </div>
 
-            
-              <div className="border-t border-gray-100 mt-1 p-2 bg-gray-50/50">
+              <div className="mt-1 border-t border-gray-100 bg-gray-50/50 p-2">
                 <Link
                   to={searchUrl}
                   onClick={() => {
                     setIsOpen(false);
                     setSearchTerm("");
                   }}
-                  className="flex items-center justify-between rounded-xl p-2 transition-colors hover:bg-gray-50 group"
+                  className="group flex items-center justify-between rounded-xl p-2 text-xs font-semibold text-[#00416A] transition-colors hover:bg-gray-50"
                 >
                   View all results
                 </Link>
               </div>
-            
             </>
           ) : (
             <div className="py-6 text-center text-sm text-gray-400">

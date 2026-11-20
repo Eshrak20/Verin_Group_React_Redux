@@ -21,7 +21,7 @@ export default function MyCart() {
       const preSelectedIds = JSON.parse(localStorage.getItem("cart_selected_ids") || "[]");
       if (preSelectedIds.length > 0) {
         setSelectedItemIds(preSelectedIds);
-        localStorage.removeItem("cart_selected_ids"); 
+        localStorage.removeItem("cart_selected_ids");
       }
     };
 
@@ -39,9 +39,6 @@ export default function MyCart() {
       setSelectedItemIds([]);
     }
   };
-
-console.log(cartItems);
-
 
   // Individual Item Select Toggle
   const handleToggleSelectItem = (id: number) => {
@@ -64,7 +61,7 @@ console.log(cartItems);
         totalQty += item.quantity;
 
         const itemShipping = item.deliveryCharge?.inside_dhaka_charge ?? 150;
-        shipping += Number(itemShipping);
+        shipping += Number(itemShipping) * item.quantity;
       }
     });
 

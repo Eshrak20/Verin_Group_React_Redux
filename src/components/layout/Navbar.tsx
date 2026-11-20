@@ -237,11 +237,11 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 w-full z-50">
       <div>
-        <div className="flex items-center bg-white border-b-2 border-gray-200/70 h-16 shadow-lg shadow-black/5 backdrop-blur-md">
-          {/* Main Container */}
-          <div className="max-w-6xl mx-auto flex w-full items-center justify-between px-4 sm:px-6 lg:px-0 gap-4">
+        <div className="bg-white/95 border-b-2 border-gray-200/70 shadow-lg shadow-black/5 backdrop-blur-md">
+          {/* Top Row Container */}
+          <div className="mx-auto flex h-16 max-w-6xl w-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-0">
             {/* Left Section: Logo & Nav links */}
-            <div className="flex items-center gap-6 lg:gap-14 shrink-0">
+            <div className="flex shrink-0 items-center gap-6 lg:gap-14">
               <NavLogo
                 logoPath={logoPath}
                 logoUrl={logoUrl}
@@ -259,22 +259,22 @@ export default function Navbar() {
             </div>
 
             {/* Right Section: Search, Wishlist, Cart & Auth Buttons */}
-            <div className="flex shrink-0 items-center gap-2.5 sm:gap-1.75 z-10 pl-2">
-              {/* Search Bar */}
+            <div className="z-10 flex shrink-0 items-center gap-2.5 pl-2 sm:gap-1.75">
+              {/* Desktop Search Bar */}
               <div className="hidden md:flex items-center">
-                <ProductSearch />
+                <ProductSearch variant="desktop" />
               </div>
 
               {/* Wishlist Icon Button */}
               <Link
                 to="/my-wishlist"
                 aria-label={`Wishlist${wishlistCount > 0 ? ` (${wishlistCount})` : ""}`}
-                className="relative flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-700 hover:border-primary hover:text-primary transition-colors"
+                className="relative flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-700 transition-colors hover:border-primary hover:text-primary"
               >
                 <Heart className="h-4 w-4" />
 
                 {wishlistCount > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white shadow-xs">
+                  <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white shadow-xs">
                     {wishlistCount > 99 ? "99+" : wishlistCount}
                   </span>
                 )}
@@ -284,11 +284,11 @@ export default function Navbar() {
               <Link
                 to="/my-cart"
                 aria-label="Cart"
-                className="relative flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-700 hover:border-primary hover:text-primary transition-colors"
+                className="relative flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-700 transition-colors hover:border-primary hover:text-primary"
               >
                 <ShoppingBag className="h-4 w-4" />
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white shadow-xs">
+                  <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white shadow-xs">
                     {cartCount}
                   </span>
                 )}
@@ -300,7 +300,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => setUserMenuOpen((prev) => !prev)}
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-white shadow-sm hover:opacity-95 transition-all focus:outline-none cursor-pointer"
+                    className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-sm transition-all hover:opacity-95 focus:outline-none"
                     aria-label="User menu"
                   >
                     {user?.profile?.avatar ? (
@@ -316,20 +316,18 @@ export default function Navbar() {
 
                   {/* User Sub-menu Dropdown */}
                   {userMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-52 rounded-2xl bg-white border border-gray-100 shadow-xl py-2 z-50 text-left animate-in fade-in slide-in-from-top-2 duration-200">
-                      {/* User Info Header */}
-                      <div className="px-4 py-2.5 border-b border-gray-100">
-                        <p className="text-xs text-gray-400 font-medium mb-1">Signed in as</p>
-                        <p className="text-sm font-bold text-gray-900 truncate mb-0.5">{userName}</p>
-                        <p className="text-xs text-gray-900 truncate">{userEmail}</p>
+                    <div className="absolute right-0 z-50 mt-2 w-52 rounded-2xl border border-gray-100 bg-white py-2 text-left shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className="border-b border-gray-100 px-4 py-2.5">
+                        <p className="mb-1 text-xs font-medium text-gray-400">Signed in as</p>
+                        <p className="mb-0.5 truncate text-sm font-bold text-gray-900">{userName}</p>
+                        <p className="truncate text-xs text-gray-900">{userEmail}</p>
                       </div>
 
-                      {/* Menu Links */}
                       <div className="py-1">
                         <Link
                           to="/my-profile"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50"
                         >
                           <Settings className="h-4 w-4 text-gray-500" />
                           My Profile
@@ -337,7 +335,7 @@ export default function Navbar() {
                         <Link
                           to="/my-wishlist"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50"
                         >
                           <Heart className="h-4 w-4 text-gray-500" />
                           My Wishlist
@@ -345,7 +343,7 @@ export default function Navbar() {
                         <Link
                           to="/my-cart"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50"
                         >
                           <ShoppingBag className="h-4 w-4 text-gray-500" />
                           My Cart
@@ -353,19 +351,18 @@ export default function Navbar() {
                         <Link
                           to="/my-orders"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50"
                         >
                           <Package className="h-4 w-4 text-gray-500" />
                           My Orders
                         </Link>
                       </div>
 
-                      {/* Logout Action */}
                       <div className="border-t border-gray-100 pt-1">
                         <button
                           type="button"
                           onClick={handleLogout}
-                          className="flex w-full items-center gap-2.5 px-4 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                          className="flex w-full cursor-pointer items-center gap-2.5 px-4 py-2 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50"
                         >
                           <LogOut className="h-4 w-4 text-red-500" />
                           Logout
@@ -376,18 +373,16 @@ export default function Navbar() {
                 </div>
               ) : (
                 <>
-                  {/* Login Button */}
                   <Link
                     to="/login"
-                    className="hidden sm:inline-flex items-center justify-center rounded-xl px-4 py-2 text-xs font-semibold text-gray-700 border border-gray-300 hover:bg-gray-50 transition-colors"
+                    className="hidden items-center justify-center rounded-xl border border-gray-300 px-4 py-2 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50 sm:inline-flex"
                   >
                     Login
                   </Link>
 
-                  {/* Register Button */}
                   <Link
                     to="/register"
-                    className="hidden sm:inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-white hover:bg-primary/90 transition-colors shadow-sm"
+                    className="hidden items-center justify-center rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-primary/90 sm:inline-flex"
                   >
                     Register
                   </Link>
@@ -403,6 +398,11 @@ export default function Navbar() {
                 checkIsActive={isLinkActive}
               />
             </div>
+          </div>
+
+          {/* Mobile Full-Width Search Row */}
+          <div className="mx-auto max-w-6xl px-4 pb-3 md:hidden sm:px-6">
+            <ProductSearch variant="mobile" />
           </div>
         </div>
       </div>

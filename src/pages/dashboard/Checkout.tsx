@@ -12,6 +12,27 @@ import React, { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 
+const TRANSACTION_ID_LENGTHS: Record<string, number> = {
+    bkash: 10,
+    nagad: 8,
+};
+
+const validateTransactionId = (provider: string, rawTxnId: string): string | null => {
+    const txnId = rawTxnId.trim();
+    const expectedLength = TRANSACTION_ID_LENGTHS[provider];
+
+    if (!txnId) {
+        return "Transaction ID is required for online payment.";
+    }
+
+    if (expectedLength && txnId.length !== expectedLength) {
+        const providerLabel = provider === "bkash" ? "bKash" : "Nagad";
+        return `${providerLabel} Transaction ID must be ${expectedLength} characters long.`;
+    }
+
+    return null;
+};
+
 export const Checkout: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -62,6 +83,7 @@ export const Checkout: React.FC = () => {
         customer_note: "",
     });
 
+    const [transactionIdError, setTransactionIdError] = useState<string | null>(null);
     const [isAutofilled, setIsAutofilled] = useState(false);
 
     if (userData && !isAutofilled) {
@@ -77,22 +99,43 @@ export const Checkout: React.FC = () => {
         setIsAutofilled(true);
     }
 
-    const selectedShippingFee = useMemo(() => {
-        const isInside = formData.delivery_zone === "inside_dhaka";
-        return selectedItems.reduce((acc, item) => {
-            const itemCharge = isInside
-                ? (item.deliveryCharge?.inside_dhaka_charge ?? insideDhakaFee)
-                : (item.deliveryCharge?.outside_dhaka_charge ?? outsideDhakaFee);
+    // Inside Dhaka এবং Outside Dhaka-এর জন্য quantity সহ মোট ডেলিভারি চার্জ
+    const { totalInsideDhakaFee, totalOutsideDhakaFee } = useMemo(() => {
+        return selectedItems.reduce(
+            (acc, item) => {
+                const insideCharge = Number(item.deliveryCharge?.inside_dhaka_charge ?? insideDhakaFee);
+                const outsideCharge = Number(item.deliveryCharge?.outside_dhaka_charge ?? outsideDhakaFee);
 
-            return acc + Number(itemCharge) * item.quantity;
-        }, 0);
-    }, [selectedItems, formData.delivery_zone]);
+                return {
+                    totalInsideDhakaFee: acc.totalInsideDhakaFee + insideCharge * item.quantity,
+                    totalOutsideDhakaFee: acc.totalOutsideDhakaFee + outsideCharge * item.quantity,
+                };
+            },
+            { totalInsideDhakaFee: 0, totalOutsideDhakaFee: 0 }
+        );
+    }, [selectedItems]);
+
+    const selectedShippingFee =
+        formData.delivery_zone === "inside_dhaka" ? totalInsideDhakaFee : totalOutsideDhakaFee;
 
     const isFreeDelivery = selectedShippingFee === 0;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+
+        if (name === "transaction_id" && formData.payment_method === "online") {
+            setTransactionIdError(validateTransactionId(formData.payment_provider, value));
+        }
+    };
+
+    const handleProviderChange = (provider: string) => {
+        setFormData((prev) => ({ ...prev, payment_provider: provider }));
+        if (formData.payment_method === "online" && formData.transaction_id.trim()) {
+            setTransactionIdError(validateTransactionId(provider, formData.transaction_id));
+        } else {
+            setTransactionIdError(null);
+        }
     };
 
     const handlePlaceOrder = async () => {
@@ -101,9 +144,13 @@ export const Checkout: React.FC = () => {
             return;
         }
 
-        if (formData.payment_method === "online" && !formData.transaction_id.trim()) {
-            toast.error("Please enter the Transaction ID for online payment.");
-            return;
+        if (formData.payment_method === "online") {
+            const txnError = validateTransactionId(formData.payment_provider, formData.transaction_id);
+            if (txnError) {
+                setTransactionIdError(txnError);
+                toast.error(txnError);
+                return;
+            }
         }
 
         if (selectedItemIds.length === 0) {
@@ -139,7 +186,7 @@ export const Checkout: React.FC = () => {
                 customer_note: formData.customer_note || undefined,
                 payment_method: formData.payment_method,
                 payment_provider: formData.payment_method === "online" ? formData.payment_provider : undefined,
-                transaction_id: formData.payment_method === "online" ? formData.transaction_id : undefined,
+                transaction_id: formData.payment_method === "online" ? formData.transaction_id.trim() : undefined,
                 items: selectedItems.map((item) => ({
                     product_variant_id: item.variantId,
                     quantity: item.quantity,
@@ -182,6 +229,8 @@ export const Checkout: React.FC = () => {
             </div>
         );
     }
+
+    const expectedTxnLength = TRANSACTION_ID_LENGTHS[formData.payment_provider];
 
     return (
         <div className="mx-auto max-w-7xl px-4 pt-2 pb-8 sm:px-0">
@@ -282,7 +331,7 @@ export const Checkout: React.FC = () => {
                                         <span>Inside Dhaka City</span>
                                     </div>
                                     <span className="font-bold text-primary">
-                                        ৳{selectedItems.reduce((acc, item) => acc + (item.deliveryCharge?.inside_dhaka_charge ?? insideDhakaFee), 0)}
+                                        ৳{totalInsideDhakaFee}
                                     </span>
                                 </label>
 
@@ -292,7 +341,7 @@ export const Checkout: React.FC = () => {
                                         <span>Outside Dhaka City</span>
                                     </div>
                                     <span className="font-bold text-primary">
-                                        ৳{selectedItems.reduce((acc, item) => acc + (item.deliveryCharge?.outside_dhaka_charge ?? outsideDhakaFee), 0)}
+                                        ৳{totalOutsideDhakaFee}
                                     </span>
                                 </label>
                             </RadioGroup>
@@ -304,7 +353,13 @@ export const Checkout: React.FC = () => {
                         <label className="block text-xs font-semibold text-foreground mb-2">Select Payment Method *</label>
                         <RadioGroup
                             value={formData.payment_method}
-                            onValueChange={(value) => setFormData((p) => ({ ...p, payment_method: value as "cod" | "online" }))}
+                            onValueChange={(value) => {
+                                const method = value as "cod" | "online";
+                                setFormData((p) => ({ ...p, payment_method: method }));
+                                if (method === "cod") {
+                                    setTransactionIdError(null);
+                                }
+                            }}
                             className="grid gap-3 sm:grid-cols-2"
                         >
                             <label className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3.5 text-sm ${formData.payment_method === "cod" ? "border-primary bg-primary/5 font-semibold" : "border-border"}`}>
@@ -325,7 +380,7 @@ export const Checkout: React.FC = () => {
                                 <label className="block text-xs font-semibold text-foreground mb-1">Payment Provider *</label>
                                 <Select
                                     value={formData.payment_provider}
-                                    onValueChange={(value) => setFormData((p) => ({ ...p, payment_provider: value }))}
+                                    onValueChange={handleProviderChange}
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select provider" />
@@ -337,16 +392,28 @@ export const Checkout: React.FC = () => {
                                 </Select>
                             </div>
                             <div>
-                                <label className="block text-xs font-semibold text-foreground mb-1">Transaction ID *</label>
+                                <label className="block text-xs font-semibold text-foreground mb-1">
+                                    Transaction ID * {expectedTxnLength ? `(${expectedTxnLength} chars)` : ""}
+                                </label>
                                 <input
                                     type="text"
                                     name="transaction_id"
                                     required
-                                    placeholder="e.g. TXN123456789"
+                                    maxLength={expectedTxnLength}
+                                    placeholder={expectedTxnLength === 10 ? "e.g. 8A7B6C5D4E" : "e.g. 7A6B5C4D"}
                                     value={formData.transaction_id}
                                     onChange={handleChange}
-                                    className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                                    aria-invalid={Boolean(transactionIdError)}
+                                    className={`w-full rounded-lg border bg-background px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-1 ${transactionIdError
+                                            ? "border-destructive focus:ring-destructive"
+                                            : "border-border focus:ring-primary"
+                                        }`}
                                 />
+                                {transactionIdError && (
+                                    <p className="mt-1 text-xs font-medium text-destructive">
+                                        {transactionIdError}
+                                    </p>
+                                )}
                             </div>
                         </div>
                     )}

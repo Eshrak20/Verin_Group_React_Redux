@@ -63,64 +63,70 @@ export default function ElecSliderBanner({ banners }: ElecBannerProps) {
     <div className="mx-auto max-w-6xl px-4 py-4 sm:px-0">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Left Slider Section (Takes 2 columns on large screens) */}
-        <div className="relative group overflow-hidden rounded-xl bg-white shadow-sm lg:col-span-2">
-          {/* Carousel Viewport */}
-          <div className="h-full w-full overflow-hidden" ref={emblaRef}>
-            <div className="flex h-full w-full">
-              {slideBanners.map((banner) => (
-                <div
-                  key={banner.id}
-                  className="relative h-62.5 w-full flex-[0_0_100%] min-w-0 sm:h-87.5"
-                >
-                  <img
-                    src={banner.image_url}
-                    alt="Electronics Slide Banner"
-                    className="h-full w-full object-cover"
-                  />
+        <div className="relative group overflow-hidden rounded-xl bg-card shadow-sm lg:col-span-2">
+          {slideBanners.length > 0 ? (
+            <>
+              {/* Carousel Viewport */}
+              <div className="h-full w-full overflow-hidden" ref={emblaRef}>
+                <div className="flex h-full w-full">
+                  {slideBanners.map((banner) => (
+                    <div
+                      key={banner.id}
+                      className="relative h-62.5 w-full flex-[0_0_100%] min-w-0 sm:h-87.5"
+                    >
+                      <img
+                        src={banner.image_url}
+                        alt="Electronics Slide Banner"
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          {/* Transparent Custom Left Button */}
-          <button
-            type="button"
-            onClick={scrollPrev}
-            className="absolute left-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-md transition-all hover:bg-black/85 shadow-lg opacity-90 group-hover:opacity-100"
-            aria-label="Previous slide"
-          >
-            <ChevronLeft className="h-6 w-6 stroke-[2.5]" />
-          </button>
-
-          {/* Transparent Custom Right Button */}
-          <button
-            type="button"
-            onClick={scrollNext}
-            className="absolute right-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-md transition-all hover:bg-black/85 shadow-lg opacity-90 group-hover:opacity-100"
-            aria-label="Next slide"
-          >
-            <ChevronRight className="h-6 w-6 stroke-[2.5]" />
-          </button>
-
-          {/* Custom Pagination Dots */}
-          <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-2">
-            {slideBanners.map((_, index) => (
+              {/* Transparent Custom Left Button */}
               <button
-                key={index}
                 type="button"
-                onClick={() => scrollTo(index)}
-                className={`h-2.5 rounded-full transition-all cursor-pointer ${index === selectedIndex
-                    ? "w-7 bg-elec"
-                    : "w-2.5 bg-white/60 hover:bg-white"
-                  }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
+                onClick={scrollPrev}
+                className="absolute left-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-md transition-all hover:bg-black/85 shadow-lg opacity-90 group-hover:opacity-100"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft className="h-6 w-6 stroke-[2.5]" />
+              </button>
+
+              {/* Transparent Custom Right Button */}
+              <button
+                type="button"
+                onClick={scrollNext}
+                className="absolute right-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-md transition-all hover:bg-black/85 shadow-lg opacity-90 group-hover:opacity-100"
+                aria-label="Next slide"
+              >
+                <ChevronRight className="h-6 w-6 stroke-[2.5]" />
+              </button>
+
+              {/* Custom Pagination Dots */}
+              <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+                {slideBanners.map((_, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => scrollTo(index)}
+                    className={`h-2.5 rounded-full transition-all cursor-pointer ${index === selectedIndex
+                        ? "w-7 bg-elec"
+                        : "w-2.5 bg-white/60 hover:bg-white"
+                      }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="h-62.5 w-full animate-pulse bg-muted sm:h-87.5" />
+          )}
         </div>
 
         {/* Right Static Banner Section (Takes 1 column on large screens) */}
-        <div className="flex items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm">
+        <div className="flex items-center justify-center overflow-hidden rounded-xl bg-card shadow-sm">
           {sideBanner ? (
             <div className="relative h-62.5 w-full sm:h-87.5">
               <img
@@ -130,9 +136,7 @@ export default function ElecSliderBanner({ banners }: ElecBannerProps) {
               />
             </div>
           ) : (
-            <div className="flex h-62.5 w-full items-center justify-center bg-elec/10 font-medium text-elec sm:h-87.5">
-              Banner Unavailable
-            </div>
+            <div className="h-62.5 w-full animate-pulse bg-muted sm:h-87.5" />
           )}
         </div>
       </div>

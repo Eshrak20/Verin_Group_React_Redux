@@ -1,4 +1,6 @@
 import { useGetElecProductDetailsQuery } from "@/redux/services/electronics/electronics.api";
+import { PageLoader } from "@/routes";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { useParams } from "react-router";
 import ElecProdDetGallery from "./ElecProdDetGallery";
@@ -13,7 +15,7 @@ export default function ElecProductDetails() {
     const product = response?.data;
 
     if (isLoading) {
-        return <div className="mx-auto max-w-6xl px-4 py-12 text-center text-gray-500">Loading product details...</div>;
+        return <PageLoader />;
     }
 
     if (!product) {
@@ -27,33 +29,58 @@ export default function ElecProductDetails() {
     const variantImages = activeVariant?.images ?? [];
 
     return (
-        <div className="mx-auto max-w-6xl px-4 pt-6 pb-16 sm:px-6 lg:px-0">
+        <motion.div
+            key={slug}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="mx-auto max-w-6xl px-4 pt-6 pb-16 sm:px-6 lg:px-0"
+        >
             {/* Top Product Section */}
             <div className="mb-10 grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
                 {/* Sticky Image Gallery Section */}
-                <div className="sticky top-6">
+                <motion.div
+                    key={`left-${slug}`}
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+                    className="sticky top-6"
+                >
                     <ElecProdDetGallery
                         key={activeVariant?.sku ?? "default"}
                         images={variantImages}
                         productName={product.name}
                     />
-                </div>
+                </motion.div>
 
                 {/* Product Information Section */}
-                <ElecProdDetInfo
-                    productId={product.id}
-                    category={product?.category?.name}
-                    slug={product.slug}
-                    name={product.name}
-                    variants={variants}
-                    selectedSku={activeVariant?.sku ?? null}
-                    onSelectSku={setSelectedSku}
-                    deliveryCharge={product?.delivery_charge}
-                />
+                <motion.div
+                    key={`right-${slug}`}
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                >
+                    <ElecProdDetInfo
+                        productId={product.id}
+                        category={product?.category?.name}
+                        slug={product.slug}
+                        name={product.name}
+                        variants={variants}
+                        selectedSku={activeVariant?.sku ?? null}
+                        onSelectSku={setSelectedSku}
+                        deliveryCharge={product?.delivery_charge}
+                    />
+                </motion.div>
             </div>
 
             {/* Specifications & Warranty Section */}
-            <ElecProdDetSpec descriptionHtml={product.description ?? ""} />
-        </div>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.25, ease: "easeOut" }}
+            >
+                <ElecProdDetSpec descriptionHtml={product.description ?? ""} />
+            </motion.div>
+        </motion.div>
     );
 }

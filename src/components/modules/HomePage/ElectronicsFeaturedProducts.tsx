@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer"; // 🎯 Lazy Fetching
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const VISIBLE = 5;
 const GAP = 12;
@@ -155,7 +155,7 @@ export default function ElectronicsFeaturedProducts() {
               onMouseLeave={startAuto}
               onTouchStart={
                 stopAuto
-              } 
+              }
               onTouchEnd={
                 startAuto
               }
@@ -281,7 +281,7 @@ export default function ElectronicsFeaturedProducts() {
           </div>
 
           {/* View All Button */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -300,7 +300,7 @@ export default function ElectronicsFeaturedProducts() {
               View All Products
               <ChevronRight size={16} />
             </Link>
-          </motion.div>
+          </motion.div> */}
         </>
       )}
     </section>

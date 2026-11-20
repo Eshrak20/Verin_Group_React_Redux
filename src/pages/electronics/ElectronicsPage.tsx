@@ -1,4 +1,5 @@
 import { useGetElecSubCategoryQuery } from "@/redux/services/electronics/electronics.api";
+import { PageLoader } from "@/routes";
 import type { ElecSubCategory } from "@/types/electronics/sub-category.type";
 import { useState } from "react";
 import { Outlet } from "react-router";
@@ -20,7 +21,7 @@ export default function ElectronicsPage() {
   );
 
   if (subCategoryLoading) {
-    return <div className="px-4">Loading electronics...</div>
+    return <PageLoader />
   }
 
   if (isError) {
