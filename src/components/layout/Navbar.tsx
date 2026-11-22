@@ -258,8 +258,8 @@ export default function Navbar() {
               />
             </div>
 
-            {/* Right Section: Search, Wishlist, Cart & Auth Buttons */}
-            <div className="z-10 flex shrink-0 items-center gap-2.5 pl-2 sm:gap-1.75">
+           {/* Right Section: Search, Wishlist, Cart & Auth Buttons */}
+            <div className="z-10 flex shrink-0 items-center gap-1.5 sm:gap-2">
               {/* Desktop Search Bar */}
               <div className="hidden md:flex items-center">
                 <ProductSearch variant="desktop" />
@@ -269,9 +269,9 @@ export default function Navbar() {
               <Link
                 to="/my-wishlist"
                 aria-label={`Wishlist${wishlistCount > 0 ? ` (${wishlistCount})` : ""}`}
-                className="relative flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-700 transition-colors hover:border-primary hover:text-primary"
+                className="relative flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-gray-200 text-gray-700 transition-colors hover:border-primary hover:text-primary"
               >
-                <Heart className="h-4 w-4" />
+                <Heart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
 
                 {wishlistCount > 0 && (
                   <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white shadow-xs">
@@ -280,13 +280,13 @@ export default function Navbar() {
                 )}
               </Link>
 
-              {/* 🎯 Cart Icon Button with Badge */}
+              {/* Cart Icon Button with Badge */}
               <Link
                 to="/my-cart"
                 aria-label="Cart"
-                className="relative flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-700 transition-colors hover:border-primary hover:text-primary"
+                className="relative flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-gray-200 text-gray-700 transition-colors hover:border-primary hover:text-primary"
               >
-                <ShoppingBag className="h-4 w-4" />
+                <ShoppingBag className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 {cartCount > 0 && (
                   <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white shadow-xs">
                     {cartCount}
@@ -294,13 +294,16 @@ export default function Navbar() {
                 )}
               </Link>
 
-              {/* Conditional Auth Section: Avatar/User Icon with Dropdown */}
+              {/* Conditional Auth Section: Avatar/User Icon with Dropdown (when logged in) */}
               {isAuthenticated ? (
                 <div className="relative" ref={userMenuRef}>
                   <button
                     type="button"
-                    onClick={() => setUserMenuOpen((prev) => !prev)}
-                    className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-sm transition-all hover:opacity-95 focus:outline-none"
+                    onClick={() => {
+                      setUserMenuOpen((prev) => !prev);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex h-8 w-8 sm:h-9 sm:w-9 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-sm transition-all hover:opacity-95 focus:outline-none"
                     aria-label="User menu"
                   >
                     {user?.profile?.avatar ? (
@@ -310,41 +313,19 @@ export default function Navbar() {
                         className="h-full w-full rounded-full object-cover"
                       />
                     ) : (
-                      <User className="h-4 w-4 text-white" />
+                      <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white" />
                     )}
                   </button>
 
                   {/* User Sub-menu Dropdown */}
                   {userMenuOpen && (
-                    <div className="absolute right-0 z-50 mt-2 w-56 rounded-2xl border border-gray-100 bg-white py-2 text-left shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
-                      {/* Nav Links above "Signed in as" (Mobile/Tablet convenience) */}
-                      <div className="flex flex-col space-y-0.5 border-b border-gray-100 px-2 pb-2 mb-1 lg:hidden">
-                        {navLinks.map((link) => {
-                          const isActive = isLinkActive(link);
-                          return (
-                            <Link
-                              key={link.path}
-                              to={link.path}
-                              onClick={() => setUserMenuOpen(false)}
-                              className={`rounded-xl px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${isActive
-                                  ? "bg-[#00416A] text-white"
-                                  : "text-slate-700 hover:bg-gray-100"
-                                }`}
-                            >
-                              {link.label}
-                            </Link>
-                          );
-                        })}
-                      </div>
-
-                      {/* User Info Header */}
+                    <div className="absolute right-0 z-50 mt-2 w-52 rounded-2xl border border-gray-100 bg-white py-2 text-left shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
                       <div className="border-b border-gray-100 px-4 py-2.5">
                         <p className="mb-1 text-xs font-medium text-gray-400">Signed in as</p>
                         <p className="mb-0.5 truncate text-sm font-bold text-gray-900">{userName}</p>
                         <p className="truncate text-xs text-gray-900">{userEmail}</p>
                       </div>
 
-                      {/* Menu Links */}
                       <div className="py-1">
                         <Link
                           to="/my-profile"
@@ -380,7 +361,6 @@ export default function Navbar() {
                         </Link>
                       </div>
 
-                      {/* Logout Action */}
                       <div className="border-t border-gray-100 pt-1">
                         <button
                           type="button"
@@ -412,7 +392,7 @@ export default function Navbar() {
                 </>
               )}
 
-              {/* Mobile Menu Toggle */}
+              {/* Mobile Menu Toggle (Nav Links + Login/Register when logged out) */}
               <MobileNav
                 navLinks={navLinks}
                 mobileMenuOpen={mobileMenuOpen}
@@ -423,9 +403,6 @@ export default function Navbar() {
                 mobileMenuRef={mobileMenuRef}
                 checkIsActive={isLinkActive}
                 isAuthenticated={isAuthenticated}
-                userName={userName}
-                userEmail={userEmail}
-                onLogout={handleLogout}
               />
             </div>
           </div>
