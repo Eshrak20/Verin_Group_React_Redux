@@ -140,10 +140,10 @@ export default function ElecProdDetInfo({
   const variantThumbnail =
     activeVariant && typeof activeVariant === "object"
       ? ("thumbnail" in activeVariant ? (activeVariant as { thumbnail?: string | null }).thumbnail : null) ??
-        ("images" in activeVariant ? (activeVariant as { images?: string[] }).images?.[0] : null)
+      ("images" in activeVariant ? (activeVariant as { images?: string[] }).images?.[0] : null)
       : variants[0] && typeof variants[0] === "object"
         ? ("thumbnail" in variants[0] ? (variants[0] as { thumbnail?: string | null }).thumbnail : null) ??
-          ("images" in variants[0] ? (variants[0] as { images?: string[] }).images?.[0] : null)
+        ("images" in variants[0] ? (variants[0] as { images?: string[] }).images?.[0] : null)
         : null;
 
   return (
@@ -214,19 +214,17 @@ export default function ElecProdDetInfo({
                     setCopied(false);
                   }}
                   aria-pressed={isSelected}
-                  className={`w-full rounded-xl border p-4 text-left transition-all ${
-                    isSelected
+                  className={`w-full rounded-xl border p-4 text-left transition-all ${isSelected
                       ? "border-elec bg-elec/5 ring-1 ring-elec"
                       : "border-gray-200 bg-white hover:border-gray-400"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-start gap-3">
                     <span
-                      className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
-                        isSelected
+                      className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${isSelected
                           ? "border-elec bg-elec text-white"
                           : "border-gray-300 bg-white"
-                      }`}
+                        }`}
                     >
                       {isSelected && <Check className="h-3.5 w-3.5" />}
                     </span>
@@ -236,11 +234,10 @@ export default function ElecProdDetInfo({
                         {variant.attributes?.map((attribute) => (
                           <span
                             key={`${attribute.id}-${attribute.value_id}`}
-                            className={`rounded-md px-2.5 py-1 text-xs font-semibold sm:text-sm ${
-                              isSelected
+                            className={`rounded-md px-2.5 py-1 text-xs font-semibold sm:text-sm ${isSelected
                                 ? "bg-white text-gray-900 ring-1 ring-elec/20"
                                 : "bg-gray-100 text-gray-700"
-                            }`}
+                              }`}
                           >
                             <span className="text-gray-500">
                               {attribute.name}:
@@ -260,9 +257,8 @@ export default function ElecProdDetInfo({
 
                     <div className="shrink-0 text-right">
                       <p
-                        className={`text-base font-extrabold sm:text-lg ${
-                          isSelected ? "text-elec" : "text-gray-900"
-                        }`}
+                        className={`text-base font-extrabold sm:text-lg ${isSelected ? "text-elec" : "text-gray-900"
+                          }`}
                       >
                         ৳{formatPrice(variantDisplayPrice)}
                       </p>
@@ -401,7 +397,7 @@ export default function ElecProdDetInfo({
         onClick={handleWhatsAppRedirect}
         className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-green-500 py-3 font-semibold text-green-700 transition-colors hover:bg-green-50"
       >
-        <MessageCircle className="h-5 w-5" />
+        <MessageCircle className="h-5 w-5 hidden md:block" />
         Ask About This Product on WhatsApp
       </button>
 

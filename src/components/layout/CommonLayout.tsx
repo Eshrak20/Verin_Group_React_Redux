@@ -54,7 +54,7 @@ export default function CommonLayout({ children }: IProps) {
         <Navbar />
       </div>
 
-      <div className="grow pt-22 max-w-6xl mx-auto w-full min-h-[calc(100vh-80px)]">
+      <div className="grow pt-32.5 md:pt-22 max-w-6xl mx-auto w-full min-h-[calc(100vh-80px)]">
         {children}
       </div>
 

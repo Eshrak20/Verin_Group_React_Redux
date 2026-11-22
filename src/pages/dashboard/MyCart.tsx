@@ -166,28 +166,28 @@ export default function MyCart() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-0 min-h-[70vh] space-y-6">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-0 min-h-[70vh] -mt-3 md:space-y-6">
       {/* Top Continue Shopping Link & Clear Cart */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+      <div className="flex items-center justify-between gap-2 mb-6">
+        <h1 className="text-lg font-bold tracking-tight text-foreground sm:text-2xl shrink-0">
           Shopping Cart
         </h1>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-end gap-2 sm:gap-4 shrink-0">
           {cartItems.length > 0 && (
             <button
               type="button"
               onClick={handleClearCart}
-              className="flex items-center gap-1.5 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-1.5 text-xs font-semibold text-destructive transition-colors hover:bg-destructive/20 cursor-pointer"
+              className="flex items-center gap-1.5 rounded-lg border border-destructive/30 bg-destructive/10 px-2.5 py-1.5 sm:px-3 text-[11px] sm:text-xs font-semibold text-destructive transition-colors hover:bg-destructive/20 cursor-pointer whitespace-nowrap"
             >
-              <Trash2 className="size-3.5" />
+              <Trash2 className="size-3.5 hidden md:block" />
               <span>Clear Cart</span>
             </button>
           )}
           <Link
             to="/electronics"
-            className="text-xs sm:text-sm font-semibold text-primary hover:underline flex items-center gap-1.5"
+            className="text-[11px] sm:text-sm font-semibold text-primary hover:underline flex items-center gap-1 whitespace-nowrap"
           >
-            ← Continue Shopping
+            <span>← Continue Shopping</span>
           </Link>
         </div>
       </div>

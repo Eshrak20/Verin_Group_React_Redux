@@ -99,7 +99,7 @@ export default function ElectronicsFeaturedProducts() {
   }, [products.length]);
 
   return (
-    <section ref={containerRef} className="py-6 sm:py-8">
+    <section ref={containerRef} className="py-6 sm:py-8 px-6 md:px-0">
       {/* Skeleton / Initial Loading State */}
       {!inView || isLoading ? (
         <div className="py-2">

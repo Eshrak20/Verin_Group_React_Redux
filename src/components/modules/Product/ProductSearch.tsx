@@ -53,9 +53,8 @@ export default function ProductSearch({ variant = "desktop" }: ProductSearchProp
 
   const targetCategoryId = currentCategoryId;
 
-  const searchUrl = `/search?query=${encodeURIComponent(searchTerm.trim())}${
-    targetCategoryId !== undefined ? `&category_id=${targetCategoryId}` : ""
-  }`;
+  const searchUrl = `/search?query=${encodeURIComponent(searchTerm.trim())}${targetCategoryId !== undefined ? `&category_id=${targetCategoryId}` : ""
+    }`;
 
   const isMobile = variant === "mobile";
 
@@ -84,11 +83,9 @@ export default function ProductSearch({ variant = "desktop" }: ProductSearchProp
             if (searchTerm.trim().length > 0) setIsOpen(true);
           }}
           placeholder={
-            isMobile
-              ? "Search products..."
-              : currentCategoryId
-                ? "Search in page..."
-                : "Search..."
+            currentCategoryId
+              ? "Search in page..."
+              : "Search..."
           }
           className={
             isMobile

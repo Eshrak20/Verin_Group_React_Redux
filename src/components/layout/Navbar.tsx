@@ -239,7 +239,7 @@ export default function Navbar() {
       <div>
         <div className="bg-white/95 border-b-2 border-gray-200/70 shadow-lg shadow-black/5 backdrop-blur-md">
           {/* Top Row Container */}
-          <div className="mx-auto flex h-16 max-w-6xl w-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-0">
+          <div className="relative z-30 mx-auto flex h-16 max-w-6xl w-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-0">
             {/* Left Section: Logo & Nav links */}
             <div className="flex shrink-0 items-center gap-6 lg:gap-14">
               <NavLogo
@@ -316,13 +316,35 @@ export default function Navbar() {
 
                   {/* User Sub-menu Dropdown */}
                   {userMenuOpen && (
-                    <div className="absolute right-0 z-50 mt-2 w-52 rounded-2xl border border-gray-100 bg-white py-2 text-left shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="absolute right-0 z-50 mt-2 w-56 rounded-2xl border border-gray-100 bg-white py-2 text-left shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
+                      {/* Nav Links above "Signed in as" (Mobile/Tablet convenience) */}
+                      <div className="flex flex-col space-y-0.5 border-b border-gray-100 px-2 pb-2 mb-1 lg:hidden">
+                        {navLinks.map((link) => {
+                          const isActive = isLinkActive(link);
+                          return (
+                            <Link
+                              key={link.path}
+                              to={link.path}
+                              onClick={() => setUserMenuOpen(false)}
+                              className={`rounded-xl px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${isActive
+                                  ? "bg-[#00416A] text-white"
+                                  : "text-slate-700 hover:bg-gray-100"
+                                }`}
+                            >
+                              {link.label}
+                            </Link>
+                          );
+                        })}
+                      </div>
+
+                      {/* User Info Header */}
                       <div className="border-b border-gray-100 px-4 py-2.5">
                         <p className="mb-1 text-xs font-medium text-gray-400">Signed in as</p>
                         <p className="mb-0.5 truncate text-sm font-bold text-gray-900">{userName}</p>
                         <p className="truncate text-xs text-gray-900">{userEmail}</p>
                       </div>
 
+                      {/* Menu Links */}
                       <div className="py-1">
                         <Link
                           to="/my-profile"
@@ -335,7 +357,7 @@ export default function Navbar() {
                         <Link
                           to="/my-wishlist"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+                          className="hidden md:flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50"
                         >
                           <Heart className="h-4 w-4 text-gray-500" />
                           My Wishlist
@@ -343,7 +365,7 @@ export default function Navbar() {
                         <Link
                           to="/my-cart"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+                          className="hidden md:flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50"
                         >
                           <ShoppingBag className="h-4 w-4 text-gray-500" />
                           My Cart
@@ -358,6 +380,7 @@ export default function Navbar() {
                         </Link>
                       </div>
 
+                      {/* Logout Action */}
                       <div className="border-t border-gray-100 pt-1">
                         <button
                           type="button"
@@ -393,15 +416,22 @@ export default function Navbar() {
               <MobileNav
                 navLinks={navLinks}
                 mobileMenuOpen={mobileMenuOpen}
-                setMobileMenuOpen={setMobileMenuOpen}
+                setMobileMenuOpen={(open) => {
+                  setMobileMenuOpen(open);
+                  if (open) setUserMenuOpen(false);
+                }}
                 mobileMenuRef={mobileMenuRef}
                 checkIsActive={isLinkActive}
+                isAuthenticated={isAuthenticated}
+                userName={userName}
+                userEmail={userEmail}
+                onLogout={handleLogout}
               />
             </div>
           </div>
 
           {/* Mobile Full-Width Search Row */}
-          <div className="mx-auto max-w-6xl px-4 pb-3 md:hidden sm:px-6">
+          <div className="relative z-10 mx-auto max-w-6xl px-4 pb-3 md:hidden sm:px-6">
             <ProductSearch variant="mobile" />
           </div>
         </div>

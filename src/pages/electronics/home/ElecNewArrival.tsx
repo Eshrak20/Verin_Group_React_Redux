@@ -28,7 +28,7 @@ export default function ElecNewArrival({
   const showNavigation = newArrivalProducts.length > 5;
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-0">
+    <section className="mx-auto w-full max-w-6xl px-5 py-8 sm:px-6 lg:px-0">
       {/* Header Section */}
       <div className="mb-6 flex items-center justify-between gap-4">
         <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">

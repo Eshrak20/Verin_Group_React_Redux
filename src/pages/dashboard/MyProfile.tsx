@@ -46,7 +46,7 @@ const Field = ({
 }) => {
     const hasValue = value !== null && value !== undefined && value !== "";
     return (
-        <div className={isMultiline ? "space-y-1.5 sm:col-span-2" : "space-y-1.5"}>
+        <div className={isMultiline ? "space-y-1 md:space-y-1.5 sm:col-span-2" : "space-y-1 md:space-y-1.5"}>
             <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 {label}
             </dt>
@@ -78,12 +78,12 @@ const SectionCard = ({
     icon: React.ElementType;
     children: React.ReactNode;
 }) => (
-    <div className="rounded-2xl border bg-card p-6 shadow-sm">
+    <div className="md:rounded-2xl bg-card p-6 mb-1.75 md:mb-0 shadow-sm">
         <div className="mb-5 flex items-center gap-2 border-b pb-3">
             <Icon className="h-4 w-4 text-primary" />
             <h3 className="text-sm font-semibold text-foreground">{title}</h3>
         </div>
-        <dl className="grid gap-x-8 gap-y-5 sm:grid-cols-2">{children}</dl>
+        <dl className="grid gap-x-8 gap-y-3.5 md:gap-y-5 sm:grid-cols-2">{children}</dl>
     </div>
 );
 
@@ -123,9 +123,9 @@ const MyProfile = () => {
         user.is_active === null ? null : user.is_active ? "Active" : "Inactive";
 
     return (
-        <section className="mx-auto w-full space-y-6 mb-20">
+        <section className="mx-auto w-full space-y-6 mb-10 md:mb-20">
             {/* Header / Hero */}
-            <div className="rounded-2xl border bg-card p-6 shadow-sm sm:p-8">
+            <div className="md:rounded-2xl border bg-card p-6 shadow-sm sm:p-8">
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         {/* Avatar */}

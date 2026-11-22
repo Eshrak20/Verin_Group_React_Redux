@@ -9,7 +9,7 @@ interface ElecProdDetSpecProps {
 
 export default function ElecProdDetSpec({ descriptionHtml }: ElecProdDetSpecProps) {
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-6 -mb-5 md:mb-0 lg:grid-cols-3">
       {/* Specifications / Main RichText Content */}
       <div className="lg:col-span-2 rounded-2xl bg-white p-6 shadow-sm border border-gray-100">
         <h2 className="mb-4 text-xl font-bold text-gray-900 border-b pb-3">
@@ -40,7 +40,7 @@ export default function ElecProdDetSpec({ descriptionHtml }: ElecProdDetSpecProp
         </div> */}
 
         {/* Delivery Info */}
-        <div className="rounded-2xl bg-white p-5 shadow-sm border border-gray-100">
+        <div className="rounded-2xl bg-white p-5 -mt-2 md:mt-0 shadow-sm border border-gray-100">
           <div className="flex items-center gap-2 font-bold text-gray-900 text-base mb-2">
             <Truck className="h-5 w-5 text-elec" />
             Delivery
