@@ -21,6 +21,7 @@ export default function Footer() {
   const [searchParams] = useSearchParams();
 
   const { data: footerSettingsData } = useGetFooterSettingsQuery();
+  
   const companyFromQuery = searchParams.get("company");
 
   const companyKey = getCompanyKey(pathname, companyFromQuery);
