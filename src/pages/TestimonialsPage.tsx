@@ -56,11 +56,11 @@ function Avatar({ src, name }: { src: string; name: string }) {
           const parent = target.parentElement;
           if (parent) {
             const existingInitials = parent.querySelector('.avatar-initials');
-            if(!existingInitials) {
-                const span = document.createElement('span');
-                span.className = "avatar-initials text-base font-bold text-blue-600 dark:text-blue-300";
-                span.textContent = initials;
-                parent.appendChild(span);
+            if (!existingInitials) {
+              const span = document.createElement('span');
+              span.className = "avatar-initials text-base font-bold text-blue-600 dark:text-blue-300";
+              span.textContent = initials;
+              parent.appendChild(span);
             }
           }
         }}
@@ -137,7 +137,7 @@ export default function TestimonialsPage() {
 
       {/* Error State */}
       {isError && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="text-center py-12"
@@ -150,7 +150,7 @@ export default function TestimonialsPage() {
 
       {/* Empty State */}
       {!isLoading && !isError && activeReviews.length === 0 && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="text-center py-12"

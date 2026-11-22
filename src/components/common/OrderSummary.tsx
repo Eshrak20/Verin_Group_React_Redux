@@ -33,7 +33,7 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                     <span>Subtotal ({totalItemsCount} {totalItemsCount === 1 ? "item" : "items"})</span>
                     <span className="font-semibold text-foreground">৳{formatPrice(subtotal)}</span>
                 </div>
-                
+
                 {/* ডাইনামিক ডেলিভারি চার্জ শো করার সেকশন */}
                 <div className="flex justify-between items-center text-muted-foreground">
                     <span>Shipping Fee</span>

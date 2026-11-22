@@ -40,18 +40,18 @@ export const verifyOtpSchema = z.object({
     .string()
     .length(6, "OTP must be exactly 6 digits")
     .regex(/^\d{6}$/, "OTP must contain only numbers"),
-}); 
+});
 
 export const resetPasswordSchema = z
-    .object({
-        email: validEmailSchema,
-        otp: z.string().regex(/^\d{6}$/, "Enter the 6-digit OTP."),
-        password: z.string().min(8, "Password must be at least 8 characters."),
-        password_confirmation: z
-            .string()
-            .min(1, "Please confirm your password."),
-    })
-    .refine((data) => data.password === data.password_confirmation, {
-        message: "Passwords do not match.",
-        path: ["password_confirmation"],
-    });
+  .object({
+    email: validEmailSchema,
+    otp: z.string().regex(/^\d{6}$/, "Enter the 6-digit OTP."),
+    password: z.string().min(8, "Password must be at least 8 characters."),
+    password_confirmation: z
+      .string()
+      .min(1, "Please confirm your password."),
+  })
+  .refine((data) => data.password === data.password_confirmation, {
+    message: "Passwords do not match.",
+    path: ["password_confirmation"],
+  });

@@ -150,8 +150,8 @@ export default function ShopByCategory() {
             onScroll={checkScroll}
             onMouseEnter={stopAuto}
             onMouseLeave={startAuto}
-            onTouchStart={stopAuto} 
-            onTouchEnd={startAuto}    
+            onTouchStart={stopAuto}
+            onTouchEnd={startAuto}
             className="flex gap-3 sm:gap-4 overflow-x-auto pb-2 px-1 sm:px-0"
             style={{
               scrollbarWidth: "none",

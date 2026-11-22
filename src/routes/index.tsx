@@ -21,17 +21,12 @@ import PublicOnlyRoute from "./PublicOnlyRoute";
 
 const DecorPage = lazy(() => import("@/pages/DecorPage"));
 const ClothingPage = lazy(() => import("@/pages/ClothingPage"));
-const LogisticsPage = lazy(() => import("@/pages/LogisticsPage"));
 const ElectronicsPage = lazy(() => import("@/pages/electronics/ElectronicsPage"));
 const ElecHome = lazy(() => import("@/pages/electronics/home/ElecHome"));
 const ProductDetailsPage = lazy(() => import("@/pages/ProductDetailsPage"));
 const Login = lazy(() => import("@/pages/authentication/Login"));
 const Register = lazy(() => import("@/pages/authentication/Register"));
 const SearchPage = lazy(() => import("@/pages/SearchPage"));
-const FurniturePage = lazy(() => import("@/pages/FurniturePage"));
-const BooksPage = lazy(() => import("@/pages/BooksPage"));
-const GamingPage = lazy(() => import("@/pages/GamingPage"));
-const KitchenPage = lazy(() => import("@/pages/KitchenPage"));
 const BlogDetailsPage = lazy(() => import("@/pages/BlogDetailsPage"));
 const BlogsPage = lazy(() => import("@/pages/BlogsPage"));
 const TestimonialsPage = lazy(() => import("@/pages/TestimonialsPage"));
@@ -66,10 +61,6 @@ export const router = createBrowserRouter([
             {
                 path: "clothings",
                 element: <Suspense fallback={<PageLoader />}><ClothingPage /></Suspense>
-            },
-            {
-                path: "logistics",
-                element: <Suspense fallback={<PageLoader />}><LogisticsPage /></Suspense>
             },
             {
                 path: "/electronics",
@@ -135,22 +126,6 @@ export const router = createBrowserRouter([
             {
                 path: "privacy-policy",
                 element: <Suspense fallback={<PageLoader />}><PrivacyPolicyPage /></Suspense>
-            },
-            {
-                path: "furniture",
-                element: <Suspense fallback={<PageLoader />}><FurniturePage /></Suspense>
-            },
-            {
-                path: "books",
-                element: <Suspense fallback={<PageLoader />}><BooksPage /></Suspense>
-            },
-            {
-                path: "gaming",
-                element: <Suspense fallback={<PageLoader />}><GamingPage /></Suspense>
-            },
-            {
-                path: "kitchen",
-                element: <Suspense fallback={<PageLoader />}><KitchenPage /></Suspense>
             },
             {
                 path: "search",
@@ -224,30 +199,6 @@ export const router = createBrowserRouter([
             },
         ],
     },
-
-
-    // {
-    //     Component: ProtectedRoute,
-    //     children: [
-    //         {
-    //             Component: DashboardLayout,
-    //             children: [
-    //                 {
-    //                     path: "dashboard",
-    //                     Component: DashboardHome,
-    //                 },
-    //                 {
-    //                     path: "dashboard/my-profile",
-    //                     Component: MyProfile,
-    //                 },
-    //                 {
-    //                     path: "/dashboard/my-wishlist",
-    //                     Component: MyWishlist,
-    //                 },
-    //             ],
-    //         },
-    //     ],
-    // },
     {
         path: "*",
         element: <GlobalErrorPage />,

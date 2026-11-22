@@ -258,7 +258,7 @@ export default function Navbar() {
               />
             </div>
 
-           {/* Right Section: Search, Wishlist, Cart & Auth Buttons */}
+            {/* Right Section: Search, Wishlist, Cart & Auth Buttons */}
             <div className="z-10 flex shrink-0 items-center gap-1.5 sm:gap-2">
               {/* Desktop Search Bar */}
               <div className="hidden md:flex items-center">

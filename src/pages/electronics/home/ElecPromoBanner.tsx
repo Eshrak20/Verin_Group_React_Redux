@@ -13,36 +13,36 @@ export default function ElecPromoBanner({ banners }: ElecBannerProps) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-4 sm:px-0">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {/* Banner 5 (Left Side) */}
-        <div className="overflow-hidden rounded-xl bg-white shadow-sm flex items-center justify-center">
+        <div className="flex items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm">
           {bannerFive ? (
-            <div className="relative h-50 sm:h-60 w-full">
+            <div className="relative h-48 w-full sm:h-60">
               <img
                 src={bannerFive.image_url}
                 alt="Promotional Banner 1"
-                className="h-full w-full object-cover"
+                className="h-full w-full object-fill md:object-cover"
               />
             </div>
           ) : (
-            <div className="flex h-50 sm:h-60 w-full items-center justify-center bg-elec/10 text-elec font-medium">
+            <div className="flex h-48 w-full items-center justify-center bg-elec/10 font-medium text-elec sm:h-60">
               Banner Unavailable
             </div>
           )}
         </div>
 
         {/* Banner 6 (Right Side) */}
-        <div className="overflow-hidden rounded-xl bg-white shadow-sm flex items-center justify-center">
+        <div className="flex items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm">
           {bannerSix ? (
-            <div className="relative h-50 sm:h-60 w-full">
+            <div className="relative h-48 w-full sm:h-60">
               <img
                 src={bannerSix.image_url}
                 alt="Promotional Banner 2"
-                className="h-full w-full object-cover"
+                className="h-full w-full object-fill md:object-cover"
               />
             </div>
           ) : (
-            <div className="flex h-50 sm:h-60 w-full items-center justify-center bg-elec/10 text-elec font-medium">
+            <div className="flex h-48 w-full items-center justify-center bg-elec/10 font-medium text-elec sm:h-60">
               Banner Unavailable
             </div>
           )}

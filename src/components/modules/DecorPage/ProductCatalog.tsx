@@ -112,8 +112,8 @@ export default function ProductCatalog() {
       selectedCategory === "All"
         ? [...shuffledProducts]
         : products.filter(
-            (p) => p.sub_category === selectedCategory
-          );
+          (p) => p.sub_category === selectedCategory
+        );
 
     if (sortBy === "Price Low to High") {
       result.sort(
@@ -218,9 +218,8 @@ export default function ProductCatalog() {
             </span>
             <ChevronDown
               size={15}
-              className={`text-gray-400 transition-transform duration-200 ${
-                isSortOpen ? "rotate-180" : ""
-              }`}
+              className={`text-gray-400 transition-transform duration-200 ${isSortOpen ? "rotate-180" : ""
+                }`}
             />
           </button>
 
@@ -236,10 +235,9 @@ export default function ProductCatalog() {
                   }}
                   className={`
                     w-full flex items-center justify-between px-4 py-2.5 text-xs sm:text-sm text-left font-medium transition-colors
-                    ${
-                      sortBy === option
-                        ? "text-[#00416A] dark:text-blue-400 bg-gray-50 dark:bg-slate-700/50"
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700/30"
+                    ${sortBy === option
+                      ? "text-[#00416A] dark:text-blue-400 bg-gray-50 dark:bg-slate-700/50"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700/30"
                     }
                   `}
                 >
@@ -269,10 +267,9 @@ export default function ProductCatalog() {
               transition-all
               duration-200
               text-xs sm:text-sm
-              ${
-                selectedCategory === cat
-                  ? "bg-[#5A5A40] text-white shadow-md"
-                  : " dark:bg-slate-800 text-black dark:text-white border border-gray-200 dark:border-gray-600 hover:border-[#00416A] hover:cursor-pointer dark:hover:border-gray-400"
+              ${selectedCategory === cat
+                ? "bg-[#5A5A40] text-white shadow-md"
+                : " dark:bg-slate-800 text-black dark:text-white border border-gray-200 dark:border-gray-600 hover:border-[#00416A] hover:cursor-pointer dark:hover:border-gray-400"
               }
             `}
           >
@@ -347,11 +344,10 @@ export default function ProductCatalog() {
                   delay: (index % 8) * 0.08,
                   ease: "easeOut",
                 }}
-                className={`transition-all duration-300 h-full ${
-                  animating
+                className={`transition-all duration-300 h-full ${animating
                     ? "scale-95 opacity-0"
                     : "scale-100 opacity-100"
-                }`}
+                  }`}
               >
                 <div className="group relative bg-white dark:bg-slate-800 rounded-3xl flex flex-col transition-all duration-300 border border-gray-100 dark:border-gray-700 p-4 sm:p-6 shadow-sm hover:shadow-lg h-full">
                   {/* Image */}

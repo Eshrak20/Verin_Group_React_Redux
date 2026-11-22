@@ -1,20 +1,20 @@
 export interface CartItem {
-  id: number;
-  name: string;
-  category: string;
-  slug?: string;
-  variantId: number;
-  sku?: string;
-  price: number;
-  sale_price: number;
-  thumbnail: string | null;
-  quantity: number;
-  stock: number;
-  deliveryCharge?: {
-    inside_dhaka_charge?: number;
-    outside_dhaka_charge?: number;
-  } | null;
-  attributes?: Array<{ name: string; value: string }>;
+    id: number;
+    name: string;
+    category: string;
+    slug?: string;
+    variantId: number;
+    sku?: string;
+    price: number;
+    sale_price: number;
+    thumbnail: string | null;
+    quantity: number;
+    stock: number;
+    deliveryCharge?: {
+        inside_dhaka_charge?: number;
+        outside_dhaka_charge?: number;
+    } | null;
+    attributes?: Array<{ name: string; value: string }>;
 }
 
 

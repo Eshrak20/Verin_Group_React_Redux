@@ -90,8 +90,8 @@ export default function ElecProdDetGallery({
               type="button"
               onClick={() => setUserSelectedImage(imgUrl)}
               className={`h-16 w-16 cursor-pointer overflow-hidden rounded-xl border p-1 transition-all ${selectedImage === imgUrl
-                  ? "border-white ring-2 ring-white/50 scale-105"
-                  : "border-white/20 opacity-60 hover:opacity-100 hover:border-white/50"
+                ? "border-white ring-2 ring-white/50 scale-105"
+                : "border-white/20 opacity-60 hover:opacity-100 hover:border-white/50"
                 }`}
             >
               <img
@@ -130,8 +130,8 @@ export default function ElecProdDetGallery({
             aria-label={`View image ${index + 1}`}
             aria-pressed={selectedImage === imgUrl}
             className={`h-20 w-20 cursor-pointer overflow-hidden rounded-xl border bg-white p-2 transition-all ${selectedImage === imgUrl
-                ? "border-elec ring-2 ring-elec/20 shadow-sm"
-                : "border-gray-200 hover:border-gray-300"
+              ? "border-elec ring-2 ring-elec/20 shadow-sm"
+              : "border-gray-200 hover:border-gray-300"
               }`}
           >
             <img

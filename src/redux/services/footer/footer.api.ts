@@ -53,7 +53,7 @@ export const footerApi = baseApi.injectEndpoints({
 // Export Hooks
 // ==========================================
 
-export const { 
-  useGetFooterSettingsQuery, 
-  useGetFooterPagesByCompanyQuery 
+export const {
+  useGetFooterSettingsQuery,
+  useGetFooterPagesByCompanyQuery
 } = footerApi;

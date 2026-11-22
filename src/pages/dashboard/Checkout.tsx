@@ -405,8 +405,8 @@ export const Checkout: React.FC = () => {
                                     onChange={handleChange}
                                     aria-invalid={Boolean(transactionIdError)}
                                     className={`w-full rounded-lg border bg-background px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-1 ${transactionIdError
-                                            ? "border-destructive focus:ring-destructive"
-                                            : "border-border focus:ring-primary"
+                                        ? "border-destructive focus:ring-destructive"
+                                        : "border-border focus:ring-primary"
                                         }`}
                                 />
                                 {transactionIdError && (

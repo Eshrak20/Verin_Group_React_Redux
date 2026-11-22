@@ -15,7 +15,7 @@ export const customerServiceLinks: CustomerServiceLink[] = [
 ];
 
 export const getCompanyKey = (
-  pathname: string, 
+  pathname: string,
   companyFromQuery: string | null
 ): string => {
   if (companyFromQuery && companyFromQuery.trim() !== "") {
@@ -45,7 +45,7 @@ export const parseFooterData = (
   footerData: FooterResponse | undefined,
   companyKey: string
 ) => {
-  
+
   const footer: FooterSetting | undefined = footerData?.success
     ? footerData.data?.find((f) => f.company_key === companyKey)
     : undefined;
@@ -53,8 +53,8 @@ export const parseFooterData = (
   const logoUrl = footer?.image_url
     ? footer.image_url
     : footer?.logo
-    ? `https://v.veringroup.com/storage/${footer.logo}`
-    : null;
+      ? `https://v.veringroup.com/storage/${footer.logo}`
+      : null;
 
   const companyName = footer?.company_name || "YourBrand";
   const description = footer?.description || "";
@@ -64,12 +64,12 @@ export const parseFooterData = (
   const address = footer?.contact_info?.address || "";
 
   const socialLinks =
-    footer?.social_links?.filter((s:any) => String(s.is_active) === "1") || [];
+    footer?.social_links?.filter((s: any) => String(s.is_active) === "1") || [];
 
   const footerLinks: FooterLink[] =
     footer?.links
       ?.slice()
-      .sort((a:any, b:any) => Number(a.sort_order) - Number(b.sort_order)) || [];
+      .sort((a: any, b: any) => Number(a.sort_order) - Number(b.sort_order)) || [];
 
   return {
     logoUrl,

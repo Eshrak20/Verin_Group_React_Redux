@@ -93,8 +93,8 @@ const ProductListHeader = ({
                                         onBrandChange(isSelected ? null : brand.id)
                                     }
                                     className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-all ${isSelected
-                                            ? "border-elec bg-elec text-white shadow-sm"
-                                            : "border-gray-200 bg-white text-gray-700 hover:border-elec hover:text-elec"
+                                        ? "border-elec bg-elec text-white shadow-sm"
+                                        : "border-gray-200 bg-white text-gray-700 hover:border-elec hover:text-elec"
                                         }`}
                                 >
                                     {brand.name}

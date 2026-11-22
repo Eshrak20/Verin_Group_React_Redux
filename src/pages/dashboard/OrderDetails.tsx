@@ -4,11 +4,11 @@ import { getOrderStatusBadgeClass } from "@/lib/utils";
 import { useGetOrderDetailsQuery } from "@/redux/services/order.api";
 import { PageLoader } from "@/routes";
 import {
-    ArrowLeft,
-    CreditCard,
-    MapPin,
-    Package,
-    User,
+  ArrowLeft,
+  CreditCard,
+  MapPin,
+  Package,
+  User,
 } from "lucide-react";
 import React from "react";
 import { useNavigate, useParams } from "react-router";
@@ -91,10 +91,10 @@ export const OrderDetails: React.FC = () => {
 
       {/* Main Layout Grid */}
       <div className="grid items-start gap-6 lg:grid-cols-3 lg:gap-8">
-        
+
         {/* LEFT COLUMN: Items & Summary */}
         <div className="flex flex-col gap-6 lg:col-span-2">
-          
+
           {/* Items Card */}
           <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
             <h2 className="mb-4 flex items-center gap-2 border-b border-border/60 pb-3 text-lg font-bold text-foreground">
@@ -164,7 +164,7 @@ export const OrderDetails: React.FC = () => {
         {/* এখানে ৩টি আলাদা ডিভের বদলে ১টি কার্ডের ভেতরে সেকশন করা হয়েছে, 
             যাতে নিচে বড় ফাঁকা জায়গা তৈরি না হয় এবং লেআউট ব্যালেন্সড থাকে */}
         <aside className="rounded-2xl border border-border bg-card shadow-sm lg:col-span-1">
-          
+
           {/* Customer Section */}
           <div className="p-6 border-b border-border/60">
             <h2 className="mb-4 flex items-center gap-2 text-base font-bold text-foreground">
@@ -251,7 +251,7 @@ export const OrderDetails: React.FC = () => {
             </dl>
           </div>
         </aside>
-        
+
       </div>
     </div>
   );

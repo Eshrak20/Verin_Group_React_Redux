@@ -42,8 +42,8 @@ export function MobileNav({
                   to={link.path}
                   onClick={() => setMobileMenuOpen(false)}
                   className={`rounded-xl px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${isActive
-                      ? "bg-[#00416A] text-white"
-                      : "text-slate-700 hover:bg-gray-100"
+                    ? "bg-[#00416A] text-white"
+                    : "text-slate-700 hover:bg-gray-100"
                     }`}
                 >
                   {link.label}

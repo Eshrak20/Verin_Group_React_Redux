@@ -27,7 +27,7 @@ export default function OurClients() {
     rootMargin: "300px",
   });
 
-  const { data, isLoading, isError } = useGetClientQuery({}, { skip: !inView });  
+  const { data, isLoading, isError } = useGetClientQuery({}, { skip: !inView });
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);

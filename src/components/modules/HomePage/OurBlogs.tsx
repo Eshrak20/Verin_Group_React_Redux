@@ -136,10 +136,9 @@ export default function OurBlogs() {
             onClick={() => setIsBangla(true)}
             className={`
               px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-xs hover:cursor-pointer font-semibold transition-all duration-300
-              ${
-                isBangla
-                  ? "bg-[#262626] hover:bg-[#003557] text-white shadow-sm"
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
+              ${isBangla
+                ? "bg-[#262626] hover:bg-[#003557] text-white shadow-sm"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
               }
             `}
           >
@@ -149,10 +148,9 @@ export default function OurBlogs() {
             onClick={() => setIsBangla(false)}
             className={`
               px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-xs hover:cursor-pointer font-semibold transition-all duration-300
-              ${
-                !isBangla
-                  ? "bg-[#262626] hover:bg-[#003557] text-white shadow-sm"
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
+              ${!isBangla
+                ? "bg-[#262626] hover:bg-[#003557] text-white shadow-sm"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
               }
             `}
           >

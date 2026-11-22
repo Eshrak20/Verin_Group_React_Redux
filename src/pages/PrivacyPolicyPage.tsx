@@ -42,7 +42,7 @@ export default function PrivacyPolicyPage() {
     <div className="min-h-screen bg-gray-50/30 py-12 px-4 sm:px-6">
       {/* Centered White Card Box */}
       <div className="max-w-3xl mx-auto bg-white rounded-2xl border border-gray-100 shadow-sm p-8 sm:p-12 mb-12">
-        
+
         {/* Title Section */}
         <h1 className="text-2xl sm:text-3xl font-serif font-bold text-center text-black mb-4">
           {pageData?.title || "Privacy Policy"}

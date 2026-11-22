@@ -38,10 +38,10 @@ export const Login = () => {
 
     const returnTo = (location.state as { from?: string } | null)?.from;
 
-  const redirectTo =
-    returnTo?.startsWith("/") && !returnTo.startsWith("//")
-      ? returnTo
-      : "/";
+    const redirectTo =
+        returnTo?.startsWith("/") && !returnTo.startsWith("//")
+            ? returnTo
+            : "/";
 
     const onSubmit = async (data: LoginFormValues) => {
         try {

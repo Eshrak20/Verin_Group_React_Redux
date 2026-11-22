@@ -84,7 +84,7 @@ export const categoriesApi = baseApi.injectEndpoints({
   }),
 });
 
-export const clientReviewsApi = baseApi.injectEndpoints({ 
+export const clientReviewsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getReviews: builder.query({
       query: () => "/client-reviews",

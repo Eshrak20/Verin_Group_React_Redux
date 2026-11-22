@@ -124,7 +124,7 @@ const VerifyOtp = () => {
 
             localStorage.removeItem("guest_wishlist");
 
-             setAuthCookies(response.data.token, "Bearer");
+            setAuthCookies(response.data.token, "Bearer");
 
             dispatch(
                 setCredentials({

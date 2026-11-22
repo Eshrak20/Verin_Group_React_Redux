@@ -18,8 +18,8 @@ export default function DecorFeaturedProducts() {
 
   // 🎯 Priority 2 Intersection Observer Setup
   const { ref: containerRef, inView } = useInView({
-    triggerOnce: true, 
-    rootMargin: "300px", 
+    triggerOnce: true,
+    rootMargin: "300px",
   });
 
   const { data, isLoading } = useGetProductsQuery(
@@ -153,10 +153,10 @@ export default function DecorFeaturedProducts() {
               onMouseLeave={startAuto}
               onTouchStart={
                 stopAuto
-              } 
+              }
               onTouchEnd={
                 startAuto
-              } 
+              }
               className="flex gap-3 overflow-x-auto pb-2"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >

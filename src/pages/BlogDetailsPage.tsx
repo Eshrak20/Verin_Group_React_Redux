@@ -150,7 +150,7 @@ export default function BlogDetailsPage() {
 
   const date = formatDate(currentBlog.created_at, isBangla);
 
- 
+
   const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
   const cleanPath = window.location.pathname.replace(/\s+/g, "-");
 
@@ -200,8 +200,8 @@ export default function BlogDetailsPage() {
               <button
                 onClick={() => setIsBangla(true)}
                 className={`px-4 py-1 rounded-full text-[11px] hover:cursor-pointer font-bold transition-all duration-300 ease-in-out transform ${isBangla
-                    ? "bg-[#262626] text-white shadow-md scale-105"
-                    : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
+                  ? "bg-[#262626] text-white shadow-md scale-105"
+                  : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
                   }`}
               >
                 বাংলা
@@ -209,8 +209,8 @@ export default function BlogDetailsPage() {
               <button
                 onClick={() => setIsBangla(false)}
                 className={`px-4 py-1 rounded-full text-[11px] hover:cursor-pointer font-bold transition-all duration-300 ease-in-out transform ${!isBangla
-                    ? "bg-[#262626] text-white shadow-md scale-105"
-                    : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
+                  ? "bg-[#262626] text-white shadow-md scale-105"
+                  : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
                   }`}
               >
                 English

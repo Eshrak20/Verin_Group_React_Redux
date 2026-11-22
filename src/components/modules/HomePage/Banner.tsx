@@ -20,15 +20,15 @@ const sideBgs = [
 export default function Banner() {
   const [current, setCurrent] = useState(0);
   const isFirstRender = useRef(true);
-  
+
   // 🎯 Priority 1: No skip logic here, loads immediately on page visit
   const { data, isLoading } = useGetBannerQuery("home");
 
   const allBanners =
     data?.success && data.data.length > 0
       ? [...data.data].sort(
-          (a, b) => Number(a.sorting_number) - Number(b.sorting_number)
-        )
+        (a, b) => Number(a.sorting_number) - Number(b.sorting_number)
+      )
       : [];
 
   const slideBanners = allBanners.filter((b) => Number(b.is_slide) === 1);
@@ -37,28 +37,28 @@ export default function Banner() {
   const slides =
     slideBanners.length > 0
       ? slideBanners.map((b, i) => ({
-          id: b.id,
-          image: b.image_url,
-          bg: slideBgs[i % slideBgs.length],
-        }))
+        id: b.id,
+        image: b.image_url,
+        bg: slideBgs[i % slideBgs.length],
+      }))
       : [
-          { id: 1, image: "", bg: slideBgs[0] },
-          { id: 2, image: "", bg: slideBgs[1] },
-          { id: 3, image: "", bg: slideBgs[2] },
-        ];
+        { id: 1, image: "", bg: slideBgs[0] },
+        { id: 2, image: "", bg: slideBgs[1] },
+        { id: 3, image: "", bg: slideBgs[2] },
+      ];
 
   const sideImages =
     sideBanners.length > 0
       ? sideBanners.map((b, i) => ({
-          id: b.id,
-          image: b.image_url,
-          bg: sideBgs[i % sideBgs.length],
-          link: "#",
-        }))
+        id: b.id,
+        image: b.image_url,
+        bg: sideBgs[i % sideBgs.length],
+        link: "#",
+      }))
       : [
-          { id: 1, image: "", bg: sideBgs[0], link: "/offer1" },
-          { id: 2, image: "", bg: sideBgs[1], link: "/offer2" },
-        ];
+        { id: 1, image: "", bg: sideBgs[0], link: "/offer1" },
+        { id: 2, image: "", bg: sideBgs[1], link: "/offer2" },
+      ];
 
   const goTo = useCallback(
     (index: number) => {

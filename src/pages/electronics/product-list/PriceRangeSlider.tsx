@@ -51,7 +51,7 @@ export const PriceRangeSlider: React.FC<PriceRangeSliderProps> = ({
   const minPercent = ((minValue - rangeMin) / (rangeMax - rangeMin)) * 100;
   const maxPercent = ((maxValue - rangeMin) / (rangeMax - rangeMin)) * 100;
 
-  const thumbClasses = 
+  const thumbClasses =
     "[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:size-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-background [&::-webkit-slider-thumb]:bg-elec [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110 [&::-webkit-slider-thumb]:active:cursor-grabbing " +
     "[&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:size-5 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-background [&::-moz-range-thumb]:bg-elec [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:transition-transform [&::-moz-range-thumb]:hover:scale-110 [&::-moz-range-thumb]:active:cursor-grabbing";
 
@@ -65,7 +65,7 @@ export const PriceRangeSlider: React.FC<PriceRangeSliderProps> = ({
 
       <div className="relative flex h-6 w-full min-w-0 max-w-full items-center">
         <div className="absolute h-1.5 w-full rounded-full bg-muted" />
-        
+
         <div
           className="absolute h-1.5 rounded-full bg-elec"
           style={{

@@ -215,15 +215,15 @@ export default function ElecProdDetInfo({
                   }}
                   aria-pressed={isSelected}
                   className={`w-full rounded-xl border p-4 text-left transition-all ${isSelected
-                      ? "border-elec bg-elec/5 ring-1 ring-elec"
-                      : "border-gray-200 bg-white hover:border-gray-400"
+                    ? "border-elec bg-elec/5 ring-1 ring-elec"
+                    : "border-gray-200 bg-white hover:border-gray-400"
                     }`}
                 >
                   <div className="flex items-start gap-3">
                     <span
                       className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${isSelected
-                          ? "border-elec bg-elec text-white"
-                          : "border-gray-300 bg-white"
+                        ? "border-elec bg-elec text-white"
+                        : "border-gray-300 bg-white"
                         }`}
                     >
                       {isSelected && <Check className="h-3.5 w-3.5" />}
@@ -235,8 +235,8 @@ export default function ElecProdDetInfo({
                           <span
                             key={`${attribute.id}-${attribute.value_id}`}
                             className={`rounded-md px-2.5 py-1 text-xs font-semibold sm:text-sm ${isSelected
-                                ? "bg-white text-gray-900 ring-1 ring-elec/20"
-                                : "bg-gray-100 text-gray-700"
+                              ? "bg-white text-gray-900 ring-1 ring-elec/20"
+                              : "bg-gray-100 text-gray-700"
                               }`}
                           >
                             <span className="text-gray-500">

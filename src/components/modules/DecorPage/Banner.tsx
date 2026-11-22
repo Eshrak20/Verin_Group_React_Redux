@@ -13,11 +13,11 @@ export default function Banner() {
     <div className="w-full py-4 sm:py-6 lg:py-8">
       {/* Main Banner Container */}
       <div className="bg-[#dfd9cf] text-stone-900 rounded-2xl sm:rounded-[2rem] md:rounded-[2.5rem] grid lg:grid-cols-12 overflow-hidden relative">
-        
+
         {/* LEFT COLUMN: Main Typography & CTA */}
         <div className="lg:col-span-7 p-6 sm:p-10 lg:p-16 flex flex-col justify-between gap-6 sm:gap-8 lg:gap-12 lg:min-h-125">
           <div className="space-y-4 sm:space-y-6">
-            
+
             {/* 🎯 Elegant Serif Heading Animation */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
@@ -29,7 +29,7 @@ export default function Banner() {
               <span className="font-serif italic">&</span> novelty decor for <br className="hidden sm:inline" />
               modern living.
             </motion.h1>
-            
+
             {/* 🎯 Subtitle Description Animation */}
             <motion.p
               initial={{ opacity: 0, y: 30 }}
@@ -48,7 +48,7 @@ export default function Banner() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
           >
-            <button 
+            <button
               onClick={handleScrollToCatalog}
               className="border border-stone-900 rounded-full px-6 sm:px-8 py-2.5 sm:py-3 text-xs font-bold tracking-widest uppercase hover:bg-stone-900 hover:text-[#dfd9cf] transition-all duration-300 cursor-pointer"
             >
@@ -62,7 +62,7 @@ export default function Banner() {
 
         {/* RIGHT COLUMN: Hand-written Lined Note */}
         <div className="lg:col-span-4 p-6 sm:p-10 lg:py-14 lg:pr-14 lg:pl-0 flex flex-col border-t lg:border-t-0 border-stone-400/30">
-          
+
           {/* Note Header: Customer Text & Badge */}
           <div className="flex items-center justify-between mb-4 gap-2">
             <span className="text-xl sm:text-2xl font-serif italic text-stone-500/80 tracking-wide">
@@ -84,8 +84,8 @@ export default function Banner() {
               "appreciate you and hope",
               "you love it"
             ].map((line, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="border-b border-stone-400/40 py-2 sm:py-2.5 flex items-end min-h-10 sm:min-h-11.5"
                 style={{ fontFamily: "'Caveat', 'Dancing Script', cursive, serif" }}
               >

@@ -39,7 +39,7 @@ export default function FeaturedPieces() {
     { category_id: 1, is_featured: true },
     { skip: !inView }
   );
-  
+
   const featuredItems = useMemo(() => {
     const allProducts = Array.isArray(data)
       ? data
@@ -58,7 +58,7 @@ export default function FeaturedPieces() {
       })
       .slice(0, 4); // Select last 4 featured items
   }, [data]);
-  
+
 
   // Loading / Before InView Skeleton State
   if (!inView || isLoading) {

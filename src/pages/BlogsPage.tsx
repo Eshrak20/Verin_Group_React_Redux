@@ -95,7 +95,7 @@ export default function BlogsPage() {
   return (
     <div className="min-h-screen py-8 px-4 lg:px-0 max-w-7xl mx-auto transition-colors duration-300">
       {/* Top Header Section */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
@@ -122,21 +122,19 @@ export default function BlogsPage() {
           <div className="flex items-center gap-2 bg-gray-100 dark:bg-slate-800 rounded-full p-1 w-fit border dark:border-slate-700 shadow-sm transition-colors duration-300">
             <button
               onClick={() => setIsBangla(true)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-300 transform ${
-                isBangla
-                  ? "bg-[#262626] text-white shadow-md scale-105"
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
-              }`}
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-300 transform ${isBangla
+                ? "bg-[#262626] text-white shadow-md scale-105"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
+                }`}
             >
               বাংলা
             </button>
             <button
               onClick={() => setIsBangla(false)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-300 transform ${
-                !isBangla
-                  ? "bg-[#262626] text-white shadow-md scale-105"
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
-              }`}
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-300 transform ${!isBangla
+                ? "bg-[#262626] text-white shadow-md scale-105"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
+                }`}
             >
               English
             </button>
@@ -179,7 +177,7 @@ export default function BlogsPage() {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{
                   duration: 0.5,
-                  delay: (index % 3) * 0.15, 
+                  delay: (index % 3) * 0.15,
                   ease: "easeOut",
                 }}
               >

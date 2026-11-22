@@ -47,7 +47,6 @@ export default function ElecSliderBanner({ banners }: ElecBannerProps) {
       setSelectedIndex(emblaApi.selectedScrollSnap());
     };
 
-    // Set initial selection once emblaApi is ready
     updateSelection();
 
     emblaApi.on("select", updateSelection);
@@ -63,7 +62,7 @@ export default function ElecSliderBanner({ banners }: ElecBannerProps) {
     <div className="mx-auto max-w-6xl px-4 py-4 sm:px-0">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Left Slider Section (Takes 2 columns on large screens) */}
-        <div className="relative group overflow-hidden rounded-xl bg-card shadow-sm lg:col-span-2">
+        <div className="group relative overflow-hidden rounded-xl bg-card shadow-sm lg:col-span-2">
           {slideBanners.length > 0 ? (
             <>
               {/* Carousel Viewport */}
@@ -72,12 +71,12 @@ export default function ElecSliderBanner({ banners }: ElecBannerProps) {
                   {slideBanners.map((banner) => (
                     <div
                       key={banner.id}
-                      className="relative h-62.5 w-full flex-[0_0_100%] min-w-0 sm:h-87.5"
+                      className="relative h-56 w-full min-w-0 flex-[0_0_100%] sm:h-80 lg:h-87.5"
                     >
                       <img
                         src={banner.image_url}
                         alt="Electronics Slide Banner"
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-fill lg:object-cover"
                       />
                     </div>
                   ))}
@@ -88,20 +87,20 @@ export default function ElecSliderBanner({ banners }: ElecBannerProps) {
               <button
                 type="button"
                 onClick={scrollPrev}
-                className="absolute left-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-md transition-all hover:bg-black/85 shadow-lg opacity-90 group-hover:opacity-100"
+                className="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/60 text-white shadow-lg opacity-90 backdrop-blur-md transition-all hover:bg-black/85 group-hover:opacity-100 sm:h-11 sm:w-11"
                 aria-label="Previous slide"
               >
-                <ChevronLeft className="h-6 w-6 stroke-[2.5]" />
+                <ChevronLeft className="h-5 w-5 stroke-[2.5] sm:h-6 sm:w-6" />
               </button>
 
               {/* Transparent Custom Right Button */}
               <button
                 type="button"
                 onClick={scrollNext}
-                className="absolute right-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-md transition-all hover:bg-black/85 shadow-lg opacity-90 group-hover:opacity-100"
+                className="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/60 text-white shadow-lg opacity-90 backdrop-blur-md transition-all hover:bg-black/85 group-hover:opacity-100 sm:h-11 sm:w-11"
                 aria-label="Next slide"
               >
-                <ChevronRight className="h-6 w-6 stroke-[2.5]" />
+                <ChevronRight className="h-5 w-5 stroke-[2.5] sm:h-6 sm:w-6" />
               </button>
 
               {/* Custom Pagination Dots */}
@@ -111,7 +110,7 @@ export default function ElecSliderBanner({ banners }: ElecBannerProps) {
                     key={index}
                     type="button"
                     onClick={() => scrollTo(index)}
-                    className={`h-2.5 rounded-full transition-all cursor-pointer ${index === selectedIndex
+                    className={`h-2.5 cursor-pointer rounded-full transition-all ${index === selectedIndex
                         ? "w-7 bg-elec"
                         : "w-2.5 bg-white/60 hover:bg-white"
                       }`}
@@ -121,22 +120,22 @@ export default function ElecSliderBanner({ banners }: ElecBannerProps) {
               </div>
             </>
           ) : (
-            <div className="h-62.5 w-full animate-pulse bg-muted sm:h-87.5" />
+            <div className="h-56 w-full animate-pulse bg-muted sm:h-80 lg:h-87.5" />
           )}
         </div>
 
         {/* Right Static Banner Section (Takes 1 column on large screens) */}
         <div className="flex items-center justify-center overflow-hidden rounded-xl bg-card shadow-sm">
           {sideBanner ? (
-            <div className="relative h-62.5 w-full sm:h-87.5">
+            <div className="relative h-64 w-full sm:h-80 lg:h-87.5">
               <img
                 src={sideBanner.image_url}
                 alt="Side Promotional Banner"
-                className="h-full w-full object-cover"
+                className="h-full w-full object-fill lg:object-cover"
               />
             </div>
           ) : (
-            <div className="h-62.5 w-full animate-pulse bg-muted sm:h-87.5" />
+            <div className="h-64 w-full animate-pulse bg-muted sm:h-80 lg:h-87.5" />
           )}
         </div>
       </div>

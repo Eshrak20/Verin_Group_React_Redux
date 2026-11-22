@@ -15,10 +15,6 @@ export default function ElectronicsPage() {
     category_id: 2,
   });
 
-  // if (bannerLoading || productLoading) {
-  //   return <div className="px-4 py-8">Loading electronics...</div>;
-  // }
-
   if (bannerError) {
     return (
       <div className="px-4 py-8 text-destructive">

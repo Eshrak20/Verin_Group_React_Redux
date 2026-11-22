@@ -47,6 +47,3 @@ export const {
   useGetProductsQuery,
   useGetProductBySlugQuery,
 } = productApi;
-
-
-
