@@ -297,7 +297,7 @@ const ProductListMain = () => {
     const pagination = productResponse?.data?.meta;
 
     return (
-        <section className="px-4 pb-6 pt-0 sm:px-6 lg:px-0">
+        <section className="px-4 pb-6 pt-3 md:pt-0 sm:px-6 lg:px-0">
             <ProductListHeader
                 subCategory={subCategory}
                 brands={brands}
@@ -307,9 +307,9 @@ const ProductListMain = () => {
             />
 
             <div className="mt-6 grid grid-cols-1 gap-6 lg:min-h-[calc(100vh+5rem)] lg:grid-cols-[260px_minmax(0,1fr)]">
-                {/* Sticky Filter */}
-                <aside className="hidden self-start lg:sticky lg:top-20 lg:block">
-                    <div className="max-h-[calc(100vh-6rem)] overflow-y-auto overscroll-contain rounded-xl">
+                {/* Filter (Mobile button + Desktop Sticky Sidebar) */}
+                <div className="self-start lg:sticky lg:top-20">
+                    <div className="lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:overscroll-contain lg:rounded-xl">
                         <ProductListFilter
                             filters={filters}
                             price={availablePrice}
@@ -321,7 +321,7 @@ const ProductListMain = () => {
                             onClearFilters={handleClearFilters}
                         />
                     </div>
-                </aside>
+                </div>
 
                 {/* Sticky Product Grid */}
                 <div className="min-w-0 self-start lg:sticky lg:top-20">

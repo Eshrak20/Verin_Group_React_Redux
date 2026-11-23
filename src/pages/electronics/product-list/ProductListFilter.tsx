@@ -1,11 +1,17 @@
 import { Button } from "@/components/ui/button";
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet";
 import type { ProductFilter } from "@/types/electronics/product-list.type";
 import {
     RotateCcw,
     SlidersHorizontal,
-    X,
 } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PriceRangeSlider from "./PriceRangeSlider";
 
 interface ProductListFilterProps {
@@ -41,6 +47,80 @@ const ProductListFilter = ({
 }: ProductListFilterProps) => {
     const [mobileOpen, setMobileOpen] = useState(false);
 
+    // Direct DOM refs for 60fps smooth swipe without React re-renders
+    const sheetRef = useRef<HTMLDivElement | null>(null);
+    const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+    const currentDeltaXRef = useRef<number>(0);
+    const isHorizontalSwipeRef = useRef<boolean | null>(null);
+
+    const resetSheetStyle = () => {
+        const el = sheetRef.current;
+        if (!el) return;
+        el.style.transform = "";
+        el.style.transition = "";
+        el.style.animation = "";
+    };
+
+    const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+        const touch = e.touches[0];
+        if (!touch) return;
+        touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+        currentDeltaXRef.current = 0;
+        isHorizontalSwipeRef.current = null;
+    };
+
+    const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+        if (!touchStartRef.current || !sheetRef.current) return;
+        const touch = e.touches[0];
+        if (!touch) return;
+
+        const deltaX = touch.clientX - touchStartRef.current.x;
+        const deltaY = touch.clientY - touchStartRef.current.y;
+
+        if (isHorizontalSwipeRef.current === null) {
+            if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
+                isHorizontalSwipeRef.current =
+                    Math.abs(deltaX) > Math.abs(deltaY) && deltaX > 0;
+            }
+        }
+
+        if (isHorizontalSwipeRef.current && deltaX >= 0) {
+            currentDeltaXRef.current = deltaX;
+            const el = sheetRef.current;
+            el.style.animation = "none";
+            el.style.transition = "none";
+            el.style.transform = `translate3d(${deltaX}px, 0, 0)`;
+        }
+    };
+
+    const handleTouchEnd = () => {
+        const el = sheetRef.current;
+        const swipedDistance = currentDeltaXRef.current;
+        const wasHorizontal = isHorizontalSwipeRef.current;
+
+        touchStartRef.current = null;
+        isHorizontalSwipeRef.current = null;
+        currentDeltaXRef.current = 0;
+
+        if (!el || !wasHorizontal) return;
+
+        if (swipedDistance > 75) {
+            // Smoothly finish sliding out to the right, then close without double animation
+            el.style.transition = "transform 180ms cubic-bezier(0.32, 0.72, 0, 1)";
+            el.style.transform = "translate3d(100%, 0, 0)";
+            window.setTimeout(() => {
+                setMobileOpen(false);
+            }, 170);
+        } else {
+            // Snap back smoothly if swipe was too short
+            el.style.transition = "transform 200ms cubic-bezier(0.32, 0.72, 0, 1)";
+            el.style.transform = "translate3d(0, 0, 0)";
+            window.setTimeout(() => {
+                resetSheetStyle();
+            }, 200);
+        }
+    };
+
     const hasActiveAttributes = Object.values(selectedAttributes).some(
         (options) => options.length > 0,
     );
@@ -56,10 +136,6 @@ const ProductListFilter = ({
             0,
         ) + (hasActivePrice ? 1 : 0);
 
-    const handleClearFilters = () => {
-        onClearFilters();
-    };
-
     const filterContent = (
         <div className="space-y-5">
             {/* Filter Header */}
@@ -74,9 +150,9 @@ const ProductListFilter = ({
 
                 <button
                     type="button"
-                    onClick={handleClearFilters}
+                    onClick={onClearFilters}
                     disabled={!hasActiveFilters}
-                    className="inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-elec transition-colors hover:bg-elec/10 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:hover:bg-transparent"
+                    className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-elec transition-colors hover:bg-elec/10 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:hover:bg-transparent"
                 >
                     <RotateCcw className="size-3.5" />
                     Clear filters
@@ -115,8 +191,9 @@ const ProductListFilter = ({
                                     <div className="size-4 rounded border border-border bg-muted" />
 
                                     <div
-                                        className={`h-3 rounded bg-muted ${option === 1 ? "w-24" : "w-16"
-                                            }`}
+                                        className={`h-3 rounded bg-muted ${
+                                            option === 1 ? "w-24" : "w-16"
+                                        }`}
                                     />
                                 </div>
                             ))}
@@ -127,13 +204,24 @@ const ProductListFilter = ({
                 <>
                     {/* Price Range */}
                     {price && (
-                        <div className="border-b border-border/60 pb-5">
+                        <div
+                            onTouchStart={(e) => e.stopPropagation()}
+                            className="border-b border-border/60 pb-5"
+                        >
                             <PriceRangeSlider
                                 key={`${price.min}:${price.max}:${priceRange.min ?? ""}:${priceRange.max ?? ""}`}
                                 min={price.min}
                                 max={price.max}
-                                currentMin={priceRange.min !== null ? String(priceRange.min) : undefined}
-                                currentMax={priceRange.max !== null ? String(priceRange.max) : undefined}
+                                currentMin={
+                                    priceRange.min !== null
+                                        ? String(priceRange.min)
+                                        : undefined
+                                }
+                                currentMax={
+                                    priceRange.max !== null
+                                        ? String(priceRange.max)
+                                        : undefined
+                                }
                                 onPriceChange={onPriceChange}
                             />
                         </div>
@@ -201,71 +289,60 @@ const ProductListFilter = ({
 
     return (
         <>
-            {/* Mobile Filter Button */}
-            <div className="mb-4 lg:hidden">
-                <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setMobileOpen(true)}
-                    className="w-full justify-center gap-2"
+            {/* Mobile Filter Trigger & Sliding Sheet (Sidebar Drawer) */}
+            <div className="lg:hidden">
+                <Sheet
+                    open={mobileOpen}
+                    onOpenChange={(open) => {
+                        if (open) resetSheetStyle();
+                        setMobileOpen(open);
+                    }}
                 >
-                    <SlidersHorizontal className="size-4" />
-                    Filters
+                    <SheetTrigger asChild>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="w-full cursor-pointer -mt-3 -mb-3 justify-center gap-2 rounded-xl border-border/80 bg-card shadow-2xs"
+                        >
+                            <SlidersHorizontal className="size-4 text-elec" />
+                            <span>Filters</span>
 
-                    {activeFilterCount > 0 && (
-                        <span className="rounded-full bg-elec px-2 py-0.5 text-xs text-white">
-                            {activeFilterCount}
-                        </span>
-                    )}
-                </Button>
+                            {activeFilterCount > 0 && (
+                                <span className="rounded-full bg-elec px-2 py-0.5 text-xs font-semibold text-white">
+                                    {activeFilterCount}
+                                </span>
+                            )}
+                        </Button>
+                    </SheetTrigger>
+
+                    <SheetContent
+                        ref={sheetRef}
+                        side="right"
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                        className="flex w-[85vw] max-w-sm flex-col p-0 touch-pan-y will-change-transform"
+                    >
+                        <SheetHeader className="border-b border-border/60 px-5 -ppy-4 text-left">
+                            <SheetTitle className="text-base font-bold text-foreground">
+                                Product Filters
+                            </SheetTitle>
+                        </SheetHeader>
+
+                        <div className="flex-1 overflow-y-auto px-5 pb-5">
+                            {filterContent}
+                        </div>
+                    </SheetContent>
+                </Sheet>
             </div>
 
+            {/* Desktop Sticky Sidebar (Unchanged) */}
             <aside
                 aria-label="Product filters"
                 className="hidden rounded-xl border border-border/70 bg-card p-4 lg:block"
             >
                 {filterContent}
             </aside>
-
-            {/* Mobile Filter Drawer */}
-            {mobileOpen && (
-                <div className="fixed inset-0 z-50 lg:hidden">
-                    <button
-                        type="button"
-                        aria-label="Close filters"
-                        onClick={() => setMobileOpen(false)}
-                        className="absolute inset-0 bg-black/50"
-                    />
-
-                    <div className="absolute inset-y-0 right-0 w-full max-w-sm overflow-y-auto bg-background p-5 shadow-xl">
-                        <div className="mb-5 flex items-center justify-between">
-                            <h2 className="text-lg font-bold text-foreground">
-                                Product Filters
-                            </h2>
-
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => setMobileOpen(false)}
-                                aria-label="Close filters"
-                            >
-                                <X className="size-5" />
-                            </Button>
-                        </div>
-
-                        {filterContent}
-
-                        <Button
-                            type="button"
-                            onClick={() => setMobileOpen(false)}
-                            className="mt-6 w-full bg-elec text-white hover:bg-elec/90"
-                        >
-                            Show Results
-                        </Button>
-                    </div>
-                </div>
-            )}
         </>
     );
 };
